@@ -1,0 +1,58 @@
+@import "../../../styles/Mixins";
+@import "../../../styles/Variables";
+
+.logoBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: default;
+
+  & div {
+    @include size(20.5px, 24px);
+    margin-right: 9.5px;
+    background: url("../../../Images/headerLogo.svg") no-repeat;
+
+    @media (max-width: 768px) {
+      background: url("../../../Images/darkLogo.svg") no-repeat;
+    }
+  }
+
+  & p {
+    @include SFDisplayBold();
+    font-size: 16px;
+    line-height: 24px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    @media (max-width: 768px) {
+      color: $textColor;
+    }
+
+    & span {
+      @media (max-width: 768px) {
+        color: $successColor;
+      }
+    }
+  }
+}
+
+.logoBlockForBurger {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  & div {
+    @include size(20.5px, 24px);
+    margin-right: 9.5px;
+    background: url("../../../Images/darkLogo.svg");
+  }
+
+  & p {
+    @include SFDisplayBold();
+    @include fontSize16();
+    text-transform: uppercase;
+
+    & span {
+      color: $successColor;
+    }
+  }
+}

@@ -1,0 +1,75 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.discount {
+  @include flex(row, space-between, center);
+  @include SFDisplayBold();
+  font-size: 20px;
+  line-height: 130%;
+  color: $textColor;
+  max-width: 569px;
+  border-radius: 5px;
+  padding: 0 24px;
+  margin: 0 auto;
+  width: 569px;
+
+  .titlePart {
+    max-width: 363px;
+    & p {
+      @include SFDisplayBold;
+      font-size: 20px;
+      line-height: 130%;
+      color: $textColor;
+      margin-bottom: 17px;
+
+    }
+
+    & button {
+      @include SFTextMedium();
+      font-size: 14px;
+      line-height: 20px;
+      cursor: pointer;
+      padding: 8px 16px;
+      background: #FFFFFF;
+      border: 1px solid #8C9196;
+      border-radius: 4px;
+    }
+  }
+
+  .discountImageWrapper {
+    max-width: 196px;
+    height: 148.69px;
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+@media (max-width: 1199px) {
+  .discount {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .discount {
+    padding: 8px;
+    width: 100%;
+
+    .titlePart {
+      & p {
+        font-size: 15px;
+        line-height: 20px;
+        max-width: 215px;
+      }
+    }
+
+    .discountImageWrapper {
+      width: 116px;
+      height: 116px;
+    }
+  }
+}

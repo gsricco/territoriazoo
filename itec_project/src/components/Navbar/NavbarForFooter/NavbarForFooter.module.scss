@@ -1,0 +1,23 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.navBar {
+  gap: 48px;
+  display: flex;
+  justify-content: space-between;
+
+  & a {
+    @include SFTextMedium();
+    @include fontSize14();
+
+    &:hover {
+      text-decoration-line: underline;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .navBar {
+    gap: 32px;
+  }
+}

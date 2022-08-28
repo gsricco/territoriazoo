@@ -1,0 +1,35 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+<title>{% block title %} Ошибка {% endblock %}</title>
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Территория ZOO</a></h1>
+{% endblock %}
+
+
+{% block messages %}
+<h2>{{ mess_1 }}</h2>
+<style>
+h2 {
+    font-size: 16pt;
+    text-align: center;
+    color: red;
+   }
+</style>
+
+<p class="fig"><img src="https://avatanplus.com/files/resources/original/56ec0647e4bdc15389f88901.png" width="400"></p>
+<style>
+   .fig {
+    text-align: center;
+   }
+</style>
+
+<div class="breadcrumbs"><a href="{{ site_url }}">Вернуться назад</a></div>
+{% endblock messages %}
+
+

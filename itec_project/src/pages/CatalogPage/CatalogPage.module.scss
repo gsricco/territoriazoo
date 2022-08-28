@@ -1,0 +1,269 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.catalogPageBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: #f6f6f7;
+  padding-bottom: 57px;
+
+  .navigationBlock {
+    width: 100%;
+    max-width: 1200px;
+
+  }
+
+  .navigationBlockWrapper {
+    padding-top: 16px;
+    display: flex;
+    align-items: center;
+
+    & img {
+      margin: 0 14px 0 15px;
+    }
+  }
+
+  .title {
+    width: 100%;
+    max-width: 1200px;
+    @include flex(row, space-between, center);
+    margin-bottom: 40px;
+    padding: 0 10px;
+    cursor: default;
+
+    & h1 {
+      @include SFDisplayBold();
+      font-size: 42px;
+      line-height: 44px;
+      color: $textColor;
+    }
+
+    .select {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      @media (max-width: 768px) {
+        width: 100%;
+      }
+
+      & select {
+        @include size(268px, 36px);
+        background-color: #FFFFFF;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+        border: 1px solid #BABFC3;
+        border-radius: 4px;
+        appearance: none;
+        background-image: url("../../Images/downArrow.svg");
+        background-repeat: no-repeat;
+        background-position: right .7em top 50%, 0 0;
+        padding: 8px 8px 8px 12px;
+        outline: none;
+        @include SFTextRegular();
+        @include fontSize14();
+        cursor: pointer;
+      }
+
+      & p {
+        @include SFTextMedium();
+        font-size: 14px;
+        line-height: 20px;
+        margin-right: 9px;
+      }
+    }
+  }
+
+  .catalogFilter {
+    width: 338px;
+    height: 36px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 14px;
+    border: 1px solid #BABFC3;
+    display: none;
+
+    & .catalogFilterText {
+      @include SFTextMedium();
+      font-size: 15px;
+      line-height: 20px;
+      color: $textColor;
+    }
+
+    & .catalogFilterImage {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      margin-right: 8px;
+    }
+  }
+
+  .mainBlock {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: row;
+    padding: 0 10px;
+
+    .sortingBlock {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .productsBlockContainer {
+      padding: 0 0 0 30px;
+      width: 100%;
+
+      .productsBlock {
+        display: flex;
+        gap: 25px;
+        box-sizing: border-box;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .emptyCatalog {
+        width: 70%;
+        margin: 96px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .title {
+          margin: 24px 0 25px;
+
+          & h3 {
+            @include SFDisplaySemibold();
+            font-size: 20px;
+            line-height: 28px;
+            text-align: center;
+            color: $textColor;
+          }
+        }
+
+        & button {
+          padding: 12px 24px;
+          background: $mainColor;
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), inset 0px -1px 0px rgba(0, 0, 0, 0.2);
+          border-radius: 4px;
+          outline: none;
+          border: none;
+          cursor: pointer;
+          @include SFTextMedium();
+          font-size: 14px;
+          line-height: 20px;
+          text-align: center;
+          color: #FFFFFF;
+          margin-bottom: 9px;
+
+          &:hover {
+            background: $hoverColor;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), inset 0px -1px 0px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.productsType {
+  width: 270px;
+}
+
+.catalogPopularProductsWrapper {
+  margin-bottom: 60px;
+}
+
+@media (max-width: 1199px) {
+  .mainBlock {
+    max-width: 960px !important;
+  }
+  .title {
+    max-width: 960px !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .mainBlock {
+    max-width: 720px !important;
+  }
+  .productsType {
+    //position: absolute;
+    //left: -1000px;
+    width: 220px;
+
+    & input {
+      width: 190px !important;
+    }
+
+    & button {
+      width: 190px !important;
+    }
+  }
+  .title {
+    max-width: 720px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+
+    & h1 {
+      margin-bottom: 16px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .mainBlock {
+    max-width: 540px !important;
+  }
+  .title {
+    & h1 {
+      font-size: 24px !important;
+      line-height: 28px !important;
+    }
+
+  }
+  .productsType {
+    display: none !important;
+  }
+  .productsBlockContainer {
+    padding: 0 !important;
+  }
+  .select {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+
+    & select {
+      width: 100% !important;
+    }
+
+    & p {
+      margin-bottom: 4px;
+    }
+  }
+  .title {
+    max-width: 540px !important;
+  }
+  .catalogFilter {
+    display: flex !important;
+    margin: 0 auto;
+    margin-top: 14px !important;
+    cursor: pointer;
+    width: 100% !important;
+  }
+  .productsBlock {
+    justify-content: center !important;
+    gap: 16px !important;
+  }
+  .catalogPopularProductsWrapper {
+    width: 100%;
+    margin-bottom: 41px;
+  }
+}
+
+@media (max-width: 576px) {
+}

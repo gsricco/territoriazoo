@@ -1,0 +1,88 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+@import "src/styles/fonts";
+
+.animalType {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  @include size(214px, 84px);
+  background-color: white;
+  margin: 24px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 5px 5px 0;
+
+  &:hover {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(0, 0, 0, 0.1);
+
+    & span {
+      @include SFDisplaySemibold();
+      font-size: 16px;
+      line-height: 24px;
+      color: $mainColor;
+    }
+  }
+
+  & span {
+    @include SFDisplaySemibold();
+    @include fontSize16();
+  }
+
+  .animalTypeImageWrapper {
+    @include size(85px, 81px);
+
+    & img {
+      @include size(100%, 100%);
+      object-fit: contain;
+    }
+  }
+}
+
+.active {
+  box-sizing: border-box;
+  border: 2px solid $successColor;
+}
+
+.restTypes {
+  opacity: 0.6;
+}
+
+@media (max-width: 992px) {
+  .animalType {
+    min-width: 173px;
+    height: 73px;
+    gap: 10px;
+
+    & .animalTypeImageWrapper {
+      @include size(73px, 71px);
+    }
+    & span {
+      @include fontSize14();
+    }
+    &:hover {
+
+      & span {
+        font-size: 14px;
+        line-height: 20px;
+      }
+    }
+  }
+}
+@media (max-width: 768px) {
+  .animalType {
+    min-width: 137.88px;
+    height: 56px;
+
+    & .animalTypeImageWrapper {
+      width: 56.88px;
+      height: 53px;
+    }
+  }
+
+  .active {
+    border: 1px solid $successColor;
+  }
+}

@@ -1,0 +1,136 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 8px;
+  cursor: default;
+
+}
+
+@media (max-width: 1199px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (max-width: 576px) {
+}
+
+.block {
+  width: 100%;
+
+  .navigationInfoBlock {
+    @include flex(row, space-between, center);
+    width: 100%;
+
+    & h2 {
+      @include SFDisplaySemibold();
+      font-size: 28px;
+      line-height: 32px;
+      color: $textColor;
+    }
+
+    .sectionsBlock {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+
+  .itemsContainer {
+    margin: 28px 0 1px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    .window {
+      width: 100%;
+      overflow: hidden;
+
+      .allProductItemsContainer {
+        display: flex;
+        align-items: stretch;
+        width: 100%;
+        gap: 2.12%;
+        margin: 0 1.06% 25px;
+        transition: translate;
+        transition-property: transform;
+        transition-duration: 500ms;
+        transition-timing-function: ease-in-out;
+        @media (max-width: 1199px) {
+          gap: 4.64%;
+          margin: 8px 2.32%;
+        }
+        @media (max-width: 992px) {
+          gap: 11.4% !important;
+          margin: 8px 5.7%;
+        }
+        @media (max-width: 768px) {
+          gap: 4.1% !important;
+          margin: 8px 2.05%;
+          margin-bottom: 17px !important;
+        }
+        @media (max-width: 420px) {
+          gap: 7.1% !important;
+          margin: 16px 0;
+        }
+      }
+
+      .allAnimalTypesContainer {
+        @include flex(row, space-between, stretch);
+        width: 100%;
+        transition: translate;
+        transition-property: transform;
+        transition-duration: 500ms;
+        transition-timing-function: ease-in-out;
+      }
+    }
+  }
+
+  & button {
+    cursor: pointer;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .block {
+    .itemsContainer {
+      margin-top: 0;
+
+      .allProductItemsContainer {
+        gap: 5% !important;
+      }
+    }
+
+
+    .navigationInfoBlock {
+      & h2 {
+        font-size: 21px;
+        line-height: 28px;
+        @include SFDisplayBold;
+      }
+
+      .sectionsBlock {
+        display: none !important;
+      }
+    }
+  }
+}
+

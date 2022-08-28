@@ -1,0 +1,46 @@
+@import "src/styles/Variables";
+
+.block {
+  background-color: #f6f6f7;
+
+  .sectionsBlock {
+    & button:last-child {
+      border: none;
+      outline: none;
+      background-size: 7px 12px;
+      background: white url("../../Images/nextIcon.svg") no-repeat 50% 50%;
+    }
+
+    & button:last-child:hover {
+      border: none;
+      outline: none;
+      background-size: 7px 12px;
+      background: $mainColor url("../../Images/whiteNextArrow.svg") no-repeat 50% 50%;
+
+    }
+
+    & button:first-child {
+      border: none;
+      outline: none;
+      background-size: 7px 12px;
+      background: white url("../../Images/prevIcon.svg") no-repeat 50% 50%;
+
+      &:hover {
+        transform: rotate(-180deg);
+        background: $mainColor url("../../Images/whiteNextArrow.svg") no-repeat 50% 50%;
+
+      }
+    }
+
+    & button:hover {
+      border: none;
+      outline: none;
+      background: $mainColor;
+      border-radius: 40px;
+    }
+  }
+}
+
+.productItem {
+  background-color: white;
+}

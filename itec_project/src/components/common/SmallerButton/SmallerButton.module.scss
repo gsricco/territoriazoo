@@ -1,0 +1,30 @@
+@import "../../../styles/Mixins";
+@import "../../../styles/Variables";
+
+.button {
+  cursor: pointer;
+  width: 234px;
+  height: 44px;
+  background: $mainColor;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), inset 0px -1px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  color: #FFFFFF;
+  border: none;
+  @include SFDisplaySemibold();
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.smallerButtonMoreProducts {
+  display: flex;
+  justify-content: center;
+
+  & button {
+    &:hover {
+      background: $hoverColor;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), inset 0px -1px 0px rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+  }
+}

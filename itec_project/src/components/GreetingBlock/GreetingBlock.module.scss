@@ -1,0 +1,121 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.greetingBlock {
+  width: 100%;
+  background-color: white;
+  margin-top: 57px;
+
+  .greetingBlockContainer {
+    @include flex(row, space-between, center);
+  }
+}
+
+.greetingBlockTitle {
+  @include SFDisplaySemibold();
+  max-width: 597px;
+  font-size: 28px;
+  line-height: 32px;
+  color: $textColor;
+  margin-bottom: 12px;
+}
+
+.greetingBlockText {
+  @include SFTextRegular();
+  max-width: 597px;
+  font-size: 16px;
+  line-height: 125%;
+  color: $textColor;
+}
+
+.greetingBlockWrapperTitle {
+  @include SFDisplayBold();
+  font-size: 16px;
+  line-height: 125%;
+  color: $textColor;
+  margin-bottom: 8px;
+}
+
+.greetingBlockTextWrapper {
+  margin-bottom: 24px;
+}
+
+.greetingBlockWrapper {
+  display: flex;
+  margin-bottom: 24px;
+  min-height: 30px;
+  position: relative;
+
+  &:before {
+    content: "";
+    display: block;
+    width: 2px;
+    top: 0;
+    position: absolute;
+    height: 100%;
+    background: #98C6CD;
+    border-radius: 2px;
+    margin-right: 12px;
+  }
+
+  .greetingOptionWrapper {
+    margin-left: 12px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .greetingBlockImageWrapper {
+    display: none;
+  }
+  .greetingBlockWrapperText {
+    padding: 62.5px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .greetingBlock {
+    margin-top: 33px;
+
+    .greetingBlockWrapperText {
+
+      padding: 16px 0 0;
+
+      .greetingBlockTitle {
+        @include SFDisplayBold();
+        font-size: 21px;
+        line-height: 28px;
+      }
+
+      .greetingBlockTextWrapper {
+        margin-bottom: 16px;
+
+        .greetingBlockText {
+          font-size: 15px;
+          line-height: 20px;
+        }
+      }
+
+      .greetingBlockWrapper {
+        margin-bottom: 16px;
+
+        &:before {
+          margin-right: 6px;
+        }
+
+        .greetingOptionWrapper {
+
+          .greetingBlockWrapperTitle {
+            font-size: 15px;
+            line-height: 20px;
+          }
+
+          .greetingBlockText {
+            font-size: 15px;
+            line-height: 20px;
+          }
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,77 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.navigationBar {
+  width: 302px;
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+
+  @media (max-width: 992px) {
+    gap: 18px;
+  }
+  @media (max-width: 768px) {
+    display: none;
+  }
+
+  & a.activeLink {
+    font-size: 14px;
+    line-height: 20px;
+    color: #80CFD5;
+
+    &:hover {
+      text-decoration: none;
+      cursor: default;
+    }
+  }
+
+  & a {
+    @include SFTextMedium();
+    font-size: 14px;
+    line-height: 20px;
+    color: #FFFFFF;
+  }
+
+  & a:hover {
+    text-decoration-line: underline;
+  }
+
+  .scroll {
+    scroll-behavior: smooth;
+
+  }
+}
+
+.navigationBarForHeader {
+  @include size(100%, 29vh);
+  margin: 48px 0 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+
+  & a.activeLink {
+    @include SFDisplaySemibold();
+    font-size: 20px;
+    line-height: 28px;
+    color: $textColor;
+  }
+
+  & a {
+    @include SFDisplaySemibold();
+    font-size: 20px;
+    line-height: 28px;
+    color: $textColor;
+  }
+
+  & a:hover {
+    text-decoration-line: underline;
+  }
+
+  .scroll {
+    scroll-behavior: smooth;
+
+  }
+}
+

@@ -1,0 +1,54 @@
+@import "src/styles/Variables";
+
+.block {
+  background-color: white;
+  padding: 10px 0 12px;
+
+  .sectionsBlock {
+    & button:last-child {
+      border: none;
+      outline: none;
+      background-size: 7px 12px;
+      background: #F6F6F7 url("../../Images/nextIcon.svg") no-repeat 50% 50%;
+    }
+
+    & button:last-child:hover {
+      border: none;
+      outline: none;
+      background-size: 7px 12px;
+      background: $mainColor url("../../Images/whiteNextArrow.svg") no-repeat 50% 50%;
+
+    }
+
+    & button:first-child {
+      border: none;
+      outline: none;
+      background-size: 7px 12px;
+      background: #F6F6F7 url("../../Images/prevIcon.svg") no-repeat 50% 50%;
+
+      &:hover {
+        transform: rotate(-180deg);
+        background: $mainColor url("../../Images/whiteNextArrow.svg") no-repeat 50% 50%;
+        background-size: 7px 12px;
+      }
+    }
+
+    & button:hover {
+      border: none;
+      outline: none;
+      background: $mainColor;
+      border-radius: 40px;
+    }
+  }
+}
+
+.productItem {
+  background-color: #FAFBFB;
+}
+
+@media (max-width: 768px) {
+  .block {
+    background: none;
+    padding-top: 0;
+  }
+}

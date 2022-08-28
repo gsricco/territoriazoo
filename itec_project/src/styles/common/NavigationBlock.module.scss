@@ -1,0 +1,49 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.navigationBlock {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 10px;
+
+  .navigationBlockWrapper {
+    padding-top: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+
+    & img {
+      margin: 0 14px 0 15px;
+    }
+
+    & p {
+      @include SFTextRegular();
+      @include fontSize14();
+      cursor: pointer;
+
+      &:last-child {
+        color: $opacityColor;
+      }
+    }
+  }
+}
+
+@media (max-width: 1199px) {
+  .navigationBlock {
+    max-width: 960px;
+  }
+}
+
+@media (max-width: 992px) {
+  .navigationBlock {
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navigationBlock {
+    max-width: 540px;
+  }
+}

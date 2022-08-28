@@ -1,0 +1,18 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.callback {
+  cursor: pointer;
+  @include SFTextRegular();
+  font-size: 14px;
+  line-height: 20px;
+  color: $callbackColor;
+}
+
+.callbackForFooter {
+  cursor: pointer;
+  @include SFTextMedium();
+  font-size: 16px;
+  line-height: 24px;
+  color: $callbackColor;
+}

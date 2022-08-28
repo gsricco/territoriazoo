@@ -1,0 +1,554 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.productPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 65px;
+
+  width: 100%;
+  background-color: #f6f6f7;
+
+  .mainDescription {
+    max-width: 670px;
+    @include SFTextRegular();
+    @include fontSize14();
+    & h3{
+      @include SFDisplaySemibold();
+      @include fontSize16();
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+  }
+  & ul {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 9px;
+
+    & li:before {
+      content: '';
+      display: inline-block;
+      height: 3px;
+      width: 3px;
+      vertical-align: middle;
+      border-radius: 50%;
+      background-color: $textColor;
+      margin-right: 10px;
+    }
+  }
+  .mainAnalysis{
+    max-width: 470px;
+    @include SFTextRegular();
+    @include fontSize14();
+
+    & h3{
+      @include SFDisplaySemibold();
+      @include fontSize16();
+      margin-top: 24px;
+      margin-bottom: 12px;
+      &:first-child{
+        margin-top: 0;
+      }
+    }
+  }
+  .productPageSubTitle {
+    margin-bottom: 32px;
+    cursor: pointer;
+    @include SFDisplaySemibold();
+    font-size: 16px;
+    line-height: 24px;
+    color: $callbackColor;
+  }
+
+  .mainImageWrapper {
+    width: 470px;
+    height: 392px;
+    margin-right: 16px;
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  }
+  .productPageButtonWrappers{
+    margin-bottom: 69px;
+    width: 100%;
+  }
+  .productPageButtonWithWrappers{
+    margin-bottom: 44px;
+    width: 100%;
+  }
+  .productInfo {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 20px;
+
+    .productInfoTitle{
+      width: 100%;
+      @include flex(row, space-between, center);
+
+      .productPageTitle {
+        @include SFDisplaySemibold();
+        font-size: 28px;
+        line-height: 130%;
+        color: $textColor;
+        margin: 24px 0;
+        width: 80%;
+        cursor: default;
+      }
+
+      & div{
+        @include size(66px, 24px);
+        @include SFDisplaySemibold();
+        font-size: 17px;
+        line-height: 24px;
+        color: #FFFFFF;
+        padding: 0 6px;
+        border-radius: 2px;
+        background: $discountColor;
+      }
+    }
+
+    .imgAndOrderBlock {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 64px;
+
+      .imageBlock {
+        display: flex;
+        flex-direction: row;
+
+        .mainImg {
+        }
+
+        .restImagesBlock {
+          display: flex;
+          flex-direction: column;
+
+          .restImage {
+            width: 92px;
+            height: 92px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            object-fit: cover;
+          }
+
+          .restImage:last-child {
+            margin-bottom: 0;
+          }
+
+          .selectImg {
+            border: 2px solid $successColor;
+          }
+        }
+      }
+
+      .orderBlock {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        max-width: 501px;
+
+        & h3 {
+          @include SFDisplaySemibold();
+          font-size: 20px;
+          line-height: 28px;
+          color: $textColor;
+          cursor: default;
+        }
+
+        .unitsGroup {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 16px;
+
+          .unit {
+            background: #E4E5E7;
+            border-radius: 2px;
+            padding: 6px 16px;
+
+            & .option {
+              @include SFDisplayBold();
+              font-size: 16px;
+              line-height: 120%;
+              margin-bottom: 4px;
+            }
+
+            & .price {
+              @include SFTextRegular();
+              font-size: 16px;
+              line-height: 110%;
+              color: $opacityColor;
+            }
+          }
+
+          .unit:hover {
+            background: $successColor;
+            color: white;
+
+            & .option {
+              color: white;
+            }
+
+            & .price {
+              color: white;
+            }
+          }
+          .active{
+            border-radius: 2px;
+            padding: 6px 16px;
+            background: $successColor;
+            color: white;
+            & .option {
+              @include SFDisplayBold();
+              font-size: 16px;
+              line-height: 120%;
+              margin-bottom: 4px;
+            }
+
+            & .price {
+              @include SFTextRegular();
+              font-size: 16px;
+              line-height: 110%;
+            }
+          }
+        }
+
+        .unitsGroupHeft {
+          @include SFTextRegular();
+          margin-top: 12px;
+          font-size: 14px;
+          line-height: 20px;
+          color: $callbackColor;
+          cursor: pointer;
+        }
+
+        .setWeightBlock {
+          margin: 12px 0 13px;
+
+          & h3 {
+            @include SFDisplaySemibold();
+            font-size: 20px;
+            line-height: 28px;
+            color: $textColor;
+            margin-bottom: 9px;
+          }
+
+          & input {
+            padding: 8px 12px;
+            gap: 10px;
+            width: 184px;
+            height: 36px;
+            background: #FFFFFF;
+            border-radius: 4px;
+            outline: none;
+            border: 1px solid #BABFC3;
+            margin-right: 9px;
+            @include SFTextRegular();
+            font-size: 15px;
+            line-height: 20px;
+            color: $textColor;
+
+            &::placeholder {
+              @include SFTextRegular();
+              font-size: 15px;
+              line-height: 20px;
+              color: $textColor;
+            }
+          }
+
+          & button {
+            background: #FFFFFF;
+            border-radius: 5px;
+            padding: 0;
+            width: 112px;
+            height: 36px;
+            border: 1px solid #BABFC3;
+            @include SFTextMedium();
+            @include fontSize14();
+            text-align: center;
+            cursor: pointer;
+          }
+
+          .errorContainer{
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+
+            & span{
+              @include SFTextRegular();
+              font-size: .8em;
+              line-height: 130%;
+              color: #b42b33;
+            }
+          }
+
+        }
+
+        .orderInfo {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-top: 12px;
+
+          .orderImageWrapper {
+            margin-right: 20.88px;
+          }
+
+          & h3 {
+            @include SFDisplaySemibold();
+            font-size: 20px;
+            line-height: 130%;
+            color: $textColor;
+            margin-bottom: 6px;
+          }
+
+          & .pickUpInfo {
+            @include SFTextRegular();
+            font-size: 14px;
+            line-height: 130%;
+            color: #5C5C5C;
+            margin-bottom: 6px;
+            cursor: default;
+          }
+        }
+
+        .orderInfoForPayment {
+          @include flex(row, space-between, center);
+          background: #FFFFFF;
+          border-radius: 4px;
+          padding: 8px 16px;
+          margin: 24px 0 25px;
+
+          & div{
+            display: flex;
+            flex-direction: row;
+          }
+
+          .priceWithDiscount{
+            @include SFDisplayBold();
+            font-size: 28px;
+            line-height: 32px;
+            color: #8C9196;
+            text-decoration: line-through;
+            text-decoration-color: #D72C0D;
+            cursor: default;
+          }
+
+          .firstPrice {
+            @include SFDisplayBold();
+            font-size: 28px;
+            line-height: 32px;
+            color: $textColor;
+            cursor: default;
+          }
+
+          .discountPrice{
+            @include SFDisplayBold();
+            font-size: 28px;
+            line-height: 32px;
+            color: $textColor;
+            cursor: default;
+            margin-left: 12px;
+          }
+
+          & p {
+            @include SFDisplaySemibold();
+            @include fontSize16();
+            cursor: default;
+          }
+        }
+
+        .basketInterface {
+          //@include flex(row, space-between, center);
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 14px;
+
+          .quantityManagementBlock {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .basketInterfaceMinus {
+              width: 36px;
+              height: 36px;
+              background: #FFFFFF;
+              box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+              border-radius: 4px;
+              display: flex;
+              justify-content: center;
+              border: 1px solid #BABFC3;
+              align-items: center;
+              cursor: pointer;
+
+              & div {
+                width: 12px;
+                height: 2px;
+                background: $successColor;
+                border-radius: 10px;
+              }
+            }
+
+            .basketInterfaceCount {
+              width: 36px;
+              height: 36px;
+              background: #FFFFFF;
+              box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+              border-radius: 4px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border: 1px solid #BABFC3;
+              margin: 0 6px;
+              cursor: default;
+            }
+          }
+
+          .basketInterfacePlus {
+            width: 36px;
+            height: 36px;
+            background: #FFFFFF;
+            box-shadow: 0 1px 0 rgb(0 0 0 / 5%);
+            border-radius: 4px;
+            display: flex;
+            border: 1px solid #BABFC3;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+
+            & div {
+              width: 12px;
+              height: 2px;
+              background: $successColor;
+              border-radius: 5px;
+
+              & span {
+                display: block;
+                height: 1.5px;
+                transform: rotate(90deg);
+                background: $successColor;
+                border-radius: 5px;
+              }
+            }
+          }
+
+          .basketInterfaceButton {
+            
+          }
+
+          .basketInterfaceOneClick {
+            @include SFTextMedium();
+            font-size: 16px;
+            line-height: 24px;
+            color: $callbackColor;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    .descriptionTitle{
+      @include SFDisplaySemibold();
+      font-size: 28px;
+      line-height: 32px;
+      color: $textColor;
+      margin-bottom: 24px;
+      cursor: default;
+    }
+  }
+
+  .descriptionBlock {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    cursor: default;
+
+    & div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+@media (max-width: 1199px) {
+  .productInfo{
+    max-width: 960px !important;
+  }
+  .imageBlock{
+    margin-bottom: 32px !important;
+  }
+  .orderBlock{
+    & h3 {
+      margin-bottom: 12px !important;
+    }
+  }
+  .descriptionBlock{
+    flex-direction: column !important;
+  }
+  .imgAndOrderBlock{
+    flex-direction: column !important;
+  }
+}
+@media (max-width: 992px) {
+ .productInfo{
+   max-width: 720px !important;
+ }
+}
+@media (max-width: 768px) {
+  .productInfo{
+    max-width: 540px !important;
+    padding: 0 10px !important;
+  }
+  .imgAndOrderBlock{
+    margin-bottom: 32px !important;
+  }
+  .unitsGroupHeft {
+    @include SFDisplaySemibold();
+    font-size: 17px !important;
+    line-height: 24px !important;
+  }
+  .mainImageWrapper{
+    height: 100% !important;
+  }
+  .imageBlock{
+    margin-bottom: 32px;
+  }
+  .orderBlock{
+    & h3{
+      margin-bottom: 12px;
+      font-size: 17px !important;
+      line-height: 24px !important;
+    }
+  }
+  .basketInterface{
+    flex-wrap: wrap;
+  }
+  .basketInterfaceButton {
+    & button{
+      padding: 12px 24px;
+    }
+  }
+  .basketInterfaceOneClickWrapper{
+    margin: 0 auto;
+  }
+  .productPageTitle{
+    width: 100% !important;
+    font-size: 24px;
+    line-height: 28px;
+  }
+}
+@media (max-width: 576px) {
+  .basketInterfaceOneClickWrapper{
+
+  }
+}

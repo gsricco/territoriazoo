@@ -1,0 +1,113 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.articlesPageBlock {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+
+  background-color: #f6f6f7;
+
+  .navigationBlock {
+    width: 80%;
+  }
+
+  .articlesTitle {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 10px;
+    cursor: default;
+  }
+
+  .articlesBlockContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 10px;
+
+    .articlesBlock {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+      gap: 16px;
+
+    }
+
+    & button {
+      margin: 0 auto;
+      width: 148px;
+      height: 46px;
+      background: white;
+      border-radius: 5px;
+      cursor: pointer;
+      border: 1px solid deepskyblue;
+      @include fontSize14();
+      @include SFTextMedium();
+
+      &:hover {
+        background: $mainColor;
+        color: #FFFFFF;
+        border: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 1199px) {
+  .articlesPageBlock {
+    .articlesTitle {
+      max-width: 960px;
+    }
+
+    .articlesBlockContainer {
+      max-width: 960px;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .articlesPageBlock {
+    .articlesTitle {
+      max-width: 720px;
+    }
+
+    .articlesBlockContainer {
+      max-width: 720px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .articlesPageBlock {
+    .articlesTitle {
+      max-width: 540px;
+
+      & h1 {
+        @include SFDisplayBold();
+        font-size: 24px;
+        line-height: 28px;
+        margin-bottom: 24px;
+      }
+    }
+
+    .articlesBlockContainer {
+      max-width: 540px;
+
+      .articlesBlock {
+        justify-content: center;
+      }
+
+      & button {
+        margin-top: 20px;
+        width: 100%;
+      }
+    }
+
+
+  }
+}

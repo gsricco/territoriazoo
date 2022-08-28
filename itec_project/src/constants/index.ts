@@ -1,0 +1,1 @@
+export const PRODUCT_IMAGE = 'https://vinograd.shop/files/inclusio/img/no_photo.png'

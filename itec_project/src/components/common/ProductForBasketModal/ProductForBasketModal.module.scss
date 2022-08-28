@@ -1,0 +1,72 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.ProductForBasketModalContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  @include SFTextRegular();
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 130%;
+  color: $textColor;
+
+  .productName {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+
+    & img {
+      @include size(56px, 56px);
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    & p {
+      max-width: 232px;
+    }
+  }
+
+  .orderInfoNotPartial {
+    width: 100%;
+    min-width: 276px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+
+    .price {
+      @include SFDisplayBold();
+      font-size: 16px;
+      line-height: 130%;
+      color: $textColor;
+    }
+
+    .priceWithDiscount {
+      @include SFDisplayBold();
+      font-size: 16px;
+      line-height: 130%;
+      color: #8C9196;
+      text-decoration: line-through;
+      text-decoration-color: #D72C0D;
+    }
+  }
+
+  .orderInfoPartial {
+    @include flex(row, center, center);
+    min-width: 230px;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 577px) {
+  .ProductForBasketModalContainer {
+    display: flex;
+    flex-direction: column;
+  }
+}

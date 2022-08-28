@@ -1,0 +1,29 @@
+@import "src/styles/Mixins.scss";
+@import "src/styles/Variables.scss";
+
+.phoneBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: default;
+
+  & img {
+    @include size(11.2px, 16px)
+  }
+
+  & a {
+    display: block;
+    margin-left: 10.4px;
+    @include SFDisplaySemibold();
+    @include fontSize14();
+    cursor: default;
+  }
+}
+
+@media (max-width: 768px) {
+  .phoneBlock {
+    & a {
+      font-size: 14px;
+    }
+  }
+}

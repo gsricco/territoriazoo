@@ -1,0 +1,43 @@
+@import "src/styles/Mixins";
+@import "src/styles/Variables";
+
+.popularBrandsBlock {
+  width: 100%;
+  padding-top: 56px;
+  margin-bottom: 57px;
+
+  .title {
+    @include SFDisplaySemibold();
+    font-size: 28px;
+    line-height: 32px;
+    color: $textColor;
+  }
+
+  .brandsContainer {
+    @include flex(row, space-between, center);
+    box-sizing: border-box;
+    width: 100%;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin: 24px 0 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .popularBrandsBlock {
+    padding-top: 0;
+
+    .title {
+      @include SFDisplayBold();
+      font-size: 21px;
+      line-height: 28px;
+      margin-bottom: 16px;
+    }
+
+    .brandsContainer {
+      gap: 8px;
+      margin-bottom: 17px;
+      margin-top: 0;
+    }
+  }
+}
