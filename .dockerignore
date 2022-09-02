@@ -2,4 +2,6 @@ venv
 db.sqlite3
 dump.rdb
 фывфыв.py
-media
+ZOO/media
+ZOO/main/migrations
+__pycache__/

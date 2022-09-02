@@ -464,8 +464,8 @@ class Banner(models.Model):
                                 options={'quality': 50}, null=True, blank=True,
                                 upload_to='photos_banner/')
     is_active = models.BooleanField(verbose_name='Активно', default=False)
-    info_shop = models.ForeignKey('InfoShop', related_name='banners', on_delete=models.CASCADE, null=True)
-                                  #default=InfoShop.objects.all().first().id)
+    info_shop = models.ForeignKey('InfoShop', related_name='banners', on_delete=models.CASCADE, null=True,
+                                  default=1)
 
     def __str__(self):
         return self.title

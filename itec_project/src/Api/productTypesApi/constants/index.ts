@@ -1,1 +1,1 @@
-export const PRODUCT_TYPES_URL = 'categories'
+export const PRODUCT_TYPES_URL = 'categories/'

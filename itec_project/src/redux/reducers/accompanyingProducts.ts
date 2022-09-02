@@ -21,13 +21,12 @@ export const fetchAccompanyingProductsTC = createAsyncThunk(
 );
 export const slice = createSlice( {
   name: 'accompanyingProducts',
-  initialState: {
-    results: [] as Array<ProductItemType>,
-  },
+  initialState:
+        [] as Array<ProductItemType>,
   reducers: {
     setChosenOptionToAccompanyingProducts( state, action: PayloadAction<{ productId: number, option: OptionType }> ) {
-      const index = state.results.findIndex( product => product.id === action.payload.productId );
-      state.results[ index ].chosen_option = action.payload.option;
+      const index = state.findIndex( product => product.id === action.payload.productId );
+      state[ index ].chosen_option = action.payload.option;
     },
   },
   extraReducers: ( builder => {

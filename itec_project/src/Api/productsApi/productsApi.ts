@@ -38,6 +38,6 @@ export const productsAPI = {
     } );
   },
   async setAccompanyingProducts( productId: number ) {
-    return await instance.get<Array<ProductItemType>>( `${ PRODUCTS_URL }/${ productId }/${ ACCOMPANYING_PRODUCTS_URL }` );
+    return await instance.get<Array<ProductItemType>>( `${ PRODUCTS_URL }/${ productId }/${ ACCOMPANYING_PRODUCTS_URL }/` );
   },
 };

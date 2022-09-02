@@ -24,11 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = os.environ.get('SECRET_KEY')
 SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DEBUG'))
+# DEBUG = bool(os.environ.get('DEBUG'))
+DEBUG = False
 
-ALLOWED_HOSTS = []
-if not DEBUG:
-    ALLOWED_HOSTS += os.getenv('ALLOWED_HOSTS')
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+# if not DEBUG:
+#     ALLOWED_HOSTS += os.getenv('ALLOWED_HOSTS')
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,7 +45,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'django_filters',
     'ckeditor_uploader',
-    'debug_toolbar',
+    # 'debug_toolbar',
     'ckeditor',
     'import_export',
     'admin_reorder',
@@ -52,16 +53,11 @@ INSTALLED_APPS = [
     'colorfield',
 
     'main.apps.MainConfig',
-
-    'admin_numeric_filter',
 ]
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
-# }
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -74,7 +70,7 @@ REDIS_HOST = os.getenv('R_HOST')
 REDIS_PORT = os.getenv('R_PORT')
 REDIS_DB = os.getenv('R_DB')
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -87,6 +83,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+
 ROOT_URLCONF = 'ZOO.urls'
 
 TEMPLATES = [
@@ -152,6 +149,7 @@ ADMIN_REORDER = (
         'models': [
             {'model': 'main.InfoShop', 'label': 'Информация о магазине'},
             {'model': 'main.InfoShopBlock', 'label': 'Блок о магазине'},
+            {'model': 'main.Article', 'label': 'Полезные статьи'},
             {'model': 'main.Comments', 'label': 'Отзывы о магазине'},
             {'model': 'main.Banner', 'label': 'Рекламные Баннеры'},
 
@@ -160,9 +158,6 @@ ADMIN_REORDER = (
 )
 WSGI_APPLICATION = 'ZOO.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-#
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -173,12 +168,6 @@ DATABASES = {
         # 'PORT': os.getenv('DB_PORT'),
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -192,8 +181,6 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 CACHE_TTL = 60 * 1
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -225,24 +212,25 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_URL = '/django_static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static')
+# ]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/django_media/'
+MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-REDIS_URL = "redis://redis:6379/1"
-BROKER_URL = REDIS_URL
-CELERY_BROKER_URL = REDIS_URL
-CELERY_RESULT_BACKEND = REDIS_URL
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+# REDIS_URL = "redis://redis:6379/1"
+# BROKER_URL = REDIS_URL
+# CELERY_BROKER_URL = REDIS_URL
+# CELERY_RESULT_BACKEND = REDIS_URL
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json' 207320125879
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -287,6 +275,6 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'YourCustomToolbarConfig',
     }
 }
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
+# INTERNAL_IPS = [
+#     '127.0.0.1',
+# ]

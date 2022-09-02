@@ -380,9 +380,11 @@ const ProductPage = React.memo( () => {
       <div className={ style.productPageButtonWrappers }>
         <PopularProductsBlock fromCatalog={ false }/>
       </div>
-      { accompanyingProducts.length > 0 && <div className={ style.productPageButtonWithWrappers }>
-        <WithThisProductBuyBlock products={ accompanyingProducts }/>
-      </div>
+      { accompanyingProducts.length &&
+        <div className={style.productPageButtonWithWrappers}>
+
+          <WithThisProductBuyBlock products={accompanyingProducts}/>
+        </div>
       }
       <UsefulArticlesBlock/>
       { isOneClickModalActive &&

@@ -10,7 +10,7 @@ from .models import (Product, Brand, Animal, Category, ProductOptions, ProductIm
                      DiscountProduct, DiscountByCategory, DiscountProductOption, DiscountByDay, DiscountByDayOptions,
                      InfoShopMainPage, Banner)
 from .resources import ProductOptionsAdminResource, ProductAdminResource
-from admin_numeric_filter.admin import RangeNumericFilter
+
 
 admin.site.site_header = "Территория ZOO"  # Надпись в админке сайта
 admin.site.site_title = "Территория ZOO"
@@ -35,9 +35,9 @@ class ProductOptionsAdmin(ImportExportModelAdmin):
     list_display = 'article_number', 'product', 'price', 'stock_balance', 'size', 'units', 'is_active', 'partial'
     list_filter = (
         'is_active', 'partial', 'units',
-        ('price', RangeNumericFilter),
-        ('size', RangeNumericFilter),
-        ('stock_balance', RangeNumericFilter),
+        'price',
+        'size',
+        'stock_balance',
     )
     search_fields = 'article_number', 'stock_balance', 'price'
     list_editable = 'price', 'size', 'stock_balance', 'units', 'partial', 'is_active'
@@ -320,6 +320,7 @@ class DiscountByDayAdmin(admin.ModelAdmin):
     list_filter = 'title', 'is_active'
     inlines = (DiscountByDayOptionsAdminInline,)
     form = MyForm
+
     def add_view(self, request):
         if request.method == "POST":
             days_list = request.POST.getlist('week_days')

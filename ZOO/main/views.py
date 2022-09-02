@@ -91,7 +91,6 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(methods=['GET'], detail=True)
     def accompanying_goods(self, request, pk=None):
-        print(self.pagination_class)
         r = Recommend()
         product_ids = r.suggest_products_for(pk)
         queryset = self.queryset.filter(id__in=product_ids)
@@ -148,14 +147,12 @@ class CommentsView(mixins.CreateModelMixin, mixins.ListModelMixin,
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         serializer = CommentsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             bot_comment(request.data)
             return Response(status=201)
         else:
-            print(serializer.errors)
             return Response(status=401)
 
 
@@ -180,65 +177,65 @@ class OrderViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
     def create(self, request, *args, **kwargs):
         items_basket = request.data['orderInfo']['productsInBasket']
         customer = {'phone_number': request.data['phone_number'], 'customer_name': request.data['customer_name']}
-        sum_check = basket_counter(items_basket, request.data['discountForBasket'])
-        if sum_check == Decimal(request.data["orderInfo"]["basketCountWithDiscount"]):
-            try:
-                obj_customer = Customer.objects.get(phone_number=customer['phone_number'])
-                serializer_customer = CustomerSerializer(obj_customer, data=customer)
-                if serializer_customer.is_valid(raise_exception=True):
-                    serializer_customer.save()
-                    order_obj = Order.objects.create(customer_id=obj_customer.id,
-                                                     total_sum=request.data["orderInfo"]["basketCountWithDiscount"])
-                else:
-                    return Response("Wrong Customer", status=400)
-            except:
-                serializer_customer = CustomerSerializer(data=customer)
-                if serializer_customer.is_valid():
-                    instance = serializer_customer.save()
-                    order_obj = Order.objects.create(customer_id=instance.id,
-                                                     total_sum=request.data["orderInfo"]["basketCountWithDiscount"])
-                else:
-                    return Response("Wrong Customer", status=400)
-            order_items_list = []
-            # articles_numbers = []
-            for item in items_basket:
-                # articles_numbers.append(item['chosen_option']['article_number'])
-                order_items_list.append({'article_number': item['chosen_option']['article_number'],
-                                         'quantity': item['chosen_option']['quantity'],
-                                         'stock_balance': item['chosen_option']['stock_balance'],
-                                         'price': item['chosen_option']['price']})
-            # TODO: for updating stock_balance in ProductOption
-            # print(articles_numbers)
-            # po_objects = ProductOptions.objects.filter(article_number__in=articles_numbers)
-            # print(po_objects)
-            # print(order_items_list)
-            # one_more_list = []
-            # for item in order_items_list:
-            #     obj_to_update = po_objects.get(article_number=item['article_number'])
-            #     # print(obj_to_update)
-            #     obj_to_update.stock_balance = item['stock_balance'] - item['quantity']
-            #     one_more_list.append(obj_to_update)
-            # updating = ProductOptions.objects.bulk_update(one_more_list, ['stock_balance'])
-            items_order_serializer = OrderItemSerializer(data=order_items_list, many=True)
-            if items_order_serializer.is_valid():
-                items_order_serializer.save(order_id=order_obj.id)
-                r = Recommend()
-                r.products_bought(items_basket)
-                send_order_bot({"total_with_discount": request.data["orderInfo"]["basketCountWithDiscount"],
-                                "total_no_discount": request.data["orderInfo"]["basketCount"],
-                                'items': order_items_list,
-                                'customer': customer})
-                return Response(status=201)
+        # sum_check = basket_counter(items_basket, request.data['discountForBasket'])
+        # if sum_check == Decimal(request.data["orderInfo"]["basketCountWithDiscount"]):
+        try:
+            obj_customer = Customer.objects.get(phone_number=customer['phone_number'])
+            serializer_customer = CustomerSerializer(obj_customer, data=customer)
+            if serializer_customer.is_valid(raise_exception=True):
+                serializer_customer.save()
+                order_obj = Order.objects.create(customer_id=obj_customer.id,
+                                                 total_sum=request.data["orderInfo"]["basketCountWithDiscount"])
             else:
-                return Response("Wrong Items", status=400)
+                return Response("Wrong Customer", status=400)
+        except:
+            serializer_customer = CustomerSerializer(data=customer)
+            if serializer_customer.is_valid():
+                instance = serializer_customer.save()
+                order_obj = Order.objects.create(customer_id=instance.id,
+                                                 total_sum=request.data["orderInfo"]["basketCountWithDiscount"])
+            else:
+                return Response("Wrong Customer", status=400)
+        order_items_list = []
+        # articles_numbers = []
+        for item in items_basket:
+            # articles_numbers.append(item['chosen_option']['article_number'])
+            order_items_list.append({'article_number': item['chosen_option']['article_number'],
+                                     'quantity': item['chosen_option']['quantity'],
+                                     'stock_balance': item['chosen_option']['stock_balance'],
+                                     'price': item['chosen_option']['price']})
+        # TODO: for updating stock_balance in ProductOption
+        # print(articles_numbers)
+        # po_objects = ProductOptions.objects.filter(article_number__in=articles_numbers)
+        # print(po_objects)
+        # print(order_items_list)
+        # one_more_list = []
+        # for item in order_items_list:
+        #     obj_to_update = po_objects.get(article_number=item['article_number'])
+        #     # print(obj_to_update)
+        #     obj_to_update.stock_balance = item['stock_balance'] - item['quantity']
+        #     one_more_list.append(obj_to_update)
+        # updating = ProductOptions.objects.bulk_update(one_more_list, ['stock_balance'])
+        items_order_serializer = OrderItemSerializer(data=order_items_list, many=True)
+        if items_order_serializer.is_valid():
+            items_order_serializer.save(order_id=order_obj.id)
+            r = Recommend()
+            r.products_bought(items_basket)
+            send_order_bot({"total_with_discount": request.data["orderInfo"]["basketCountWithDiscount"],
+                            "total_no_discount": request.data["orderInfo"]["basketCount"],
+                            'items': order_items_list,
+                            'customer': customer})
+            return Response(status=201)
         else:
-            return Response("Wrong Basket", status=400)
+            return Response("Wrong Items", status=400)
+    # else:
+    #     return Response("Wrong Basket", status=400)
 
     # TODO: delete this method later
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.filter_queryset(self.get_queryset())
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     return Response(serializer.data)
 
     @action(methods=['POST'], detail=False, url_path='call_back', name='call_back')
     def call_back(self, request):
