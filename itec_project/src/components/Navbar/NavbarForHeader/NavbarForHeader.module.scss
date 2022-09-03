@@ -38,7 +38,8 @@
 
   .scroll {
     scroll-behavior: smooth;
-
+    display:flex;
+    align-items:center;
   }
 }
 
