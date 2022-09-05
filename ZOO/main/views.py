@@ -149,6 +149,7 @@ class CommentsPerms(BasePermission):
 
 class CommentsView(mixins.CreateModelMixin, mixins.ListModelMixin,
                    viewsets.GenericViewSet):
+    queryset = Comments.objects.filter(published=True)
     serializer_class = CommentsSerializer
     permission_classes = (CommentsPerms,)
 
