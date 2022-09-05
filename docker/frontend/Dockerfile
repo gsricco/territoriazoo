@@ -1,4 +1,9 @@
-FROM node:15.13-alpine
+FROM node:16-alpine
 WORKDIR /react
+COPY package.json ./
+RUN yarn install
 COPY . .
-RUN npm run build
+RUN yarn build
+
+
+
