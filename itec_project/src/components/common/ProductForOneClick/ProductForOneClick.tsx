@@ -121,7 +121,7 @@ const ProductForOneClick = ( {
             <p
               className={ priceWithDiscount === price ? style.price : style.priceWithDiscount }>{ price } BYN.</p>
             { priceWithDiscount !== price && <p
-              className={ style.price }>{ priceWithDiscount }BYN.</p> }
+              className={ style.price }>{ priceWithDiscount } BYN.</p> }
           </div>
         }
       </div>
