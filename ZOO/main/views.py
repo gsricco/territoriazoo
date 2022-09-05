@@ -9,7 +9,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action, permission_classes
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 from .models import (Animal, Brand, Category, Product, ProductOptions, Article, Comments, InfoShop, Consultation, Order,
                      Customer, DiscountProductOption, DiscountByDay, Banner)
@@ -135,14 +135,25 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ArticleSerializer
 
 
+class CommentsPerms(BasePermission):
+
+    def has_permission(self, request, view):
+
+        if request.method == 'POST' and request.user and request.user.is_authenticated:
+            return True
+        elif request.method == 'GET':
+            return True
+        else:
+            return False
+
+
 class CommentsView(mixins.CreateModelMixin, mixins.ListModelMixin,
                    viewsets.GenericViewSet):
-    queryset = Comments.objects.filter(published=True)
     serializer_class = CommentsSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (CommentsPerms,)
 
     def list(self, request, *args, **kwargs):
-        comments = self.queryset
+        comments = Comments.objects.filter(published=True)
         serializer = CommentsSerializer(comments, many=True)
         return Response(serializer.data)
 
