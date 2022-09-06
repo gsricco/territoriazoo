@@ -104,7 +104,7 @@ const ReviewsBlock = React.memo((): ReactElement => {
           <div className={ colorStyle.block }>
             <div className={ `${ colorStyle.sectionsBlock } ${ style.buttonsBlock }` }>
               <PrevSectionButton disabled={ isPrevDisabled } onClick={ onPrevSectionButtonClick }/>
-              <p>{ currentReviewNumber } из { reviews.length }</p>
+              <p>{!reviews.length ? 0 : currentReviewNumber } из { reviews.length }</p>
               <NextSectionButton disabled={ isNextDisabled } onClick={ onNextSectionButtonClick }/>
             </div>
           </div>

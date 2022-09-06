@@ -285,7 +285,7 @@ const ProductPage = React.memo( () => {
                 ) }
               </div>
               <div>
-                { partialOption &&
+                { !!partialOption &&
                   <p className={ style.unitsGroupHeft } onClick={ onWeightSetParagraphClick }>Задать свой
                     вес</p>
                 }
