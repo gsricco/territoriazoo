@@ -50,6 +50,17 @@
         margin-left: 6px;
       }
     }
+    .itecInfo {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      & a {
+        line-height: 24px;
+        color: $callbackColor;
+        margin-left: 6px;
+      }
+    }
   }
 }
 

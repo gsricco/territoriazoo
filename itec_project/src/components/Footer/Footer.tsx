@@ -33,6 +33,9 @@ const Footer = (): ReactElement => {
           <div className={ style.designerInfo }><p>Дизайн сайта: </p>
             <a href={ 'https://shkuratovdesigner.com/' } target={ '_blank' } rel={ 'noreferrer' }>shkuratovdesigner.com</a>
           </div>
+          <div className={ style.itecInfo }><p>Разработан: </p>
+            <a href={ 'https://itec.by/' } target={ '_blank' } rel={ 'noreferrer' }>ITEC Education Complex</a>
+          </div>
           <p>© Все права защищены 2022</p>
         </div>
       </div>
