@@ -31,7 +31,7 @@ const Footer = (): ReactElement => {
         </div>
         <div className={ style.siteInfo }>
           <div className={ style.designerInfo }><p>Дизайн сайта: </p>
-            <a href={ 'shkuratovdesigner.com' } target={ '_blank' } rel={ 'noreferrer' }>shkuratovdesigner.com</a>
+            <a href={ 'https://shkuratovdesigner.com/' } target={ '_blank' } rel={ 'noreferrer' }>shkuratovdesigner.com</a>
           </div>
           <p>© Все права защищены 2022</p>
         </div>
