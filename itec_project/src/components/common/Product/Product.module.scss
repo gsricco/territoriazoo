@@ -11,6 +11,7 @@
 
   .productWrap {
     display: flex;
+    max-width: 70%;
   }
 
   .imageWrapper {
@@ -297,7 +298,7 @@
 }
 
 .widthForModalMainProductInfo {
-  max-width: 355px;
+  max-width: 325px;
 }
 
 @media (max-width: 768px) {
