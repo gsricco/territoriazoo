@@ -75,6 +75,7 @@ class ProductOptionsAdminResource(resources.ModelResource):
             row['Объём'] = '1000'
             row['Единицы измерения'] = 'грамм'
 
+
 class ProductAdminResource(resources.ModelResource):
     name = Field(column_name='Название товара', attribute='name')
     description = Field(column_name='Описание товара', attribute='description')
