@@ -108,6 +108,13 @@ class ProductOptions(models.Model):
         verbose_name_plural = 'ВАРИАНТЫ ФАСОВКИ'
         ordering = ('partial', 'size',)
 
+    def save(self, *args, **kwargs):
+        if self.partial == False:
+            super(ProductOptions, self).save(*args, **kwargs)
+        elif self.partial == True:
+            self.size = 1000
+            self.units = Units.objects.get(unit_name='грамм')
+        super(ProductOptions, self).save(*args, **kwargs)
 
 class Animal(models.Model):
     """Доступные типы животных для поиска товаров"""
