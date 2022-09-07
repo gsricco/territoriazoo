@@ -70,6 +70,11 @@ class ProductOptionsAdminResource(resources.ModelResource):
         import_id_fields = ('article_number',)  # поля для определения идентификатора
         exclude = ('id', 'date_created', 'date_updated',)  # поля для исключения
 
+    def before_import_row(self, row, row_number=None, **kwargs):
+        if row['На развес'] == 'True' or row['На развес'] == '1':
+            row['Объём'] = '1000'
+            row['Единицы измерения'] = 'грамм'
+
 
 class ProductAdminResource(resources.ModelResource):
     name = Field(column_name='Название товара', attribute='name')

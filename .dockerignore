@@ -5,3 +5,4 @@ dump.rdb
 ZOO/media
 ZOO/main/migrations
 __pycache__/
+docker/
