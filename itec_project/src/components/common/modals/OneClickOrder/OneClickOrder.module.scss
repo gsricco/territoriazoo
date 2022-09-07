@@ -145,3 +145,10 @@
   }
 }
 
+@media (max-width: 577px) {
+  .ProductForBasketModalContainer {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
