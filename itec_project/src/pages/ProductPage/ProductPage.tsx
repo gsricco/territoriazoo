@@ -380,7 +380,7 @@ const ProductPage = React.memo( () => {
       <div className={ style.productPageButtonWrappers }>
         <PopularProductsBlock fromCatalog={ false }/>
       </div>
-      { accompanyingProducts.length &&
+      { !!accompanyingProducts.length &&
         <div className={style.productPageButtonWithWrappers}>
 
           <WithThisProductBuyBlock products={accompanyingProducts}/>
