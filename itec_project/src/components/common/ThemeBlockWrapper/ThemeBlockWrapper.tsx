@@ -67,9 +67,9 @@ const ThemeBlockWrapper = ( {
     dispatch( setOneClickOrderRequestStatus( { status: RequestStatus.IDLE } ) );
     setIsOneClickModalActive( false );
   };
-  const closeOneClickOrderModal = () => {
+  /*const closeOneClickOrderModal = () => {
     setIsOneClickOrderActive( true );
-  };
+  };*/
   const openOneClickModal = ( product: ProductItemType ) => {
     dispatch( setProductToState( { product, basketDiscount } ) );
     setIsOneClickModalActive( true );

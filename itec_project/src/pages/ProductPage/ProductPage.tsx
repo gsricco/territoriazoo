@@ -82,7 +82,6 @@ const ProductPage = React.memo( () => {
   const priceWithDiscountCropped = getPrice( priceWithDiscount );
   const partialOption = options.filter( option => option.partial )[ 0 ];
   const stockBalanceInfo = `Максимальный размер заказа может составить: ${ partialOption ? ( partialOption.stock_balance / 1000 ) : 0 } кг.`;
-  const products = getProductItems(); //todo позже приходить будет по апи
   const price = getPrice( product.chosen_option.partial ? ( ( product.chosen_option.quantity / 1000 ) * +product.chosen_option.price ) : +product.chosen_option.price * countOfProduct );
 
   const navigate = useNavigate();
@@ -297,7 +296,7 @@ const ProductPage = React.memo( () => {
                         type="text"
                         value={ weightSetValue }
                         onChange={ onWeightSetInputChange }
-                        autoFocus={ weightSetIsShowed }
+                        autoFocus={ true }
                         placeholder={ 'Например: 1.2 кг' }
                       />
                       <button onClick={ onApplyButtonClick }>Применить</button>
@@ -380,7 +379,7 @@ const ProductPage = React.memo( () => {
       <div className={ style.productPageButtonWrappers }>
         <PopularProductsBlock fromCatalog={ false }/>
       </div>
-      { accompanyingProducts.length &&
+      { !!accompanyingProducts.length &&
         <div className={style.productPageButtonWithWrappers}>
 
           <WithThisProductBuyBlock products={accompanyingProducts}/>
