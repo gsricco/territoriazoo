@@ -24,7 +24,6 @@ import { setActualPage } from '../../redux/reducers/products';
 import { stringCutter } from '../../helpers/stringCutter';
 import { getProductsInBasket } from '../../redux/selectors/basket';
 import { AppDispatch } from '../../redux/store';
-import { getProductItems } from '../../mocks';
 import { fetchProductTC, setChosenOptionToProduct } from '../../redux/reducers/product';
 import { getProduct } from '../../redux/selectors/product';
 import { setProductToState } from '../../redux/reducers/onClickOrder';
@@ -172,7 +171,7 @@ const ProductPage = React.memo( () => {
         } ) );
         setWeightSetError( '' );
         setWeightSetValue( '' );
-        setWeightSetIsShowed( { status: false } );
+        dispatch( setWeightSetIsShowed( { status: false } ) );
       } else setWeightSetError( `К сожалению, в наличие нет указанного количества товара.` );
     }
   };
@@ -380,9 +379,9 @@ const ProductPage = React.memo( () => {
         <PopularProductsBlock fromCatalog={ false }/>
       </div>
       { !!accompanyingProducts.length &&
-        <div className={style.productPageButtonWithWrappers}>
+        <div className={ style.productPageButtonWithWrappers }>
 
-          <WithThisProductBuyBlock products={accompanyingProducts}/>
+          <WithThisProductBuyBlock products={ accompanyingProducts }/>
         </div>
       }
       <UsefulArticlesBlock/>
