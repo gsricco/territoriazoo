@@ -1,4 +1,4 @@
-import re
+from .validators import phone_validator, name_validator
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.html import strip_tags
 from rest_framework import serializers
@@ -6,14 +6,6 @@ from .models import (Animal, Article, Brand, Category, Comments, InfoShop,
                      Product, ProductOptions, ProductImage, Order, Customer, OrderItem, Units, Consultation,
                      InfoShopBlock, DiscountProductOption, DiscountProduct, DiscountByCategory, DiscountByDay,
                      DiscountByDayOptions, InfoShopMainPage, Banner, )
-
-
-def phone_validator(phone_number):
-    regular = r'(\+375)?(?:33|44|25|29)?([0-9]{7})'
-    if re.fullmatch(regular, phone_number):
-        return phone_number
-    else:
-        raise serializers.ValidationError('wrong phone number')
 
 
 class DiscountProductSerializer(serializers.ModelSerializer):
@@ -170,13 +162,27 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CommentsSerializer(serializers.ModelSerializer):
+class CommentsCreateSerializer(serializers.ModelSerializer):
+    name_author = serializers.CharField(validators=[name_validator])
+    phone_number = serializers.CharField(validators=[phone_validator])
+    name_animal = serializers.CharField(validators=[name_validator])
+
     class Meta:
         model = Comments
         exclude = ('date_added', 'published',)
 
 
+class CommentsListSerializer(serializers.ModelSerializer):
+    name_author = serializers.CharField(validators=[name_validator])
+    name_animal = serializers.CharField(validators=[name_validator])
+
+    class Meta:
+        model = Comments
+        exclude = ('phone_number', 'date_added', 'published',)
+
+
 class InfoShopBlockSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = InfoShopBlock
         fields = ('id', 'info_title', 'info_text',)
@@ -210,6 +216,7 @@ class InfoShopSerializer(serializers.ModelSerializer):
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+    customer_name = serializers.CharField(validators=[name_validator])
     phone_number = serializers.CharField(validators=[phone_validator])
 
     class Meta:
@@ -233,6 +240,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class ConsultationSerializer(serializers.ModelSerializer):
+    customer_name = serializers.CharField(validators=[name_validator])
     phone_number = serializers.CharField(validators=[phone_validator])
 
     class Meta:

@@ -16,9 +16,10 @@ from .models import (Animal, Brand, Category, Product, ProductOptions, Article, 
 from .recommendations import Recommend
 from .serializers import (AnimalSerializer, BrandSerializer, CategorySerializer,
                           ProductSerializer, ProductOptionsSerializer, ArticleSerializer,
-                          InfoShopSerializer, CommentsSerializer, OrderSerializer, CustomerSerializer,
-                          OrderItemSerializer, DiscountProductOptionSerializer, ProductDetailSerializer,
-                          DiscountByDaySerializer, ConsultationSerializer,)
+                          InfoShopSerializer, OrderSerializer, CustomerSerializer,
+                          OrderItemSerializer, ProductDetailSerializer,
+                          DiscountByDaySerializer, ConsultationSerializer, CommentsListSerializer,
+                          CommentsCreateSerializer, )
 from .services import send_order_bot, basket_counter, call_back_bot, bot_comment
 
 
@@ -150,16 +151,15 @@ class CommentsPerms(BasePermission):
 class CommentsView(mixins.CreateModelMixin, mixins.ListModelMixin,
                    viewsets.GenericViewSet):
     queryset = Comments.objects.filter(published=True)
-    serializer_class = CommentsSerializer
     permission_classes = (CommentsPerms,)
 
     def list(self, request, *args, **kwargs):
         comments = Comments.objects.filter(published=True)
-        serializer = CommentsSerializer(comments, many=True)
+        serializer = CommentsListSerializer(comments, many=True)
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        serializer = CommentsSerializer(data=request.data)
+        serializer = CommentsCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             bot_comment(request.data)

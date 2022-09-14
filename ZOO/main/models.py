@@ -1,20 +1,10 @@
-import re
-
+from .validators import name_validator, phone_validator
 from colorfield.fields import ColorField
 from django.contrib.postgres.fields import ArrayField
-from django.core.exceptions import ValidationError
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator, MaxLengthValidator
 from imagekit.models import ProcessedImageField
-
-
-def phone_validator(phone_number):
-    regular = r'(\+375)?(?:33|44|25|29)?([0-9]{7})'
-    if re.fullmatch(regular, phone_number):
-        return phone_number
-    else:
-        raise ValidationError('Неправильный номер телефона')
 
 
 class Product(models.Model):
@@ -116,6 +106,7 @@ class ProductOptions(models.Model):
             self.units = Units.objects.get(unit_name='грамм')
         super(ProductOptions, self).save(*args, **kwargs)
 
+
 class Animal(models.Model):
     """Доступные типы животных для поиска товаров"""
     name = models.CharField(verbose_name='Название животного', max_length=20, unique=True)
@@ -199,11 +190,12 @@ class Article(models.Model):
 
 class Comments(models.Model):
     """Отзыв о магазине"""
-    name_author = models.CharField(verbose_name='Автор отзыва', max_length=100)
+    name_author = models.CharField(verbose_name='Автор отзыва', max_length=100, validators=[name_validator])
     body_of_comment = models.TextField(verbose_name='Содержание отзыва')
     phone_number = models.CharField(verbose_name='Номер телефона', max_length=20, null=True, blank=True,
                                     validators=[phone_validator])
-    name_animal = models.CharField(verbose_name='Имя питомца', max_length=100, null=True, blank=True)
+    name_animal = models.CharField(verbose_name='Имя питомца', max_length=100, null=True, blank=True,
+                                   validators=[name_validator])
     date_added = models.DateTimeField(verbose_name='Дата добавления', auto_now_add=True)
     published = models.BooleanField(verbose_name='Опубликовано', default=False)
 
@@ -281,7 +273,8 @@ class InfoShopBlock(models.Model):
 
 class Consultation(models.Model):
     """Консультация"""
-    customer_name = models.CharField(verbose_name='Имя', max_length=100, blank=True, null=True)
+    customer_name = models.CharField(verbose_name='Имя', max_length=100, blank=True, null=True,
+                                     validators=[name_validator])
     phone_number = models.CharField(verbose_name='Номер телефона', max_length=13, unique=True,
                                     validators=[phone_validator])
     date_added = models.DateTimeField(verbose_name='Дата первого обращения', auto_now_add=True)
@@ -299,8 +292,8 @@ class Customer(models.Model):
     """Покупатели"""
     phone_number = models.CharField(verbose_name='Номер телефона', max_length=13, blank=True, null=True, unique=True,
                                     validators=[phone_validator])
-    customer_name = models.CharField(verbose_name='Имя покупателя', max_length=50, blank=True, null=True)
-
+    customer_name = models.CharField(verbose_name='Имя покупателя', max_length=50, blank=True, null=True,
+                                     validators=[name_validator])
     first_order_date = models.DateTimeField(verbose_name='Дата первого заказа', auto_now_add=True)
     last_order_date = models.DateTimeField(verbose_name="Дата последнего заказа", auto_now=True, null=True)
     # TODO: Нужны ли ещё поля для учёта статистики
