@@ -74,7 +74,11 @@ const CheckoutPage = React.memo( () => {
     validate: ( values ) => {
       const errors: FormikErrorType = {};
       if ( values.name.length < 2 ) {
-        errors.name = 'Поле обязательно для заполнения';
+        errors.name = 'Минимально допустимое количество символов: 2';
+      } else if ( !/(^(?!~!"№;%\?.*\(\)#\$%\^&=\+-_@$)([A-Za-z]{1}[a-z]{1,18}( [A-Za-z]{1})?([a-z]{1,18})?)$)|(^[А-Яа-я]{1}[а-я]{1,18}( [А-Яа-я]{1})?([а-я]{1,18})?$)/i.test( values.name ) ) {
+        errors.name = 'Допустимые символы: A-z А-я';
+      } else if ( values.name.length > 30 ) {
+        errors.name = 'Максимально допустимое количество символов: 30';
       }
       if ( !values.phoneNumber ) {
         errors.phoneNumber = 'Обязательно';
@@ -115,7 +119,7 @@ const CheckoutPage = React.memo( () => {
               <p>Имя</p>
               <input
                 type={ 'name' }
-                placeholder={ 'Иванов Иван Иванович' }
+                placeholder={ 'Иванов Иван' }
                 { ...formik.getFieldProps( 'name' ) }
               />
               { formik.touched.name && formik.errors.name &&
@@ -149,7 +153,7 @@ const CheckoutPage = React.memo( () => {
           </div>
           <div className={ style.orderBlock }>
             <button className={ style.orderBtn } type="submit">Заказать</button>
-            <p>Нажимая на кнопку вы даёте согласие на обработку <span onClick={ openPrivacyPolicyModal }>персональных данных</span>
+            <p>Нажимая на кнопку, вы даёте согласие на обработку <span onClick={ openPrivacyPolicyModal }>персональных данных</span>
             </p>
           </div>
         </form>
