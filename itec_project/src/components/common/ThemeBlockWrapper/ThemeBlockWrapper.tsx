@@ -37,7 +37,7 @@ const ThemeBlockWrapper = ( {
   const [ isOneClickOrderActive, setIsOneClickOrderActive ] = useState<boolean>( false );
   const [ isBasketModalActive, setIsBasketModalActive ] = useState<boolean>( false );
   const productsFromBasket = useSelector( getProductsInBasket );
-  const basketDiscount = useSelector( getDiscountsForBasket )[0];
+  const basketDiscount = useSelector( getDiscountsForBasket )[ 0 ];
   const isSuccessOneClickOrder = useSelector( getOneClickOrderRequestStatus ) === RequestStatus.SUCCEEDED;
   const { block, sectionsBlock, productItem } = blockTheme;
 
@@ -67,9 +67,9 @@ const ThemeBlockWrapper = ( {
     dispatch( setOneClickOrderRequestStatus( { status: RequestStatus.IDLE } ) );
     setIsOneClickModalActive( false );
   };
-  /*const closeOneClickOrderModal = () => {
+  const closeOneClickOrderModal = () => {
     setIsOneClickOrderActive( true );
-  };*/
+  };
   const openOneClickModal = ( product: ProductItemType ) => {
     dispatch( setProductToState( { product, basketDiscount } ) );
     setIsOneClickModalActive( true );
@@ -143,7 +143,8 @@ const ThemeBlockWrapper = ( {
           <Modal closeModal={ closeOneClickModal }>
             { isSuccessOneClickOrder
               ? ( <SuccessOrderModal from={ location.ONE_CLICK_ORDER }/> )
-              : ( <OneClickOrder closeOneClickOrderModal={ closeOneClickModal }/> )
+              : (
+                <OneClickOrder closeOneClickOrderModal={ closeOneClickOrderModal } closeModal={ closeOneClickModal }/> )
             }
           </Modal>
         }
