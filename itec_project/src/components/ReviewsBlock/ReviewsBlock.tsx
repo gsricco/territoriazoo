@@ -22,7 +22,7 @@ import { getSendingReviewsRequestStatus } from '../../redux/selectors/app';
 import { setSendingReviewRequestStatus } from '../../redux/reducers/app';
 import { RequestStatus } from '../../redux/reducers/enums';
 
-const ReviewsBlock = React.memo((): ReactElement => {
+const ReviewsBlock = React.memo( (): ReactElement => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ const ReviewsBlock = React.memo((): ReactElement => {
 
   useEffect( () => {
     dispatch( fetchReviewsTC() );
-  }, [dispatch] );
+  }, [ dispatch ] );
   useEffect( () => {
     if ( isReviewModalActive || isSuccessReview ) {
       window.document.body.style.overflow = 'hidden';
@@ -88,12 +88,11 @@ const ReviewsBlock = React.memo((): ReactElement => {
                      transform: `translateX(${ offset }px)`,
                    } }>
                 {
-                  reviews.map( ({id, name_author, body_of_comment, phone_number, name_animal}) =>
+                  reviews.map( ( { id, name_author, body_of_comment, name_animal } ) =>
                     <Review
                       key={ id }
                       nameAuthor={ name_author }
                       bodyOfComment={ body_of_comment }
-                      phoneNumber={ phone_number }
                       nameAnimal={ name_animal }
                     />,
                   )
@@ -104,7 +103,7 @@ const ReviewsBlock = React.memo((): ReactElement => {
           <div className={ colorStyle.block }>
             <div className={ `${ colorStyle.sectionsBlock } ${ style.buttonsBlock }` }>
               <PrevSectionButton disabled={ isPrevDisabled } onClick={ onPrevSectionButtonClick }/>
-              <p>{!reviews.length ? 0 : currentReviewNumber } из { reviews.length }</p>
+              <p>{ currentReviewNumber } из { reviews.length }</p>
               <NextSectionButton disabled={ isNextDisabled } onClick={ onNextSectionButtonClick }/>
             </div>
           </div>
@@ -123,6 +122,6 @@ const ReviewsBlock = React.memo((): ReactElement => {
       }
     </div>
   );
-});
+} );
 
 export default ReviewsBlock;
