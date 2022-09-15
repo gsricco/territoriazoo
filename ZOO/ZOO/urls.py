@@ -11,11 +11,10 @@ urlpatterns = [
          name="api_schema"),
     path('docs/', TemplateView.as_view(template_name='docs.html',
                                        extra_context={'schema_url': 'api_schema'}), name='swagger-ui'),
-    path('admin/panel/', admin.site.urls),
+    path('admin-panel/', admin.site.urls),
     path('api/', include('main.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
