@@ -296,7 +296,6 @@ class Customer(models.Model):
                                      validators=[name_validator])
     first_order_date = models.DateTimeField(verbose_name='Дата первого заказа', auto_now_add=True)
     last_order_date = models.DateTimeField(verbose_name="Дата последнего заказа", auto_now=True, null=True)
-    # TODO: Нужны ли ещё поля для учёта статистики
 
     class Meta:
         verbose_name = 'ПОКУПАТЕЛЬ'
@@ -432,27 +431,6 @@ class DiscountByDayOptions(models.Model):
         verbose_name = "Сумма покупок для скидки и размер скидки"
         verbose_name_plural = "СУММЫ ПОКУПОК ДЛЯ СКИДОК И РАЗМЕР СКИДОК"
         ordering = ('-min_price_for_discount',)
-
-
-# class WeekDays(models.Model):
-#     DAYS_DISCOUNT_CHOICES = (
-#         (0, 'Понедельник'),
-#         (1, 'Вторник'),
-#         (2, 'Среда'),
-#         (3, 'Четверг'),
-#         (4, 'Пятница'),
-#         (5, 'Суббота'),
-#         (6, 'Воскресение'),
-#     )
-#     days_discount = models.IntegerField(verbose_name='Дни недели для скидки', blank=True, null=True,
-#                                         choices=DAYS_DISCOUNT_CHOICES)
-#
-#     def __str__(self):
-#         return self.get_days_discount_display()
-#
-#     class Meta:
-#         verbose_name = 'День недели для скидки'
-#         verbose_name_plural = 'Дни недели для скидок'
 
 
 class Banner(models.Model):

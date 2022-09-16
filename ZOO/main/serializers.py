@@ -1,6 +1,5 @@
 from .validators import phone_validator, name_validator
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.html import strip_tags
 from rest_framework import serializers
 from .models import (Animal, Article, Brand, Category, Comments, InfoShop,
                      Product, ProductOptions, ProductImage, Order, Customer, OrderItem, Units, Consultation,
@@ -43,10 +42,6 @@ class ProductOptionsSerializer(serializers.ModelSerializer):
         depth = 1
 
     def get_discount_by_option(self, obj):
-        # if hasattr(obj, 'discount_option'):
-        #     print(obj.discount_option)
-        # else:
-        #     print('no such attributes')
         try:
             ser = DiscountProductOptionSerializer(obj.discount_option)
             return ser.data['discount_amount']
@@ -83,12 +78,10 @@ class ProductSerializer(serializers.ModelSerializer):
             'discount_by_product',
             'discount_by_category',
             'name',
-            # 'animal', 'brand',
-            # 'category',
+
             'chosen_option',
             'options', 'images',
-            # 'description', 'features', 'composition', 'additives', 'analysis', 'min_price'
-        )
+            )
         depth = 1
 
     def get_max_discount(self, obj):
@@ -106,28 +99,6 @@ class ProductSerializer(serializers.ModelSerializer):
         option_id = obj.options.all().first()
         serializer = ProductOptionsSerializer(option_id)
         return serializer.data
-
-    # def to_representation(self, instance):
-    #     data = super().to_representation(instance)
-    #     # list_discounts = []
-    #     discount_by_product = data.pop('discount_by_product')
-    #     discount_by_category = data.pop('discount_by_category')
-    #     # if discount_by_product is not None:
-    #     #     list_discounts.append(discount_by_product)
-    #     # if discount_by_category is not None:
-    #     #     list_discounts.append(discount_by_category)
-    #     # if len(list_discounts) > 0:
-    #     #     data['max_discount'] = max(discount_by_category, discount_by_product)
-    #     # else:
-    #     #     data['max_discount'] = None
-    #     data['discounts'] = {'discount_by_product': discount_by_product,
-    #                          'discount_by_category': discount_by_category}
-    #     # data['description'] = strip_tags(instance.description)
-    #     # data['features'] = strip_tags(instance.features)
-    #     # data['composition'] = strip_tags(instance.composition)
-    #     # data['additives'] = strip_tags(instance.additives)
-    #     # data['analysis'] = strip_tags(instance.analysis)
-    #     return data
 
 
 class ProductDetailSerializer(ProductSerializer):

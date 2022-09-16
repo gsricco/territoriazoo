@@ -1,7 +1,7 @@
 import datetime
 from collections import OrderedDict
-from decimal import Decimal
-from django.db.models import F, Min, Max, Q, Prefetch, FilteredRelation
+from django.db.models import F, Min, Q, Prefetch, FilteredRelation, Subquery, OuterRef
+from django.db.models.functions import Greatest
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework import mixins, viewsets
@@ -58,7 +58,14 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
                                                            condition=Q(
                                                                discount_product__is_active=True)), ). \
         annotate(discount_by_product=F('discount_by_product_true__discount_amount')). \
-        annotate(min_price=Min('options__price', filter=Q(options__partial=False) & Q(options__is_active=True)))
+        annotate(
+        min_price_options=Min('options__price', filter=Q(options__partial=False) & Q(options__is_active=True))). \
+        annotate(first_option_discount=Subquery(ProductOptions.objects.filter(
+        product=OuterRef('pk'), partial=False, is_active=True)[:1].
+                                                annotate(min_discount=F('discount_option__discount_amount')).
+                                                values('min_discount'))). \
+        annotate(greatest_discount=Greatest('discount_by_category', 'discount_by_product', 'first_option_discount')). \
+        annotate(min_price=F('min_price_options') * (100 - F('greatest_discount')) / 100)
 
     serializer_class = ProductSerializer
     pagination_class = Pagination
@@ -107,15 +114,6 @@ class BrandViewSet(viewsets.ReadOnlyModelViewSet):
 class AnimalViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Animal.objects.all()
     serializer_class = AnimalSerializer
-
-    # @action(detail=True, methods=['GET'], url_path='popular', name='popular_product_by_pet')
-    # def popular_by_pet(self, request, pk=None):
-    #     instance_set = Product.objects.filter(animal=pk).order_by('-popular')
-    #     if len(instance_set) < 16:
-    #         serializer = ProductSerializer(instance_set, many=True)
-    #     else:
-    #         serializer = ProductSerializer(instance_set[:16], many=True)
-    #     return Response(serializer.data)
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -189,8 +187,6 @@ class OrderViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
     def create(self, request, *args, **kwargs):
         items_basket = request.data['orderInfo']['productsInBasket']
         customer = {'phone_number': request.data['phone_number'], 'customer_name': request.data['customer_name']}
-        # sum_check = basket_counter(items_basket, request.data['discountForBasket'])
-        # if sum_check == Decimal(request.data["orderInfo"]["basketCountWithDiscount"]):
         try:
             obj_customer = Customer.objects.get(phone_number=customer['phone_number'])
             serializer_customer = CustomerSerializer(obj_customer, data=customer)
@@ -209,25 +205,11 @@ class OrderViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
             else:
                 return Response("Wrong Customer", status=400)
         order_items_list = []
-        # articles_numbers = []
         for item in items_basket:
-            # articles_numbers.append(item['chosen_option']['article_number'])
             order_items_list.append({'article_number': item['chosen_option']['article_number'],
                                      'quantity': item['chosen_option']['quantity'],
                                      'stock_balance': item['chosen_option']['stock_balance'],
                                      'price': item['chosen_option']['price']})
-        # TODO: for updating stock_balance in ProductOption
-        # print(articles_numbers)
-        # po_objects = ProductOptions.objects.filter(article_number__in=articles_numbers)
-        # print(po_objects)
-        # print(order_items_list)
-        # one_more_list = []
-        # for item in order_items_list:
-        #     obj_to_update = po_objects.get(article_number=item['article_number'])
-        #     # print(obj_to_update)
-        #     obj_to_update.stock_balance = item['stock_balance'] - item['quantity']
-        #     one_more_list.append(obj_to_update)
-        # updating = ProductOptions.objects.bulk_update(one_more_list, ['stock_balance'])
         items_order_serializer = OrderItemSerializer(data=order_items_list, many=True)
         if items_order_serializer.is_valid():
             items_order_serializer.save(order_id=order_obj.id)
@@ -240,14 +222,6 @@ class OrderViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
             return Response(status=201)
         else:
             return Response("Wrong Items", status=400)
-    # else:
-    #     return Response("Wrong Basket", status=400)
-
-    # TODO: delete this method later
-    # def list(self, request, *args, **kwargs):
-    #     queryset = self.filter_queryset(self.get_queryset())
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     return Response(serializer.data)
 
     @action(methods=['POST'], detail=False, url_path='call_back', name='call_back')
     def call_back(self, request):

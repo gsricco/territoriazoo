@@ -299,19 +299,6 @@ class MyForm(ModelForm):
         fields = 'title', 'is_active', 'week_days'
 
 
-# @admin.register(WeekDays)
-# class WeekDaysAdmin(admin.ModelAdmin):
-#     list_display = 'days_discount',
-#
-#     def add_view(self, request):
-#         if request.method == "POST":
-#             mess_1 = 'Дней недели не может быть больше 7!'
-#             if WeekDays.objects.count() >= 7:
-#                 context = {"mess_1": mess_1}
-#                 return render(request, 'admin/error.html', context)
-#         return super(WeekDaysAdmin, self).add_view(request)
-
-
 @admin.register(DiscountByDay)
 class DiscountByDayAdmin(admin.ModelAdmin):
     """Скидки по дням недели и сумме заказа"""
