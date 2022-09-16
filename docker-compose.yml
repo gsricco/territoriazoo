@@ -55,8 +55,11 @@ services:
     container_name: redis
     image: redis:6.0.16-alpine
     restart: unless-stopped
+    volumes:
+      - redis_volume:/data/
 volumes:
   react_build:
+  redis_volume:
   pgdata:
   static_volume:
   media_volume:

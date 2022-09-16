@@ -10,7 +10,7 @@ const FooterLogo = React.memo( (): ReactElement => {
     navigate( routesPathsEnum.MAIN );
   };
   return (
-    <div className={ style.logoBlock } onclick={ onLogoClick }>
+    <div className={ style.logoBlock } onClick={ onLogoClick }>
       <img src={ logo } loading={ 'lazy' } alt={ 'logo' }/>
       <p>Территория <span>ZOO</span></p>
     </div>
