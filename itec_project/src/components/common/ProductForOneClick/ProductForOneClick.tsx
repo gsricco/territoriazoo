@@ -64,14 +64,15 @@ const ProductForOneClick = ( {
     closeOneClickModal();
     dispatch( setWeightSetIsShowed( { status: true } ) );
     navigate( `${ routesPathsEnum.CATALOG }/${ id }` );
-    if ( from === 'oneClickOrder' ) document.documentElement.scrollTo( 0, 0);
+    if ( from === 'oneClickOrder' ) document.documentElement.scrollTo( 0, 0 );
   };
 
   return (
     <div className={ style.productForBasketContainer }>
       <div className={ style.productWrap }>
         <div className={ style.imageWrapper }>
-          <img src={ images[ 0 ] ? images[ 0 ].image : `${ PRODUCT_IMAGE }` } loading={ 'lazy' } alt="product"/>
+          <img src={ images[ 0 ] ? images[ 0 ].image : `${ PRODUCT_IMAGE }` } loading={ 'lazy' } alt="product"
+               draggable="false"/>
         </div>
         <div
           className={ isForModal ? `${ style.productMainInfo } ${ style.widthForModalMainProductInfo }` : `${ style.productMainInfo } ${ style.widthForBasketMainProductInfo }` }>

@@ -231,9 +231,9 @@ const ProductPage = React.memo( () => {
       <div className={ navigationStyle.navigationBlock }>
         <div className={ navigationStyle.navigationBlockWrapper }>
           <p onClick={ () => navigate( routesPathsEnum.MAIN ) }>Главная</p>
-          <img src={ nextIcon } loading={ 'lazy' } alt="nextIcon"/>
+          <img src={ nextIcon } loading={ 'lazy' } alt="nextIcon" draggable="false"/>
           <p onClick={ () => navigate( routesPathsEnum.CATALOG ) }>Каталог</p>
-          <img src={ nextIcon } loading={ 'lazy' } alt="nextIcon"/>
+          <img src={ nextIcon } loading={ 'lazy' } alt="nextIcon" draggable="false"/>
           <p>{ nameForNavigationBlock }</p>
         </div>
       </div>
@@ -391,7 +391,7 @@ const ProductPage = React.memo( () => {
         <Modal closeModal={ closeOneClickModal }>
           { isSuccessOneClickOrder
             ? ( <SuccessOrderModal from={ location.ONE_CLICK_ORDER }/> )
-            : ( <OneClickOrder closeOneClickOrderModal={ closeOneClickOrderModal } closeModal={closeOneClickModal}/> )
+            : ( <OneClickOrder closeOneClickOrderModal={ closeOneClickOrderModal } closeModal={ closeOneClickModal }/> )
           }
         </Modal>
       }

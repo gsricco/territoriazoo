@@ -4,11 +4,11 @@ import sadDog from '../../../../Images/emtyBrands.jpg';
 import SmallerButton from '../../SmallerButton/SmallerButton';
 import { RejectSearchResultPropsType } from '../types';
 
-const RejectSearchResult = React.memo(( { requestTitle, onClick }: RejectSearchResultPropsType ): ReactElement => {
+const RejectSearchResult = React.memo( ( { requestTitle, onClick }: RejectSearchResultPropsType ): ReactElement => {
 
   return (
     <div className={ style.rejectResultContainer }>
-      <img className={ style.rejectResultImage } loading={'lazy'} src={ sadDog } alt="sadDog"/>
+      <img className={ style.rejectResultImage } loading={ 'lazy' } src={ sadDog } alt="sadDog" draggable="false"/>
       <div className={ style.textBlock }>
         <p>По вашему запросу ничего не найдено. Попробуйте изменить запрос или выбрать { requestTitle } в нашем
           каталоге </p>
@@ -16,6 +16,6 @@ const RejectSearchResult = React.memo(( { requestTitle, onClick }: RejectSearchR
       <SmallerButton title={ 'Перейти в каталог' } onClick={ onClick }/>
     </div>
   );
-});
+} );
 
 export default RejectSearchResult;

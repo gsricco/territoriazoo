@@ -3,11 +3,11 @@ import timeIcon from '../../../Images/clock_minorfooter.svg';
 import style from './Schedule.module.scss';
 import { SchedulePropsType } from '../types';
 
-const Schedule = React.memo(( { forFooterBurger, timeWeekdays, timeWeekend }: SchedulePropsType ): ReactElement => {
+const Schedule = React.memo( ( { forFooterBurger, timeWeekdays, timeWeekend }: SchedulePropsType ): ReactElement => {
   return (
     <div className={ style.scheduleBlock }>
       <div className={ style.scheduleBlockWrapperOne }>
-        { !forFooterBurger && <img src={ timeIcon } loading={'lazy'} alt={ 'timeIcon' }/> }
+        { !forFooterBurger && <img src={ timeIcon } loading={ 'lazy' } alt={ 'timeIcon' } draggable="false"/> }
         <p>Пн.-Пт. { timeWeekdays }</p>
       </div>
       <div className={ style.scheduleBlockWrappers }>
@@ -16,7 +16,7 @@ const Schedule = React.memo(( { forFooterBurger, timeWeekdays, timeWeekend }: Sc
       </div>
     </div>
   );
-});
+} );
 
 export default Schedule;
 

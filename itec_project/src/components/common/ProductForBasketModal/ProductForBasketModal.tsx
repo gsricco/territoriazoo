@@ -16,7 +16,7 @@ const ProductForBasketModal = ( {
   return (
     <div className={ style.ProductForBasketModalContainer }>
       <div className={ style.productName }>
-        <img src={ image } loading={ 'lazy' } alt="product"/>
+        <img src={ image } loading={ 'lazy' } alt="product" draggable="false"/>
         <p>{ productName }</p>
       </div>
       <div className={ chosenOption.partial ? style.orderInfoPartial : style.orderInfoNotPartial }>
@@ -26,8 +26,9 @@ const ProductForBasketModal = ( {
         }
         { !chosenOption.partial && <p>{ countOfProduct } шт.</p> }
         { price !== priceWithDiscount &&
-         <p className={ !!priceWithDiscount ? style.priceWithDiscount : style.price }>{ price } BYN.</p> }
-        { !!priceWithDiscount && <p className={ style.price }>{ priceWithDiscount % 1 === 0 ? priceWithDiscount : priceWithDiscount.toFixed(2) } BYN.</p> }
+          <p className={ !!priceWithDiscount ? style.priceWithDiscount : style.price }>{ price } BYN.</p> }
+        { !!priceWithDiscount && <p
+          className={ style.price }>{ priceWithDiscount % 1 === 0 ? priceWithDiscount : priceWithDiscount.toFixed( 2 ) } BYN.</p> }
       </div>
     </div>
   );
