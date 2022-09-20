@@ -10,7 +10,7 @@ __pycache__/
 *$py.class
 # C extensions
 *.so
-
+.db_env
 # Distribution / packaging
 .Python
 build/
