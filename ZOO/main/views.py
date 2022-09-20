@@ -1,6 +1,6 @@
 import datetime
 from collections import OrderedDict
-from django.db.models import F, Min, Q, Prefetch, FilteredRelation, Subquery, OuterRef
+from django.db.models import F, Min, Q, Prefetch, FilteredRelation, Subquery, OuterRef, Case, When
 from django.db.models.functions import Greatest
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -61,11 +61,14 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         annotate(
         min_price_options=Min('options__price', filter=Q(options__partial=False) & Q(options__is_active=True))). \
         annotate(first_option_discount=Subquery(ProductOptions.objects.filter(
-        product=OuterRef('pk'), partial=False, is_active=True)[:1].
+                                                product=OuterRef('pk'), partial=False, is_active=True,
+                                                discount_option__is_active=True)[:1].
                                                 annotate(min_discount=F('discount_option__discount_amount')).
                                                 values('min_discount'))). \
         annotate(greatest_discount=Greatest('discount_by_category', 'discount_by_product', 'first_option_discount')). \
-        annotate(min_price=F('min_price_options') * (100 - F('greatest_discount')) / 100)
+        annotate(min_price=Case(When(greatest_discount=None, then=F('min_price_options')),
+                                When(greatest_discount__gte=0,
+                                     then=F('min_price_options') * (100 - F('greatest_discount')) / 100)))
 
     serializer_class = ProductSerializer
     pagination_class = Pagination
