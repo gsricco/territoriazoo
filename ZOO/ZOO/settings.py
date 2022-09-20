@@ -24,10 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = os.environ.get('SECRET_KEY')
 SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("DEBUG"))
+DEBUG = os.environ.get("DEBUG")
 # DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split()
+
 # if not DEBUG:
 #     ALLOWED_HOSTS += os.getenv('ALLOWED_HOSTS')
 # Application definition
