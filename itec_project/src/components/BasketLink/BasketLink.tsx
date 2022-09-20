@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { getTotalProductsCount } from '../../redux/selectors/basket';
 import { BasketLinkPropsType } from './types';
 
-const BasketLink = React.memo(( { forHeaderBurger, onClickHandler }: BasketLinkPropsType ): ReactElement => {
+const BasketLink = React.memo( ( { forHeaderBurger, onClickHandler }: BasketLinkPropsType ): ReactElement => {
 
   const productCount = useSelector( getTotalProductsCount );
   const navigate = useNavigate();
@@ -20,16 +20,16 @@ const BasketLink = React.memo(( { forHeaderBurger, onClickHandler }: BasketLinkP
     <>
       { forHeaderBurger
         ? ( <div className={ style.basketLinkForBurger } onClick={ onBasketClick }>
-          <img src={ basketIcon } loading={'lazy'} alt={ 'basketIcon' }/>
+          <img src={ basketIcon } loading={ 'lazy' } alt={ 'basketIcon' } draggable="false"/>
           <p>Корзина</p>
         </div> )
         : ( <div className={ style.basketLink } onClick={ () => navigate( routesPathsEnum.BASKET ) }>
-          <img src={ basketIcon } loading={'lazy'} alt={ 'basketIcon' }/>
+          <img src={ basketIcon } loading={ 'lazy' } alt={ 'basketIcon' } draggable="false"/>
           { productCount }
         </div> )
       }
     </>
   );
-});
+} );
 
 export default BasketLink;

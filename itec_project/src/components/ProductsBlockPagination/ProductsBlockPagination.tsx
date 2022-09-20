@@ -4,13 +4,13 @@ import prevPage from '../../Images/prevPage.svg';
 import nextPage from '../../Images/nextPage.svg';
 import { ProductsBlockPaginationType } from './types';
 
-const ProductsBlockPagination = React.memo(( {
-                                    totalProductsCount,
-                                    pageSize,
-                                    actualPage,
-                                    onPageChanged,
-                                    withWords,
-                                  }: ProductsBlockPaginationType ): ReactElement => {
+const ProductsBlockPagination = React.memo( ( {
+                                                totalProductsCount,
+                                                pageSize,
+                                                actualPage,
+                                                onPageChanged,
+                                                withWords,
+                                              }: ProductsBlockPaginationType ): ReactElement => {
 
   const [ portionNumber, setPortionNumber ] = useState( 1 );
   let pagesCount = Math.ceil( totalProductsCount / pageSize );
@@ -38,7 +38,8 @@ const ProductsBlockPagination = React.memo(( {
     <div className={ style.paginationBlock }>
       <div className={ actualPage !== 1 ? style.navigationBlock : `${ style.navigationBlock } ${ style.opacity }` }
            onClick={ onPrevButtonClick }>
-        <img className={ style.navigationBlockLeft } loading={ 'lazy' } src={ prevPage } alt="prevPage"/>
+        <img className={ style.navigationBlockLeft } loading={ 'lazy' } src={ prevPage } alt="prevPage"
+             draggable="false"/>
         { withWords && <p>Предыдущая</p> }
       </div>
       <div className={ style.pages }>
@@ -65,6 +66,6 @@ const ProductsBlockPagination = React.memo(( {
       </div>
     </div>
   );
-});
+} );
 
 export default ProductsBlockPagination;
