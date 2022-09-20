@@ -75,9 +75,9 @@ const CheckoutPage = React.memo( () => {
       const errors: FormikErrorType = {};
       if ( values.name.length < 2 ) {
         errors.name = 'Минимально допустимое количество символов: 2';
-      } else if ( !/(^(?!~!"№;%\?.*\(\)#\$%\^&=\+-_@$)([A-Za-z]{1}[a-z]{1,18}( [A-Za-z]{1})?([a-z]{1,18})?)$)|(^[А-Яа-я]{1}[а-я]{1,18}( [А-Яа-я]{1})?([а-я]{1,18})?$)/i.test( values.name ) ) {
+      } else if (!/(^(?!~!"№;%\?.*\(\)#\$%\^&=\+-_@$)([A-Za-z]{1}[a-z]{1,18}( [A-Za-z]{1})?([a-z]{1,18})?)$)|(^[А-Яа-я]{1}[а-я]{1,18}( [А-Яа-я]{1})?([а-я]{1,18})?$)/i.test(values.name)){
         errors.name = 'Допустимые символы: A-z А-я';
-      } else if ( values.name.length > 30 ) {
+      } else if (values.name.length > 30) {
         errors.name = 'Максимально допустимое количество символов: 30';
       }
       if ( !values.phoneNumber ) {
