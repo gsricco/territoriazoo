@@ -11,8 +11,8 @@ def phone_validator(phone_number):
 
 
 def name_validator(name):
-    regular = r'^([А-Яа-я]{1}[а-яё]{1,30}[\s]{0,3}[А-Яа-я]{1}[а-яё]{1,30}|' \
-              r'[A-Za-z]{1}[a-z]{1,30}[\s]{0,3}[A-Za-z]{1}[a-z]{1,30})$'
+    regular = r'^([А-Яа-я]{1}[а-яё]{0,15}[\s]{0,3}[А-Яа-я]{0,1}[а-яё]{0,15}|' \
+              r'[A-Za-z]{1}[a-z]{0,15}[\s]{0,3}[A-Za-z]{0,1}[a-z]{0,15})$'
     if re.fullmatch(regular, name):
         return name
     else:
