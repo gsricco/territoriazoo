@@ -1,4 +1,4 @@
-
+from compose.config.interpolation import re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -12,7 +12,7 @@ urlpatterns = [
     path('docs/', TemplateView.as_view(template_name='docs.html',
                                        extra_context={'schema_url': 'api_schema'}), name='swagger-ui'),
     path('admin-panel/', admin.site.urls),
-    path('chaining/', include('smart_selects.urls')),
+    re_path(r'^chaining/', include('smart_selects.urls')),
     path('api/', include('main.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
