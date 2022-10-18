@@ -14,7 +14,7 @@ from .models import (Animal, Article, Brand, Category, Comments, InfoShop,
 #         fields = ('discount_amount',)
 
 
-class DiscountProductOptionSerializer(serializers.ModelSerializer):
+class DiscountByProductOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscountByProductOption
         fields = ('discount_amount',)
@@ -44,7 +44,7 @@ class ProductOptionsSerializer(serializers.ModelSerializer):
 
     def get_discount_by_option(self, obj):
         try:
-            ser = DiscountProductOptionSerializer(obj.discount_option)
+            ser = DiscountByProductOptionSerializer(obj.discount_by_product_option)
             return ser.data['discount_amount']
         except ObjectDoesNotExist:
             return None
