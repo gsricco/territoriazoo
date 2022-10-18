@@ -1,5 +1,6 @@
 from .validators import phone_validator, name_validator
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from rest_framework import serializers
 from .models import (Animal, Article, Brand, Category, Comments, InfoShop,
                      Product, ProductOptions, ProductImage, Order, Customer, OrderItem, Units, Consultation,
