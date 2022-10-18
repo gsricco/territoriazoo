@@ -80,13 +80,14 @@ class ProductSerializer(serializers.ModelSerializer):
     options = ProductOptionsSerializer(many=True)
     chosen_option = serializers.SerializerMethodField()
     discount_by_subcategory = serializers.IntegerField()
-    max_discount = serializers.SerializerMethodField()
-
+    # max_discount = serializers.SerializerMethodField()
+    greatest_discount = serializers.IntegerField()
     class Meta:
         model = Product
         fields = (
             'id',
-            'max_discount',
+            # 'max_discount',
+            'greatest_discount',
             'discount_by_subcategory',
             'name',
             'chosen_option',
