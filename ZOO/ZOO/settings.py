@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 ]
 
 USE_DJANGO_JQUERY = True
-JQUERY_URL = True
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
