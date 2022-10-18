@@ -121,6 +121,7 @@ ADMIN_REORDER = (
             {'model': 'main.Brand', 'label': 'Бренды'},
             {'model': 'main.Animal', 'label': 'Животные'},
             {'model': 'main.Category', 'label': 'Категории'},
+            {'model': 'main.SubCategory', 'label': 'Подкатегории'},
             {'model': 'main.Units', 'label': 'Единицы измерения фасовки'},
         ]
     },
