@@ -5,7 +5,7 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator, MaxLengthValidator
 from imagekit.models import ProcessedImageField
-
+from smart_selects.db_fields import ChainedForeignKey
 
 class Product(models.Model):
     """Товары магазина"""
@@ -25,8 +25,25 @@ class Product(models.Model):
     animal = models.ManyToManyField('Animal', related_name='products', verbose_name='Тип животного', blank=True)
     brand = models.ForeignKey('Brand', related_name='products', verbose_name='Бренд', on_delete=models.PROTECT,
                               null=True, blank=True)
-    category = models.ForeignKey('Category', related_name='products', verbose_name='Категория',
+    category = ChainedForeignKey('Category',
+                                 chained_field='animal',
+                                 chained_model_field='animal',
+                                 show_all=False,
+                                 auto_choose=True,
+                                 sort=True,
+                                 related_name='products',
+                                 verbose_name='Категория',
                                  on_delete=models.PROTECT)
+    subcategory = ChainedForeignKey('SubCategory',
+                                    chained_field='category',
+                                    chained_model_field='category',
+                                    show_all=False,
+                                    auto_choose=True,
+                                    sort=True,
+                                    related_name='products',
+                                    verbose_name='Подкатегория',
+                                    on_delete=models.PROTECT,
+                                    null=True)
     popular = models.IntegerField(verbose_name='Популярность', choices=POPULAR_CHOICES, default=0)
 
     class Meta:
@@ -89,6 +106,9 @@ class ProductOptions(models.Model):
     date_updated = models.DateTimeField(verbose_name='Дата обновления', auto_now=True, blank=True, null=True)
     units = models.ForeignKey('Units', related_name='prods', verbose_name='Единица измерения', on_delete=models.CASCADE,
                               blank=True, null=True)
+    discount_by_product_option = models.ForeignKey('DiscountByProductOption', on_delete=models.PROTECT,
+                                                   related_name='options', verbose_name='Скидка на вариант товара',
+                                                   null=True, blank=True)
 
     def __str__(self):
         return f'{self.article_number}, {self.product.name}'
@@ -149,6 +169,7 @@ class Category(models.Model):
     """Категории товаров"""
     name = models.CharField(verbose_name='Название категории', max_length=30, blank=False, null=False, unique=True)
     is_active = models.BooleanField(verbose_name='Активно', default=True)
+    animal = models.ForeignKey('Animal', on_delete=models.PROTECT, null=True)
 
     class Meta:
         verbose_name = 'КАТЕГОРИИ'
@@ -161,6 +182,30 @@ class Category(models.Model):
         return self.products.count()
 
     count_prod.short_description = 'Количество товаров'
+
+
+class SubCategory(models.Model):
+    name = models.CharField(verbose_name='Название подкатегории', max_length=255)
+    category = models.ForeignKey('Category',
+                                 on_delete=models.CASCADE,
+                                 verbose_name='Название категории',
+                                 related_name='subcategory')
+    is_active = models.BooleanField(verbose_name="Активно", default=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'ПОДКАТЕГОРИЯ'
+        verbose_name_plural = 'ПОДКАТЕГОРИИ'
+
+    def count_prod(self):
+        return self.products.count()
+
+    count_prod.short_description = 'Количество товаров'
+
+    def animal(self):
+        return self.category.animal.name
 
 
 class Article(models.Model):
@@ -343,56 +388,66 @@ class OrderItem(models.Model):
         verbose_name_plural = 'ЗАКАЗАННЫЕ ТОВАРЫ'
 
 
-class Discount(models.Model):
+# class Discount(models.Model):
+#     title = models.CharField(verbose_name='Название/Описание скидки', max_length=200, null=True, blank=True)
+#     is_active = models.BooleanField(verbose_name='Активно', default=False)
+#     discount_amount = models.PositiveIntegerField(verbose_name='Процент скидки', default=0,
+#                                                   help_text='Процент скидки не должен быть меньше 1% и превышать 90%',
+#                                                   validators=[MinValueValidator(1), MaxValueValidator(90)])
+#
+#     class Meta:
+#         abstract = True
+#         verbose_name = 'СКИДКА НА ТОВАР'
+#         verbose_name_plural = 'СКИДКИ НА ТОВАРЫ'
+#
+#     def __str__(self):
+#         return f'{self.title}, {self.discount_amount}'
+#
+#
+# class DiscountProduct(Discount):
+#     """Скидка на Продукт(группу товаров)"""
+#     product = models.OneToOneField('Product', related_name='discount_product', verbose_name='Продукты',
+#                                    on_delete=models.CASCADE, null=True)
+#
+#     class Meta:
+#         verbose_name = 'СКИДКА НА ТОВАР'
+#         verbose_name_plural = 'СКИДКИ НА ТОВАРЫ'
+#
+#     def __str__(self):
+#         return f'{self.title}, {self.product}, {self.discount_amount}%'
+#
+
+class DiscountByProductOption(models.Model):
     title = models.CharField(verbose_name='Название/Описание скидки', max_length=200, null=True, blank=True)
     is_active = models.BooleanField(verbose_name='Активно', default=False)
     discount_amount = models.PositiveIntegerField(verbose_name='Процент скидки', default=0,
                                                   help_text='Процент скидки не должен быть меньше 1% и превышать 90%',
                                                   validators=[MinValueValidator(1), MaxValueValidator(90)])
 
-    class Meta:
-        abstract = True
-        verbose_name = 'СКИДКА НА ТОВАР'
-        verbose_name_plural = 'СКИДКИ НА ТОВАРЫ'
-
     def __str__(self):
-        return f'{self.title}, {self.discount_amount}'
-
-
-class DiscountProduct(Discount):
-    """Скидка на Продукт(группу товаров)"""
-    product = models.OneToOneField('Product', related_name='discount_product', verbose_name='Продукты',
-                                   on_delete=models.CASCADE, null=True)
+        return f'{self.title},{self.discount_amount}%'
 
     class Meta:
-        verbose_name = 'СКИДКА НА ТОВАР'
-        verbose_name_plural = 'СКИДКИ НА ТОВАРЫ'
-
-    def __str__(self):
-        return f'{self.title}, {self.product}, {self.discount_amount}%'
+        verbose_name = 'Скидка на вариант товара'
+        verbose_name_plural = "СКИДКИ НА ВАРИАНТЫ ТОВАРОВ"
 
 
-class DiscountProductOption(Discount):
-    """Скидка на опцию товара"""
-    product_option = models.OneToOneField('ProductOptions', verbose_name='Вариант Фасовки',
-                                          related_name='discount_option', on_delete=models.CASCADE,
-                                          null=True)
-
-    def __str__(self):
-        return f'{self.title}, {self.product_option}, {self.discount_amount}%'
-
-    class Meta:
-        verbose_name = 'Скидка на фасовку товара'
-        verbose_name_plural = "СКИДКИ НА ВАРИАНТЫ ФАСОВКИ"
-
-
-class DiscountByCategory(Discount):
+class DiscountBySubCategory(models.Model):
     """Скидка на категорию товаров"""
-    category = models.OneToOneField('Category', related_name='discount_category', verbose_name='Категория',
-                                    on_delete=models.CASCADE)
+    subcategory = models.OneToOneField('SubCategory', related_name='discount_subcategory', verbose_name='Подкатегория',
+                                       on_delete=models.CASCADE)
+    title = models.CharField(verbose_name='Название/Описание скидки', max_length=200, null=True, blank=True)
+    is_active = models.BooleanField(verbose_name='Активно', default=False)
+    discount_amount = models.PositiveIntegerField(verbose_name='Процент скидки', default=0,
+                                                  help_text='Процент скидки не должен быть меньше 1% и превышать 90%',
+                                                  validators=[MinValueValidator(1), MaxValueValidator(90)])
 
     def __str__(self):
-        return f'Скидка {self.discount_amount}% на - {self.category.name}'
+        return f'Скидка {self.discount_amount}% на - {self.subcategory.name}'
+
+    class Meta:
+        verbose_name = 'Скидка на подкатегорию товаров'
+        verbose_name_plural = "СКИДКИ НА ПОДКАТЕГОРИИ ТОВАРОВ"
 
 
 class DiscountByDay(models.Model):

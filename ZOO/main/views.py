@@ -45,27 +45,23 @@ class Pagination(PageNumberPagination):
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.filter(is_active=True). \
         prefetch_related(Prefetch('options', queryset=ProductOptions.objects.filter(is_active=True))). \
-        prefetch_related(Prefetch('options__discount_option',
-                                  queryset=DiscountProductOption.objects.filter(is_active=True))). \
+        prefetch_related(Prefetch('options__discount_by_product_option',
+                                  queryset=DiscountByProductOption.objects.filter(is_active=True))). \
+        select_related('brand', 'category', 'subcategory'). \
         prefetch_related('options__units', 'images', ). \
-        select_related('brand', 'category', 'discount_product', ). \
-        filter(category__is_active=True). \
-        annotate(discount_by_category_true=FilteredRelation('category__discount_category',
+        filter(category__is_active=True, subcategory__is_active=True). \
+        annotate(discount_by_category_true=FilteredRelation('subcategory__discount_subcategory',
                                                             condition=Q(
-                                                                category__discount_category__is_active=True)), ). \
-        annotate(discount_by_category=F('discount_by_category_true__discount_amount')). \
-        annotate(discount_by_product_true=FilteredRelation('discount_product',
-                                                           condition=Q(
-                                                               discount_product__is_active=True)), ). \
-        annotate(discount_by_product=F('discount_by_product_true__discount_amount')). \
+                                                                subcategory__discount_subcategory__is_active=True)), ). \
+        annotate(discount_by_subcategory=F('discount_by_category_true__discount_amount')). \
         annotate(
         min_price_options=Min('options__price', filter=Q(options__partial=False) & Q(options__is_active=True))). \
         annotate(first_option_discount=Subquery(ProductOptions.objects.filter(
-                                                product=OuterRef('pk'), partial=False, is_active=True,
-                                                discount_option__is_active=True)[:1].
-                                                annotate(min_discount=F('discount_option__discount_amount')).
+        product=OuterRef('pk'), partial=False, is_active=True,
+        discount_by_product_option__is_active=True)[:1].
+                                                annotate(min_discount=F('discount_by_product_option__discount_amount')).
                                                 values('min_discount'))). \
-        annotate(greatest_discount=Greatest('discount_by_category', 'discount_by_product', 'first_option_discount')). \
+        annotate(greatest_discount=Greatest('discount_by_subcategory', 'first_option_discount')). \
         annotate(min_price=Case(When(greatest_discount=None, then=F('min_price_options')),
                                 When(greatest_discount__gte=0,
                                      then=F('min_price_options') * (100 - F('greatest_discount')) / 100)))
@@ -90,6 +86,10 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         if brands:
             brand_list = brands[0].split(',')
             queryset = queryset.filter(brand_id__in=brand_list)
+        subcategory = self.request.query_params.getlist('subcategory')
+        if subcategory:
+            subcategory_list = subcategory[0].split(',')
+            queryset = queryset.filter(subcategory_id__in=subcategory_list)
         return queryset
 
     # @method_decorator(cache_page(60 * 60))
@@ -120,11 +120,12 @@ class AnimalViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Category.objects.filter(is_active=True).\
-        annotate(discount_category_true=FilteredRelation('discount_category',
-                                                         condition=Q(discount_category__is_active=True))).\
-        annotate(discount_by_category=F('discount_category_true__discount_amount'))
+    queryset = Category.objects.filter(is_active=True). \
+        prefetch_related(Prefetch('subcategory', queryset=SubCategory.objects.filter(is_active=True))). \
+        select_related('animal')
     serializer_class = CategorySerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('animal',)
 
 
 class ProductOptionsViewSet(viewsets.ReadOnlyModelViewSet):

@@ -3,25 +3,25 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 from .models import (Animal, Article, Brand, Category, Comments, InfoShop,
                      Product, ProductOptions, ProductImage, Order, Customer, OrderItem, Units, Consultation,
-                     InfoShopBlock, DiscountProductOption, DiscountProduct, DiscountByCategory, DiscountByDay,
-                     DiscountByDayOptions, InfoShopMainPage, Banner, )
+                     InfoShopBlock, DiscountBySubCategory, DiscountByDay,
+                     DiscountByDayOptions, InfoShopMainPage, Banner, SubCategory, DiscountByProductOption, )
 
 
-class DiscountProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DiscountProduct
-        fields = ('discount_amount',)
+# class DiscountProductSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = DiscountProduct
+#         fields = ('discount_amount',)
 
 
 class DiscountProductOptionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DiscountProductOption
+        model = DiscountByProductOption
         fields = ('discount_amount',)
 
 
-class DiscountByCategorySerializer(serializers.ModelSerializer):
+class DiscountBySubCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = DiscountByCategory
+        model = DiscountBySubCategory
         fields = ('discount_amount',)
 
 
@@ -54,20 +54,32 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = ProductImage
         exclude = ('product',)
 
+class SubCategorySerializer(serializers.ModelSerializer):
+    discount_subcategory = DiscountBySubCategorySerializer()
+
+    class Meta:
+        model = SubCategory
+        fields = ('id', 'name', 'discount_subcategory',)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if data.get('discount_subcategory') is not None:
+            data['discount_subcategory'] = data['discount_subcategory']['discount_amount']
+        return data
+
 
 class CategorySerializer(serializers.ModelSerializer):
-    discount_by_category = serializers.IntegerField()
+    subcategory = SubCategorySerializer(many=True)
 
     class Meta:
         model = Category
-        fields = ('id', 'name', 'discount_by_category',)
+        fields = ('id', 'name', 'subcategory',)
 
 
 class ProductSerializer(serializers.ModelSerializer):
     options = ProductOptionsSerializer(many=True)
     chosen_option = serializers.SerializerMethodField()
-    discount_by_product = serializers.IntegerField()
-    discount_by_category = serializers.IntegerField()
+    discount_by_subcategory = serializers.IntegerField()
     max_discount = serializers.SerializerMethodField()
 
     class Meta:
@@ -75,29 +87,31 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'max_discount',
-            'discount_by_product',
-            'discount_by_category',
+            'discount_by_subcategory',
             'name',
-
             'chosen_option',
             'options', 'images',
             )
         depth = 1
 
-    def get_max_discount(self, obj):
-        list_discounts = []
-        if obj.discount_by_category is not None:
-            list_discounts.append(obj.discount_by_category)
-        if obj.discount_by_product is not None:
-            list_discounts.append(obj.discount_by_product)
-        if len(list_discounts) > 0:
-            return sorted(list_discounts)[-1]
-        else:
-            return None
+    # def get_max_discount(self, obj):
+    #     list_discounts = []
+    #     if obj.discount_by_category is not None:
+    #         list_discounts.append(obj.discount_by_category)
+    #     if obj.discount_by_product is not None:
+    #         list_discounts.append(obj.discount_by_product)
+    #     if len(list_discounts) > 0:
+    #         return sorted(list_discounts)[-1]
+    #     else:
+    #         return None
 
     def get_chosen_option(self, obj):
-        option_id = obj.options.all().first()
-        serializer = ProductOptionsSerializer(option_id)
+        if obj.options.filter(~Q(discount_by_product_option__id=None)).exists():
+            option_id = obj.options.filter(~Q(discount_by_product_option__id=None)).first()
+            serializer = ProductOptionsSerializer(option_id)
+        else:
+            option_id = obj.options.all().first()
+            serializer = ProductOptionsSerializer(option_id)
         return serializer.data
 
 

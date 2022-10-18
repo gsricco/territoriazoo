@@ -1,14 +1,16 @@
 from django.contrib import admin
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db import models
 from django import forms
+from django.db.models import Q
 from django.forms import TextInput, ModelForm
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from import_export.admin import ImportExportModelAdmin
 from .models import (Product, Brand, Animal, Category, ProductOptions, ProductImage, Article, Comments, InfoShop,
                      Consultation, Customer, Order, OrderItem, InfoShopBlock, Units,
-                     DiscountProduct, DiscountByCategory, DiscountProductOption, DiscountByDay, DiscountByDayOptions,
-                     InfoShopMainPage, Banner)
+                     DiscountBySubCategory, DiscountByDay, DiscountByDayOptions,
+                     InfoShopMainPage, Banner, SubCategory, DiscountByProductOption)
 from .resources import ProductOptionsAdminResource, ProductAdminResource
 
 
@@ -39,16 +41,20 @@ class ProductOptionsAdmin(ImportExportModelAdmin):
         'size',
         'stock_balance',
     )
-    search_fields = 'article_number', 'stock_balance', 'price'
+    search_fields = 'article_number', 'product__name', 'stock_balance', 'price', 'discount_by_product_option'
+    search_help_text = "Поиск по артикулу/названию товара/остатку/цене"
     list_editable = 'price', 'size', 'stock_balance', 'units', 'partial', 'is_active'
     resource_class = ProductOptionsAdminResource
     change_list_template = "admin/model_change_list_product_options.html"
     list_per_page = 20
+    list_select_related = ('product', 'units',)
+    autocomplete_fields = ['product', 'units', 'discount_by_product_option']
 
 
 class ProductOptionsInline(admin.TabularInline):
     """Опции продукта"""
     model = ProductOptions
+    autocomplete_fields = ('discount_by_product_option', 'units', 'product')
     extra = 1
 
 
@@ -57,18 +63,29 @@ class ProductAdmin(ImportExportModelAdmin):
     """Товары магазина"""
     formfield_overrides = {models.CharField: {'widget': TextInput(attrs={'size': '90'})}}
     fieldsets = (
-        ('ОСНОВНЫЕ ДАННЫЕ', {'fields': ('name', 'brand', 'animal', 'category', 'popular',)}),
+        ('ОСНОВНЫЕ ДАННЫЕ', {'fields': ('name', 'brand', 'animal', 'category', 'subcategory', 'popular',)}),
         ('ИНФОРМАЦИЯ О ТОВАРЕ', {'fields': ('description', 'features', 'composition', 'additives', 'analysis',),
                                  'classes': ['collapse', ]}),
     )
-    list_display = ('name', 'brand', 'category', 'date_added', 'popular', 'is_active', 'product_options',)
+    list_display = (
+        'name', 'brand', 'category', 'subcategory', 'date_added', 'popular', 'is_active', 'product_options',)
     list_editable = ('is_active', 'popular')
     list_filter = ('date_added', 'animal', 'brand', 'category', 'is_active', 'popular',)
     exclude = 'unique_name',
+    search_fields = ('name',)
+    search_help_text = 'Поиск по названию товара'
     inlines = [ProductOptionsInline, ProductImageInline]
     resource_class = ProductAdminResource
     change_list_template = "admin/model_change_list_product.html"
     list_per_page = 20
+    autocomplete_fields = ['animal',]
+    list_select_related = ('brand', 'category', 'subcategory',)
+
+
+class CategoryInline(admin.TabularInline):
+    model = Category
+    fields = 'name', 'is_active',
+    extra = 1
 
 
 @admin.register(Animal)
@@ -78,6 +95,7 @@ class AnimalAdmin(admin.ModelAdmin):
     search_fields = 'name',
     readonly_fields = 'preview',
     list_per_page = 20
+    inlines = [CategoryInline]
 
     def image_img(self, obj):
         if obj.image:
@@ -114,12 +132,30 @@ class BrandAdmin(admin.ModelAdmin):
 
     preview.short_description = 'Превью изображения'
 
+class SubCategoryTabularAdmin(admin.TabularInline):
+    """Опции продукта"""
+    model = SubCategory
+    extra = 1
+    verbose_name = 'Подкатегория'
+    verbose_name_plural = "ПОДКАТЕГОРИИ"
+
 
 @admin.register(Category)
-class Category(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     """Категории товара"""
-    list_display = 'name', 'is_active', 'count_prod',
+    list_display = 'name', 'animal', 'is_active', 'count_prod',
     list_editable = 'is_active',
+    search_fields = ('name',)
+    search_help_text = 'Поиск по названию категории'
+    inlines = [SubCategoryTabularAdmin]
+
+
+@admin.register(SubCategory)
+class SubCategoryAdmin(admin.ModelAdmin):
+    """Подкатегории товара"""
+    list_display = 'name', 'is_active', 'category', 'animal', 'count_prod',
+    list_editable = 'is_active',
+    search_fields = ('name', 'category')
 
 
 @admin.register(Article)
@@ -248,30 +284,71 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(Units)
 class UnitsAdmin(admin.ModelAdmin):
     list_display = 'unit_name', 'count_prod',
+    search_fields = ('unit_name',)
 
 
-@admin.register(DiscountProduct)
-class DiscountProductAdmin(admin.ModelAdmin):
-    fields = 'title', 'product', 'discount_amount', 'is_active',
-    list_display = 'title', 'product', 'discount_amount', 'is_active',
-    list_editable = 'is_active', 'discount_amount',
-    list_filter = 'is_active', 'discount_amount',
+# @admin.register(DiscountProduct)
+# class DiscountProductAdmin(admin.ModelAdmin):
+#     fields = 'title', 'product', 'discount_amount', 'is_active',
+#     list_display = 'title', 'product', 'discount_amount', 'is_active',
+#     list_editable = 'is_active', 'discount_amount',
+#     list_filter = 'is_active', 'discount_amount',
 
 
-@admin.register(DiscountByCategory)
-class DiscountByCategoryAdmin(admin.ModelAdmin):
+@admin.register(DiscountBySubCategory)
+class DiscountBySubCategoryAdmin(admin.ModelAdmin):
     fields = 'title', 'category', 'discount_amount', 'is_active',
     list_display = 'title', 'category', 'discount_amount', 'is_active',
     list_editable = 'is_active', 'discount_amount',
     list_filter = 'is_active', 'discount_amount',
 
 
-@admin.register(DiscountProductOption)
-class DiscountProductOptionAdmin(admin.ModelAdmin):
-    fields = 'title', 'product_option', 'discount_amount', 'is_active',
-    list_display = 'title', 'product_option', 'discount_amount', 'is_active',
+class DiscountByProductOptionsForm(forms.ModelForm):
+    options = forms.ModelMultipleChoiceField(label='Вариант Товара',
+                                             queryset=ProductOptions.objects.all(),
+                                             widget=FilteredSelectMultiple(verbose_name='Варианты Товара',
+                                                                           is_stacked=False))
+
+    class Meta:
+        model = DiscountByProductOption
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(DiscountByProductOptionsForm, self).__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields['options'].queryset = ProductOptions.objects.select_related(
+                                                            'units', 'product').filter((Q(discount_by_product_option_id=None) |
+                                                                                        Q(discount_by_product_option_id=self.instance.pk)))
+            self.fields['options'].initial = self.instance.options.all()
+        else:
+            self.fields['options'].queryset = self.fields['options'].queryset.filter(discount_by_product_option_id=None)
+
+
+@admin.register(DiscountByProductOption)
+class DiscountByProductOptionAdmin(admin.ModelAdmin):
+    form = DiscountByProductOptionsForm
+    # fields = 'title', 'discount_amount', 'is_active',
+    list_display = 'title', 'discount_amount', 'is_active',
     list_editable = 'is_active', 'discount_amount',
     list_filter = 'is_active', 'discount_amount',
+    search_fields = ('title', 'discount_amount', 'options')
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        original_options = set(obj.options.values_list('id', flat=True))
+        print(original_options, 'original')
+        if form.cleaned_data.get('options') is not None:
+            current_options = set(map(lambda x: x.id, form.cleaned_data.get('options')))
+            print(current_options, 'current')
+        else:
+            current_options = set()
+        if original_options != current_options:
+            add_to_discount = current_options - original_options
+            print(add_to_discount, 'add')
+            ProductOptions.objects.filter(id__in=add_to_discount).update(discount_by_product_option_id=obj.id)
+            remove_from_discount = original_options - current_options
+            print(remove_from_discount, 'remove')
+            ProductOptions.objects.filter(id__in=remove_from_discount).update(discount_by_product_option_id=None)
 
 
 class DiscountByDayOptionsAdminInline(admin.TabularInline):
