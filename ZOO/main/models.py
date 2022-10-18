@@ -123,7 +123,7 @@ class ProductOptions(models.Model):
             super(ProductOptions, self).save(*args, **kwargs)
         elif self.partial == True:
             self.size = 1000
-            self.units = Units.objects.get(unit_name='грамм')
+            self.units, created = Units.objects.get_or_create(unit_name='грамм')
         super(ProductOptions, self).save(*args, **kwargs)
 
 
