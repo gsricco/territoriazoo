@@ -11,7 +11,7 @@ urlpatterns = [
          name="api_schema"),
     path('docs/', TemplateView.as_view(template_name='docs.html',
                                        extra_context={'schema_url': 'api_schema'}), name='swagger-ui'),
-    path('admin/', admin.site.urls),
+    path('admin-panel/', admin.site.urls),
     path('chaining/', include('smart_selects.urls')),
     path('api/', include('main.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
