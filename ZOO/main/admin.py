@@ -297,8 +297,8 @@ class UnitsAdmin(admin.ModelAdmin):
 
 @admin.register(DiscountBySubCategory)
 class DiscountBySubCategoryAdmin(admin.ModelAdmin):
-    fields = 'title', 'category', 'discount_amount', 'is_active',
-    list_display = 'title', 'category', 'discount_amount', 'is_active',
+    fields = 'title', 'subcategory', 'discount_amount', 'is_active',
+    list_display = 'title', 'subcategory', 'discount_amount', 'is_active',
     list_editable = 'is_active', 'discount_amount',
     list_filter = 'is_active', 'discount_amount',
 

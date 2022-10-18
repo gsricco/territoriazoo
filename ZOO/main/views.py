@@ -12,7 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 from .models import (Animal, Brand, Category, Product, ProductOptions, Article, Comments, InfoShop, Consultation, Order,
-                     Customer, DiscountProductOption, DiscountByDay, Banner)
+                     Customer, DiscountByDay, Banner, SubCategory, DiscountByProductOption, DiscountBySubCategory)
 from .recommendations import Recommend
 from .serializers import (AnimalSerializer, BrandSerializer, CategorySerializer,
                           ProductSerializer, ProductOptionsSerializer, ArticleSerializer,
