@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'admin_reorder',
     'imagekit',
     'colorfield',
-
+    'smart_selects',
     'main.apps.MainConfig',
 ]
 
