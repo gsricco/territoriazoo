@@ -167,7 +167,7 @@ class Brand(models.Model):
 
 class Category(models.Model):
     """Категории товаров"""
-    name = models.CharField(verbose_name='Название категории', max_length=30, blank=False, null=False, unique=True)
+    name = models.CharField(verbose_name='Название категории', max_length=30, blank=False, null=False)
     is_active = models.BooleanField(verbose_name='Активно', default=True)
     animal = models.ForeignKey('Animal', on_delete=models.PROTECT, null=True)
 
