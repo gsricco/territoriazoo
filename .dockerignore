@@ -3,6 +3,5 @@ db.sqlite3
 dump.rdb
 фывфыв.py
 ZOO/media
-ZOO/main/migrations
 __pycache__/
 docker/
