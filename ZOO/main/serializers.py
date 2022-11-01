@@ -1,51 +1,82 @@
-from .validators import phone_validator, name_validator
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.utils.html import strip_tags
 from rest_framework import serializers
-from .models import (Animal, Article, Brand, Category, Comments, InfoShop,
-                     Product, ProductOptions, ProductImage, Order, Customer, OrderItem, Units, Consultation,
-                     InfoShopBlock, DiscountBySubCategory, DiscountByDay,
-                     DiscountByDayOptions, InfoShopMainPage, Banner, SubCategory, DiscountByProductOption, )
 
-
-# class DiscountProductSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = DiscountProduct
-#         fields = ('discount_amount',)
+from .models import (
+    Animal,
+    Article,
+    Banner,
+    Brand,
+    Category,
+    Comments,
+    Consultation,
+    Customer,
+    DiscountByDay,
+    DiscountByDayOptions,
+    DiscountByProductOption,
+    DiscountBySubCategory,
+    InfoShop,
+    InfoShopBlock,
+    InfoShopMainPage,
+    Order,
+    OrderItem,
+    Product,
+    ProductImage,
+    ProductOptions,
+    SubCategory,
+    Units,
+)
+from .validators import name_validator, phone_validator
 
 
 class DiscountByProductOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscountByProductOption
-        fields = ('discount_amount',)
+        fields = ("discount_amount",)
 
 
 class DiscountBySubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscountBySubCategory
-        fields = ('discount_amount',)
+        fields = ("discount_amount",)
 
 
 class UnitsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Units
-        exclude = ('id',)
+        exclude = ("id",)
 
 
 class ProductOptionsSerializer(serializers.ModelSerializer):
     quantity = serializers.IntegerField(default=1)
     discount_by_option = serializers.SerializerMethodField()
+    units = UnitsSerializer()
 
     class Meta:
         model = ProductOptions
-        fields = ('id', 'is_active', 'discount_by_option', 'article_number', 'units', 'quantity', 'partial', 'price',
-                  'size', 'stock_balance',)
+        fields = (
+            "id",
+            "is_active",
+            "discount_by_option",
+            "article_number",
+            "units",
+            "quantity",
+            "partial",
+            "price",
+            "size",
+            "stock_balance",
+        )
         depth = 1
 
     def get_discount_by_option(self, obj):
+        # if hasattr(obj, 'discount_option'):
+        #     print(obj.discount_option)
+        # else:
+        #     print('no such attributes')
         try:
             ser = DiscountByProductOptionSerializer(obj.discount_by_product_option)
-            return ser.data['discount_amount']
+            return ser.data["discount_amount"]
         except ObjectDoesNotExist:
             return None
 
@@ -53,19 +84,29 @@ class ProductOptionsSerializer(serializers.ModelSerializer):
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        exclude = ('product',)
+        exclude = (
+            "id",
+            "product",
+        )
+
 
 class SubCategorySerializer(serializers.ModelSerializer):
     discount_subcategory = DiscountBySubCategorySerializer()
 
     class Meta:
         model = SubCategory
-        fields = ('id', 'name', 'discount_subcategory',)
+        fields = (
+            "id",
+            "name",
+            "discount_subcategory",
+        )
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        if data.get('discount_subcategory') is not None:
-            data['discount_subcategory'] = data['discount_subcategory']['discount_amount']
+        if data.get("discount_subcategory") is not None:
+            data["discount_subcategory"] = data["discount_subcategory"][
+                "discount_amount"
+            ]
         return data
 
 
@@ -74,59 +115,62 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'name', 'subcategory',)
+        fields = (
+            "id",
+            "name",
+            "animal",
+            "subcategory",
+        )
 
 
 class ProductSerializer(serializers.ModelSerializer):
     options = ProductOptionsSerializer(many=True)
-    chosen_option = serializers.SerializerMethodField()
+    # chosen_option = serializers.SerializerMethodField()
     discount_by_subcategory = serializers.IntegerField()
-    # max_discount = serializers.SerializerMethodField()
     greatest_discount = serializers.IntegerField()
+    min_price = serializers.DecimalField(max_digits=8, decimal_places=2)
+    min_price_options = serializers.DecimalField(max_digits=8, decimal_places=2)
+    images = ProductImageSerializer(many=True)
+
     class Meta:
         model = Product
         fields = (
-            'id',
-            # 'max_discount',
-            'greatest_discount',
-            'discount_by_subcategory',
-            'name',
-            'chosen_option',
-            'options', 'images',
-            )
+            "id",
+            "min_price_options",
+            "greatest_discount",
+            "min_price",
+            "discount_by_subcategory",
+            "name",
+            # "chosen_option",
+            "options",
+            "images",
+        )
         depth = 1
 
-    # def get_max_discount(self, obj):
-    #     list_discounts = []
-    #     if obj.discount_by_category is not None:
-    #         list_discounts.append(obj.discount_by_category)
-    #     if obj.discount_by_product is not None:
-    #         list_discounts.append(obj.discount_by_product)
-    #     if len(list_discounts) > 0:
-    #         return sorted(list_discounts)[-1]
-    #     else:
-    #         return None
-
-    def get_chosen_option(self, obj):
-        if obj.options.filter(~Q(discount_by_product_option__id=None)).exists():
-            option_id = obj.options.filter(~Q(discount_by_product_option__id=None)).first()
-            serializer = ProductOptionsSerializer(option_id)
-        else:
-            option_id = obj.options.all().first()
-            serializer = ProductOptionsSerializer(option_id)
-        return serializer.data
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if data.get("options"):
+            data["chosen_option"] = data.get("options")[0]
+            return data
 
 
 class ProductDetailSerializer(ProductSerializer):
     class Meta:
         model = Product
         fields = (
-            'id',
-            'max_discount', 'discount_by_product', 'discount_by_category',
-            'name', 'brand',
-            'chosen_option',
-            'options', 'images',
-            'description', 'features', 'composition', 'additives', 'analysis',
+            "id",
+            "greatest_discount",
+            "discount_by_subcategory",
+            "name",
+            "brand",
+            # "chosen_option",
+            "options",
+            "images",
+            "description",
+            "features",
+            "composition",
+            "additives",
+            "analysis",
         )
         depth = 1
 
@@ -134,19 +178,27 @@ class ProductDetailSerializer(ProductSerializer):
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
-        fields = ('id', 'name', 'image',)
+        fields = (
+            "id",
+            "name",
+            "image",
+        )
 
 
 class AnimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Animal
-        fields = ('id', 'name', 'image',)
+        fields = (
+            "id",
+            "name",
+            "image",
+        )
 
 
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = '__all__'
+        fields = "__all__"
 
 
 class CommentsCreateSerializer(serializers.ModelSerializer):
@@ -156,7 +208,10 @@ class CommentsCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comments
-        exclude = ('date_added', 'published',)
+        exclude = (
+            "date_added",
+            "published",
+        )
 
 
 class CommentsListSerializer(serializers.ModelSerializer):
@@ -165,26 +220,42 @@ class CommentsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comments
-        exclude = ('phone_number', 'date_added', 'published',)
+        exclude = (
+            "phone_number",
+            "date_added",
+            "published",
+        )
 
 
 class InfoShopBlockSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = InfoShopBlock
-        fields = ('id', 'info_title', 'info_text',)
+        fields = (
+            "id",
+            "info_title",
+            "info_text",
+        )
 
 
 class InfoShopMainPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = InfoShopMainPage
-        fields = ('main_title', 'option_one', 'option_two', 'photo_main_page',)
+        fields = (
+            "main_title",
+            "option_one",
+            "option_two",
+            "photo_main_page",
+        )
 
 
 class BannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Banner
-        fields = ('title', 'color', 'image',)
+        fields = (
+            "title",
+            "color",
+            "image",
+        )
 
 
 class InfoShopSerializer(serializers.ModelSerializer):
@@ -198,8 +269,21 @@ class InfoShopSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InfoShop
-        fields = ('info_main_page', 'address', 'metro', 'time_weekdays', 'time_weekend', 'phone_number', 'social',
-                  'maps', 'photo', 'description_shop', 'second_info', 'personal_data_politics', 'banners',)
+        fields = (
+            "info_main_page",
+            "address",
+            "metro",
+            "time_weekdays",
+            "time_weekend",
+            "phone_number",
+            "social",
+            "maps",
+            "photo",
+            "description_shop",
+            "second_info",
+            "personal_data_politics",
+            "banners",
+        )
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -208,22 +292,34 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('phone_number', 'customer_name',)
+        fields = (
+            "phone_number",
+            "customer_name",
+        )
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ('article_number', 'quantity',)
+        fields = (
+            "article_number",
+            "quantity",
+        )
 
 
 class OrderSerializer(serializers.ModelSerializer):
     customer = CustomerSerializer(read_only=True, many=False)
-    items = OrderItemSerializer(many=True, )
+    items = OrderItemSerializer(
+        many=True,
+    )
 
     class Meta:
         model = Order
-        fields = ('customer', 'paid', 'items',)
+        fields = (
+            "customer",
+            "paid",
+            "items",
+        )
 
 
 class ConsultationSerializer(serializers.ModelSerializer):
@@ -232,13 +328,16 @@ class ConsultationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Consultation
-        fields = ('customer_name', 'phone_number',)
+        fields = (
+            "customer_name",
+            "phone_number",
+        )
 
 
 class DiscountByDayOptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscountByDayOptions
-        fields = ('min_price_for_discount', 'discount_amount')
+        fields = ("min_price_for_discount", "discount_amount")
 
 
 class DiscountByDaySerializer(serializers.ModelSerializer):
@@ -246,8 +345,7 @@ class DiscountByDaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DiscountByDay
-        fields = ('title', 'options',)
-
-
-
-
+        fields = (
+            "title",
+            "options",
+        )
