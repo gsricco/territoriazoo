@@ -623,8 +623,6 @@ class Customer(models.Model):
         verbose_name="Дата последнего заказа", auto_now=True, null=True
     )
 
-    # TODO: Нужны ли ещё поля для учёта статистики
-
     class Meta:
         verbose_name = "ПОКУПАТЕЛЬ"
         verbose_name_plural = "ПОКУПАТЕЛИ"
