@@ -562,7 +562,7 @@ class DiscountByProductOptionsForm(forms.ModelForm):
                 discount_by_product_option_id=None
             )
 
-
+@admin.register(DiscountByProductOption)
 class DiscountByProductOptionAdmin(admin.ModelAdmin):
     form = DiscountByProductOptionsForm
     # fields = 'title', 'discount_amount', 'is_active',
