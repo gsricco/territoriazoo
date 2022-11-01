@@ -140,7 +140,7 @@ ADMIN_REORDER = (
         'app': 'main',
         'label': 'Скидки',
         'models': [
-            {'model': 'main.DiscountProductOption', 'label': 'Скидки по варианту фасовки'},
+            {'model': 'main.DiscountByProductOption', 'label': 'Скидки по варианту фасовки'},
             {'model': 'main.DiscountBySubCategory', 'label': 'Скидка по подкатегории'},
             {'model': 'main.DiscountByDay', 'label': 'Скидка по дням недели'},
             {'model': 'main.WeekDays', 'label': 'Дни недели'},
