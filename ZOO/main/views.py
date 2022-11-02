@@ -105,14 +105,20 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         .annotate(
             min_price_options=Min(
                 "options__price",
-                filter=Q(options__partial=False) & Q(options__is_active=True),
+                # filter=Q(options__partial=False) & Q(options__is_active=True),
             )
+        )
+        .annotate(min_price_options=Subquery(
+            ProductOptions.objects.filter(
+                product=OuterRef("pk"))[:1]
+            .values("price")
+        )
         )
         .annotate(
             first_option_discount=Subquery(
                 ProductOptions.objects.filter(
                     product=OuterRef("pk"),
-                    partial=False,
+                    # partial=False,
                     is_active=True,
                     discount_by_product_option__is_active=True,
                 )[:1]
