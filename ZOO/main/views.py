@@ -1,6 +1,6 @@
 import datetime
 from collections import OrderedDict
-
+from decimal import Decimal
 from django.db.models import Case, F, Min, OuterRef, Prefetch, Q, Subquery, When
 from django.db.models.functions import Greatest
 from django.utils.decorators import method_decorator
@@ -327,6 +327,23 @@ class OrderViewSet(
         }
         # sum_check = basket_counter(items_basket, request.data['discountForBasket'])
         # if sum_check == Decimal(request.data["orderInfo"]["basketCountWithDiscount"]):
+        order_items_list = []
+        articles_numbers = []
+        not_sellable = []
+        for item in items_basket:
+            articles_numbers.append(item["chosen_option"]["article_number"])
+            order_items_list.append(
+                {
+                    "article_number": item["chosen_option"]["article_number"],
+                    "quantity": item["chosen_option"]["quantity"],
+                    "stock_balance": item["chosen_option"]["stock_balance"],
+                    "price": item["chosen_option"]["price"],
+                }
+            )
+            if Decimal(item["chosen_option"]["stock_balance"]) < Decimal(item["chosen_option"]["quantity"]):
+                not_sellable.append(item)
+        if not_sellable:
+            return Response(not_sellable, status=402)
         try:
             obj_customer = Customer.objects.get(phone_number=customer["phone_number"])
             serializer_customer = CustomerSerializer(obj_customer, data=customer)
@@ -348,18 +365,18 @@ class OrderViewSet(
                 )
             else:
                 return Response("Wrong Customer", status=400)
-        order_items_list = []
-        articles_numbers = []
-        for item in items_basket:
-            articles_numbers.append(item["chosen_option"]["article_number"])
-            order_items_list.append(
-                {
-                    "article_number": item["chosen_option"]["article_number"],
-                    "quantity": item["chosen_option"]["quantity"],
-                    "stock_balance": item["chosen_option"]["stock_balance"],
-                    "price": item["chosen_option"]["price"],
-                }
-            )
+        # order_items_list = []
+        # articles_numbers = []
+        # for item in items_basket:
+        #     articles_numbers.append(item["chosen_option"]["article_number"])
+        #     order_items_list.append(
+        #         {
+        #             "article_number": item["chosen_option"]["article_number"],
+        #             "quantity": item["chosen_option"]["quantity"],
+        #             "stock_balance": item["chosen_option"]["stock_balance"],
+        #             "price": item["chosen_option"]["price"],
+        #         }
+        #     )
         # TODO: for updating stock_balance in ProductOption
 
         po_objects = ProductOptions.objects.filter(article_number__in=articles_numbers)
