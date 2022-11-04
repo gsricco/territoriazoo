@@ -383,7 +383,7 @@ class OrderViewSet(
         one_more_list = []
         for item in order_items_list:
             obj_to_update = po_objects.get(article_number=item["article_number"])
-            obj_to_update.stock_balance = item["stock_balance"] - item["quantity"]
+            obj_to_update.stock_balance = Decimal(item["stock_balance"]) - Decimal(item["quantity"])
             one_more_list.append(obj_to_update)
         updating = ProductOptions.objects.bulk_update(one_more_list, ["stock_balance"])
         items_order_serializer = OrderItemSerializer(data=order_items_list, many=True)

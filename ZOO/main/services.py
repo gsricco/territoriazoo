@@ -18,7 +18,7 @@ def send_order_bot(data):
     text_items = f""
     for item in data['items']:
         warning = ''
-        if item['quantity'] >= item['stock_balance']:
+        if Decimal(item['quantity']) >= Decimal(item['stock_balance']):
             warning = '⚠️'
         text_items += f"🐤Товар:\n" \
                       f"Артикул:{item.get('article_number')}, " \
