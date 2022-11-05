@@ -79,7 +79,7 @@ const ProductPage = React.memo( () => {
   const { address, metro } = useSelector( getInfo );
   const accompanyingProducts = useSelector( getAccompanyingProducts );
   /* const priceWithDiscountCropped = getPrice( priceWithDiscount );*/
-  const partialOption = options.filter( option => option.partial )[ 0 ];
+  const partialOption = options.filter( (option: OptionType) => option.partial )[ 0 ];
   /*  const stockBalanceInfo = `Максимальный размер заказа может составить: ${ partialOption ? ( partialOption.stock_balance / 1000 ) : 0 } кг.`;*/
   const price = getPrice( product.chosen_option.partial ? ( ( product.chosen_option.quantity / 1000 ) * +product.chosen_option.price ) : +product.chosen_option.price * countOfProduct );
   const priceWithDiscountCropped = getPrice( getPriceWithDiscountForProductPage( product ) );
@@ -161,7 +161,7 @@ const ProductPage = React.memo( () => {
     dispatch( setChosenOptionToProduct( { productId, option } ) );
   };
   const onApplyButtonClick = () => {
-    if ( partialOption ) {
+    if ( /^[0-9]{1,4}(\.[0-9]{1,3})?$/.test( weightSetValue ) ) {
       if ( +weightSetValue < 0.01 ) {
         setWeightSetError( `Минимальный вес заказа должен составлять: 0.01 кг.` );
       } else {
@@ -173,6 +173,8 @@ const ProductPage = React.memo( () => {
         setWeightSetValue( '' );
         dispatch( setWeightSetIsShowed( { status: false } ) );
       }
+    } else {
+      setWeightSetError( `Данные указаны в некорректном формате` );
     }
   };
   const addToPreviouslyProducts = useCallback( () => {
