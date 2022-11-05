@@ -21,19 +21,20 @@ export const fetchAccompanyingProductsTC = createAsyncThunk(
 );
 export const slice = createSlice( {
   name: 'accompanyingProducts',
-  initialState:
-        [] as Array<ProductItemType>,
+  initialState: {
+    results: [] as Array<ProductItemType>,
+  },
   reducers: {
     setChosenOptionToAccompanyingProducts( state, action: PayloadAction<{ productId: number, option: OptionType }> ) {
-      const index = state.findIndex( product => product.id === action.payload.productId );
-      state[ index ].chosen_option = action.payload.option;
+      const index = state.results.findIndex( product => product.id === action.payload.productId );
+      state.results[ index ].chosen_option = action.payload.option;
     },
   },
   extraReducers: ( builder => {
     // @ts-ignore
     builder.addCase( fetchAccompanyingProductsTC.fulfilled, ( state, action ) => {
       if ( action.payload ) {
-        return action.payload.accompanyingProducts;
+        state.results = action.payload.accompanyingProducts;
       }
     } );
   } ),
