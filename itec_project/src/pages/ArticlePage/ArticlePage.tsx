@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import UsefulArticlesBlock from '../../components/UsefulArticlesBlock/UsefulArticlesBlock';
 import PopularProductsBlock from '../../components/PopularProductsBlock/PopularProductsBlock';
 import ContactBlock from '../../components/ContactBlock/ContactBlock';
@@ -9,10 +9,12 @@ import nextIcon from '../../Images/nextIcon.svg';
 import colorTimeIcon from '../../Images/colorTimeIcon.svg';
 import colorCalendarIcon from '../../Images/colorCalendarIcon.svg';
 import commonStyle from '../../styles/common/Container.module.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getArticles } from '../../redux/selectors/articles';
 import { routesPathsEnum } from '../../routes/enums';
 import { getCurrentAddedDate } from '../../helpers/getDate';
+import { AppDispatch } from '../../redux/store';
+import { fetchArticleTC } from '../../redux/reducers/article';
 
 const ArticlePage = React.memo( () => {
   const articleId = Number( useParams().articleId ) - 1;
@@ -20,6 +22,11 @@ const ArticlePage = React.memo( () => {
   const date = new Date( article.date_added );
   const currentData = getCurrentAddedDate( date );
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect( () => {
+    dispatch( fetchArticleTC( { id: articleId } ) );
+  }, [] );
+
   return (
     <div className={ style.articlePage }>
       <div className={ commonStyle.container }>

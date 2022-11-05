@@ -11,10 +11,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import { getDiscountFilterStatus } from '../../../redux/selectors/discountFilter';
 import { setChosenDiscountFilterStatus } from '../../../redux/reducers/discountFilter';
+import { getChosenAnimalTypeId } from '../../../redux/selectors/animalTypes';
+import ChooseAnimalTypeForm from '../../ChooseAnimalTypeForm/ChooseAnimalTypeForm';
 
 const HeaderBurger = React.memo(( { onClickHandler, forFilters }: HeaderBurgerPropsType ): ReactElement => {
   const dispatch = useDispatch<AppDispatch>();
   const discountFilterStatus = useSelector( getDiscountFilterStatus );
+  const chosenAnimalTypeId = useSelector( getChosenAnimalTypeId );
   const setDiscountFilterStatusFalse = () => {
     dispatch( setChosenDiscountFilterStatus( { filterStatus: false } ) );
   };
@@ -41,7 +44,7 @@ const HeaderBurger = React.memo(( { onClickHandler, forFilters }: HeaderBurgerPr
                 </div>
               </label>
               <div className={style.nextSection}/>
-              <ProductTypesForm forBurger={true}/>
+              { chosenAnimalTypeId ? <ProductTypesForm forBurger={ true }/> : <ChooseAnimalTypeForm forBurger={ true }/>}
               <div className={style.nextSection}/>
               <BrandsForm closeEditMode={ onClickHandler } forBurger={true}/>
             </div>
