@@ -142,7 +142,6 @@
     font-weight: 600;
     font-size: 28px;
     line-height: 130%;
-    color: $textColor;
   }
 
   .emptyBasket {
@@ -208,5 +207,20 @@
   .productsItemsBlockContainer {
     width: 100% !important;
 
+  }
+}
+
+@media (max-width: 371px) {
+  .basketPageBlock {
+
+    .basketWrapper {
+
+      .basketInfoBlockContainer {
+
+        .basketInfoContainer {
+          min-width: 100%;
+        }
+      }
+    }
   }
 }
