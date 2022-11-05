@@ -20,6 +20,7 @@ import { previouslyProducts } from './reducers/previouslyProducts';
 import { descriptionShop } from './reducers/descriptionShop';
 import { discountForBasket } from './reducers/discountForBasket';
 import { accompanyingProducts } from './reducers/accompanyingProducts';
+import { discountFilter } from './reducers/discountFilter';
 
 const rootReducer = combineReducers( {
   app,
@@ -40,6 +41,7 @@ const rootReducer = combineReducers( {
   ordering,
   descriptionShop,
   discountForBasket,
+  discountFilter,
 } );
 
 const persistConfig = {
