@@ -2,6 +2,7 @@ import React from 'react';
 import { routesPathsEnum } from './enums';
 import { Route, Routes } from 'react-router-dom';
 import { AppRoutesPropsType } from './types';
+import BrandsPage from '../pages/BrandsPage/BrandsPage';
 
 const MainPage = React.lazy( () => import('../pages/MainPage/MainPage') );
 const CatalogPage = React.lazy( () => import('../pages/CatalogPage/CatalogPage') );
@@ -22,6 +23,7 @@ const AppRoutes = ( { openFiltersMode, closeEditMode }: AppRoutesPropsType ) => 
       <Route path={ routesPathsEnum.ARTICLES } element={ <ArticlesPage/> }/>
       <Route path={ routesPathsEnum.ARTICLE_WITH_ID } element={ <ArticlePage/> }/>
       <Route path={ routesPathsEnum.BASKET } element={ <BasketPage/> }/>
+      <Route path={ routesPathsEnum.BRANDS } element={ <BrandsPage/> }/>
       <Route path={ routesPathsEnum.CHECKOUT } element={ <CheckoutPage/> }/>
       <Route path={ '*' } element={ <NotFoundPage/> }/>
     </Routes>
