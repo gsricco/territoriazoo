@@ -13,6 +13,8 @@ import { setWeightSetIsShowed } from '../../redux/reducers/app';
 import { ProductItemUnitPropsType } from './types';
 import { setChosenOptionToPreviouslyProduct } from '../../redux/reducers/previouslyProducts';
 import { getDiscountsForBasket } from '../../redux/selectors/discountForBasket';
+import Discount from '../../Images/svg/Discount';
+
 
 const ProductItemUnit = ( { option, productId, active, from }: ProductItemUnitPropsType ): ReactElement => {
   const dispatch = useDispatch();
@@ -41,11 +43,22 @@ const ProductItemUnit = ( { option, productId, active, from }: ProductItemUnitPr
   return (
     <>
       { !option.partial
-        ? ( <span onClick={ onUnitClick } className={ active ? style.active : style.oneUnitBlock }>
+        ? ( <div className={ style.spanContainer }>
+          <span onClick={ onUnitClick } className={ active ? style.active : style.oneUnitBlock }>
       { +option.size } { option.units.unit_name }
-    </span> )
-        : <span className={ style.oneUnitBlock }
-                onClick={ onSetWeightClick }>Задать вес</span> }
+    </span>
+          {option.discount_by_option && <div className={ style.svg }>
+            <Discount/>
+          </div>}
+        </div> )
+        : ( <div className={ style.spanContainer }>
+          <span className={ style.oneUnitBlock }
+                onClick={ onSetWeightClick }>Задать вес</span>
+            {option.discount_by_option && <div className={ style.svg }>
+              <Discount/>
+            </div>}
+          </div>
+        ) }
     </>
   );
 };
