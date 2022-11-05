@@ -18,8 +18,8 @@ const PopularBrandsBlock = React.memo( (): ReactElement => {
   const dispatch = useDispatch<AppDispatch>();
   const chooseBrand = useCallback( ( id: number ) => {
     const pageNumber = 1;
-    dispatch( setChosenBrandId( { id } ) );
     dispatch( setActualPage( { pageNumber } ) );
+    dispatch( setChosenBrandId( { id } ) );
     dispatch( setChosenBrandsId( { id } ) );
     navigate( routesPathsEnum.CATALOG );
   }, [ dispatch, navigate ] );
@@ -33,19 +33,20 @@ const PopularBrandsBlock = React.memo( (): ReactElement => {
         <h2 className={ style.title }>Популярные бренды</h2>
         <div className={ style.brandsContainer }>
           {
-            brands.map( ( { id, image } ) =>
-              <Brand
-                key={ id }
-                id={ id }
-                image={ image }
-                chooseBrand={ chooseBrand }
-                forBlock={true}
-              />,
-            )
+            brands
+              .filter( ( brand, index ) => index < 18 )
+              .map( ( { id, image } ) =>
+                <Brand
+                  key={ id }
+                  id={ id }
+                  image={ image }
+                  chooseBrand={ chooseBrand }
+                  forBlock={ true }
+                />,
+              )
           }
         </div>
         <Button title={ 'Смотреть больше брендов' } onClick={ () => navigate( routesPathsEnum.BRANDS ) }/>
-
       </div>
     </div>
   );
