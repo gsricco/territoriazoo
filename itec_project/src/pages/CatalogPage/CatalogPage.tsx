@@ -46,6 +46,7 @@ import { ProductItemType } from '../../types';
 import { getDiscountsForBasket } from '../../redux/selectors/discountForBasket';
 import { getDiscountFilterStatus } from '../../redux/selectors/discountFilter';
 import { setChosenDiscountFilterStatus } from '../../redux/reducers/discountFilter';
+import ChooseAnimalTypeForm from '../../components/ChooseAnimalTypeForm/ChooseAnimalTypeForm';
 
 const CatalogPage = ( { openFiltersMode, closeEditMode }: CatalogPagePropsType ) => {
 
@@ -187,7 +188,7 @@ const CatalogPage = ( { openFiltersMode, closeEditMode }: CatalogPagePropsType )
                 </div>
               </label>
             </div>
-            <ProductTypesForm forBurger={false}/>
+            { animal ? <ProductTypesForm forBurger={ false }/> : <ChooseAnimalTypeForm forBurger={ false }/> }
             <BrandsForm closeEditMode={ closeEditMode } forBurger={false}/>
           </div>
         </div>
