@@ -10,7 +10,7 @@ import { AppDispatch } from '../../redux/store';
 import { SearchInputPropsType } from './types';
 import { useDebounce } from '../../customHooks/useDebounce';
 
-const SearchInput = React.memo(( { forHeaderBurger }: SearchInputPropsType ): ReactElement => {
+const SearchInput = React.memo(( { forHeaderBurger, closeBurgerNuv }: SearchInputPropsType ): ReactElement => {
 
   const [ search, setSearch ] = useState( '' );
   const debouncedSearch = useDebounce(search, 1000);
