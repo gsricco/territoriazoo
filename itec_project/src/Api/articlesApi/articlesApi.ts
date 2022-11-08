@@ -6,4 +6,7 @@ export const articlesAPI = {
   async setArticles() {
     return await instance.get<Array<ResBrandType>>( ARTICLES_URL );
   },
+  async getArticle( id: number ) {
+    return await instance.get( `${ ARTICLES_URL }${ id }` );
+  },
 };
