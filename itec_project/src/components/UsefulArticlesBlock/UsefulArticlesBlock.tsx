@@ -10,7 +10,6 @@ import NextSectionButton from '../common/nextSectionButton/nextSectionButton';
 import themeStyle from '../../styles/common/DarkBlock.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAnimalTypes, getChosenAnimalTypeId } from '../../redux/selectors/animalTypes';
-import { getTitleForArticlesBlock } from '../../helpers/getTitle';
 import { getArticles } from '../../redux/selectors/articles';
 import { fetchArticlesTC } from '../../redux/reducers/articles';
 import { useCarousel } from '../../customHooks/useCarousel';
