@@ -251,8 +251,10 @@ class ProductOptionsViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Article.objects.filter(is_active=True)
+    queryset = Article.objects.filter(is_active=True).select_related("animals")
     serializer_class = ArticleSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ("animals",)
 
 
 class MyPerms(BasePermission):
