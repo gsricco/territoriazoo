@@ -24,7 +24,7 @@ const BrandsPage = () => {
   }, [ dispatch, navigate ] );
   useEffect( () => {
     dispatch( fetchBrandsTC() );
-  }, [dispatch] );
+  }, [ dispatch ] );
   return (
     <div className={ style.brandsPage }>
       <div className={ navigationStyle.navigationBlock }>
@@ -38,13 +38,14 @@ const BrandsPage = () => {
         <h1>Все бренды</h1>
         <div className={ style.brandsContainer }>
           {
-            brands.map( ( { id, image } ) =>
+            brands.map( ( { id, image, name } ) =>
               <Brand
                 key={ id }
                 id={ id }
+                name={ name }
                 image={ image }
                 chooseBrand={ chooseBrand }
-                forBlock={false}
+                forBlock={ false }
               />,
             )
           }
