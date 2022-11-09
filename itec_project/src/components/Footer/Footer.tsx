@@ -34,7 +34,7 @@ const Footer = (): ReactElement => {
             <a href={ 'https://shkuratovdesigner.com/' } target={ '_blank' } rel={ 'noreferrer' }>shkuratovdesigner.com</a>
           </div>
           <div className={ style.itecInfo }><p>Разработан: </p>
-            <a href={ 'https://itec.by/' } target={ '_blank' } rel={ 'noreferrer' } translate={ 'no' }>ITEC</a>
+            <a href={ 'https://itec.by/' } target={ '_blank' } rel={ 'noreferrer' }>ITEC</a>
           </div>
           <p>© Все права защищены 2022</p>
         </div>
