@@ -175,10 +175,16 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
+        animal = self.request.query_params.get("animal")
+        if animal:
+            queryset = queryset.filter(animal_ids__overlap=[animal])
         brands = self.request.query_params.getlist("brand")
         if brands:
             brand_list = brands[0].split(",")
             queryset = queryset.filter(brand_id__in=brand_list)
+        category = self.request.query_params.get("category")
+        if category:
+            queryset = queryset.filter(category_ids__overlap=[category])
         subcategory = self.request.query_params.getlist("subcategory")
         if subcategory:
             subcategory_list = subcategory[0].split(",")
@@ -186,9 +192,6 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         on_discount = self.request.query_params.get("on_discount")
         if on_discount:
             queryset = queryset.filter(greatest_discount__gt=0)
-        animal = self.request.query_params.get("animal")
-        if animal:
-            queryset = queryset.filter(animal_ids__overlap=[animal])
         return queryset
 
     # @method_decorator(cache_page(60 * 60))
