@@ -51,7 +51,6 @@
             }
 
             & p {
-              @include SFTextRegular();
               font-size: 16px;
               line-height: 24px;
               color: $opacityColor;
@@ -83,7 +82,6 @@
         margin: 0 auto 76px;
 
         .articleText {
-          @include SFTextRegular();
           font-size: 20px;
           line-height: 145%;
         }
@@ -165,7 +163,6 @@
         }
 
         & p {
-          @include SFTextRegular();
           font-size: 16px;
           line-height: 24px;
           color: $opacityColor;
@@ -197,7 +194,6 @@
     margin: 0 auto 76px;
 
     .articleText {
-      @include SFTextRegular();
       font-size: 20px;
       line-height: 145%;
       color: $textColor;
