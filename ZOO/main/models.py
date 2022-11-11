@@ -392,7 +392,7 @@ class Article(models.Model):
     )
     description = RichTextField(verbose_name="Описание статьи", config_name="custom")
     image = ProcessedImageField(
-        verbose_name="Изображение бренда",
+        verbose_name="Изображение статьи",
         options={"quality": 50},
         null=True,
         blank=True,
@@ -859,10 +859,8 @@ class Banner(models.Model):
     )
     is_active = models.BooleanField(verbose_name="Активно", default=False)
     info_shop = models.ForeignKey(
-        "InfoShop", related_name="banners", on_delete=models.CASCADE, null=True
-    )
-
-    # default=InfoShop.objects.all().first().id)
+        "InfoShop", related_name="banners", on_delete=models.CASCADE, null=True,
+        default=InfoShop.objects.all().first().id)
 
     def __str__(self):
         return self.title
