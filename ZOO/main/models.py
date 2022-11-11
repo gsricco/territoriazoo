@@ -41,7 +41,7 @@ class Product(models.Model):
     )
     name = models.CharField(
         verbose_name="Название товара",
-        max_length=150,
+        max_length=255,
         unique=True,
         blank=False,
         null=False,
@@ -170,7 +170,7 @@ class Units(models.Model):
     """Единицы измерения"""
 
     unit_name = models.CharField(
-        max_length=50,
+        max_length=150,
         verbose_name="Название единиц измерения",
         blank=True,
         null=True,
@@ -195,7 +195,7 @@ class ProductOptions(models.Model):
 
     article_number = models.CharField(
         verbose_name="Артикул товара",
-        max_length=200,
+        max_length=255,
         unique=True,
         blank=True,
         null=True,
@@ -283,7 +283,7 @@ class Animal(models.Model):
     """Доступные типы животных для поиска товаров"""
 
     name = models.CharField(
-        verbose_name="Название животного", max_length=20, unique=True
+        verbose_name="Название животного", max_length=150, unique=True
     )
     image = ProcessedImageField(
         verbose_name="Изображение животного",
@@ -335,7 +335,7 @@ class Category(models.Model):
     """Категории товаров"""
 
     name = models.CharField(
-        verbose_name="Название категории", max_length=30, blank=False, null=False
+        verbose_name="Название категории", max_length=255, blank=False, null=False
     )
     is_active = models.BooleanField(verbose_name="Активно", default=True)
     animal = models.ForeignKey(
@@ -386,7 +386,7 @@ class SubCategory(models.Model):
 class Article(models.Model):
     """Полезные статьи"""
 
-    title = models.CharField(verbose_name="Название статьи", max_length=200)
+    title = models.CharField(verbose_name="Название статьи", max_length=255)
     animals = models.ForeignKey(
         Animal, verbose_name="Название животного", on_delete=models.PROTECT
     )
@@ -398,7 +398,7 @@ class Article(models.Model):
         blank=True,
         upload_to="photos_article/",
     )
-    time_read = models.CharField(verbose_name="Время чтения статьи", max_length=50)
+    time_read = models.CharField(verbose_name="Время чтения статьи", max_length=100)
     date_added = models.DateField(
         verbose_name="Дата добавления статьи", auto_now_add=True
     )
@@ -422,7 +422,7 @@ class Comments(models.Model):
     """Отзыв о магазине"""
 
     name_author = models.CharField(
-        verbose_name="Автор отзыва", max_length=100, validators=[name_validator]
+        verbose_name="Автор отзыва", max_length=35, validators=[name_validator]
     )
     body_of_comment = models.TextField(verbose_name="Содержание отзыва")
     phone_number = models.CharField(
@@ -434,7 +434,7 @@ class Comments(models.Model):
     )
     name_animal = models.CharField(
         verbose_name="Имя питомца",
-        max_length=100,
+        max_length=35,
         null=True,
         blank=True,
         validators=[name_validator],
@@ -460,16 +460,16 @@ class InfoShop(models.Model):
     """Информация о магазине - адрес, телефон, ст.метро и тд."""
 
     address = models.CharField(
-        verbose_name="Адрес магазина", max_length=100, blank=True, null=True
+        verbose_name="Адрес магазина", max_length=255, blank=True, null=True
     )
     metro = models.CharField(
-        verbose_name="Станция метро", max_length=50, blank=True, null=True
+        verbose_name="Станция метро", max_length=150, blank=True, null=True
     )
     time_weekdays = models.CharField(
-        verbose_name="Время работы (будние)", max_length=50, blank=True, null=True
+        verbose_name="Время работы (будние)", max_length=150, blank=True, null=True
     )
     time_weekend = models.CharField(
-        verbose_name="Время работы (выходные)", max_length=50, blank=True, null=True
+        verbose_name="Время работы (выходные)", max_length=150, blank=True, null=True
     )
     phone_number = models.CharField(
         verbose_name="Номер телефона", max_length=20, blank=True, null=True
@@ -493,7 +493,7 @@ class InfoShop(models.Model):
         upload_to="photos_time/",
     )
     title = models.CharField(
-        verbose_name="Заголовок описания", max_length=100, null=True, blank=True
+        verbose_name="Заголовок описания", max_length=255, null=True, blank=True
     )
     main_info = models.TextField(verbose_name="Тело описания", null=True, blank=True)
     published = models.BooleanField(verbose_name="Опубликовано", default=True)
@@ -555,7 +555,7 @@ class InfoShopBlock(models.Model):
         on_delete=models.CASCADE,
     )
     info_title = models.CharField(
-        verbose_name="Заголовок Блока", max_length=50, blank=True, null=True
+        verbose_name="Заголовок Блока", max_length=255, blank=True, null=True
     )
     info_text = models.TextField(verbose_name="Описание Блока", blank=True, null=True)
 
@@ -729,7 +729,7 @@ class DiscountByProductOption(models.Model):
     """Скидки по варианту фасовки продукта"""
 
     title = models.CharField(
-        verbose_name="Название/Описание скидки", max_length=200, null=True, blank=True
+        verbose_name="Название/Описание скидки", max_length=255, null=True, blank=True
     )
     is_active = models.BooleanField(verbose_name="Активно", default=False)
     discount_amount = models.PositiveIntegerField(
@@ -777,8 +777,8 @@ class DiscountBySubCategory(models.Model):
     discount_amount = models.PositiveIntegerField(
         verbose_name="Процент скидки",
         default=0,
-        help_text="Процент скидки не должен быть меньше 1% и превышать 90%",
-        validators=[MinValueValidator(1), MaxValueValidator(90)],
+        help_text="Процент скидки не должен быть меньше 1% и превышать 100%",
+        validators=[MinValueValidator(1), MaxValueValidator(100)],
     )
 
     def __str__(self):
@@ -827,8 +827,8 @@ class DiscountByDayOptions(models.Model):
     discount_amount = models.PositiveIntegerField(
         verbose_name="Процент скидки",
         default=0,
-        help_text="Процент скидки не должен быть меньше 1% и превышать 90%",
-        validators=[MinValueValidator(1), MaxValueValidator(90)],
+        help_text="Процент скидки не должен быть меньше 1% и превышать 100%",
+        validators=[MinValueValidator(1), MaxValueValidator(100)],
     )
 
     def __str__(self):
@@ -843,7 +843,7 @@ class DiscountByDayOptions(models.Model):
 class Banner(models.Model):
     """Рекламные Баннеры"""
 
-    title = models.CharField(verbose_name="Описание баннера", max_length=150, null=True)
+    title = models.CharField(verbose_name="Описание баннера", max_length=255, null=True)
     color = ColorField(
         verbose_name="Цвет фона баннера",
         help_text="Выберите цвет для фона баннера",
