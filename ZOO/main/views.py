@@ -345,7 +345,10 @@ class OrderViewSet(
                     "price": item["chosen_option"]["price"],
                 }
             )
-            if Decimal(item["chosen_option"]["stock_balance"]) < Decimal(item["chosen_option"]["quantity"]):
+            # if Decimal(item["chosen_option"]["stock_balance"]) < Decimal(item["chosen_option"]["quantity"]):
+            #     not_sellable.append(item)
+            if (ProductOptions.objects.get(article_number=item["chosen_option"]["article_number"]).stock_balance
+                    < Decimal(item["chosen_option"]["quantity"])):
                 not_sellable.append(item)
         if not_sellable:
             return Response(not_sellable, status=402)
