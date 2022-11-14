@@ -385,12 +385,13 @@ class OrderViewSet(
         # TODO: for updating stock_balance in ProductOption
 
         po_objects = ProductOptions.objects.filter(article_number__in=articles_numbers)
-        one_more_list = []
+        # one_more_list = []
         for item in order_items_list:
             obj_to_update = po_objects.get(article_number=item["article_number"])
             obj_to_update.stock_balance = Decimal(item["stock_balance"]) - Decimal(item["quantity"])
-            one_more_list.append(obj_to_update)
-        updating = ProductOptions.objects.bulk_update(one_more_list, ["stock_balance"])
+            obj_to_update.save()
+            # one_more_list.append(obj_to_update)
+        # updating = ProductOptions.objects.bulk_update(one_more_list, ["stock_balance"])
         items_order_serializer = OrderItemSerializer(data=order_items_list, many=True)
         if items_order_serializer.is_valid():
             items_order_serializer.save(order_id=order_obj.id)
@@ -436,11 +437,24 @@ class OrderViewSet(
 
 
 class DiscountByDayViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = (
-        DiscountByDay.objects.filter(is_active=True)
-        .prefetch_related(
-            "options",
-        )
-        .filter(week_days__contains=[datetime.datetime.now().weekday()])
-    )
+    # queryset = (
+    #     DiscountByDay.objects.filter(is_active=True)
+    #     .prefetch_related(
+    #         "options",
+    #     )
+    #     .filter(week_days__contains=[datetime.datetime.now().weekday()])
+    # )
     serializer_class = DiscountByDaySerializer
+
+    def get_queryset(self):
+        print(datetime.datetime.now())
+        print(datetime.datetime.now().weekday())
+        queryset = (
+            DiscountByDay.objects.filter(is_active=True)
+            .prefetch_related(
+                "options",
+            )
+            .filter(week_days__contains=[datetime.datetime.now().weekday()])
+        )
+        print(queryset)
+        return queryset
