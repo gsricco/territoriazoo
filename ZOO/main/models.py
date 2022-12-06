@@ -210,7 +210,7 @@ class ProductOptions(models.Model):
         verbose_name="На развес", default=False, db_index=True
     )
     price = models.DecimalField(verbose_name="Цена", max_digits=8, decimal_places=2)
-    size = models.IntegerField(verbose_name="Объём упаковки", blank=False, null=False)
+    size = models.DecimalField(verbose_name="Объём упаковки", blank=False, null=False, max_digits=8, decimal_places=2)
     stock_balance = models.DecimalField(
         verbose_name="Остаток на складе", max_digits=8, decimal_places=2
     )

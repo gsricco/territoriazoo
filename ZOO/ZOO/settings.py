@@ -221,7 +221,7 @@ STATIC_URL = '/django_static/'
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static')
 # ]
-
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
 MEDIA_URL = '/django_media/'
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
 

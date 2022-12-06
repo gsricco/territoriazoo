@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.forms import ModelForm, TextInput
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportMixin
 
 from .models import (
     Animal,
@@ -53,7 +53,7 @@ class ProductImageInline(admin.TabularInline):
 
 
 @admin.register(ProductOptions)
-class ProductOptionsAdmin(ImportExportModelAdmin):
+class ProductOptionsAdmin(ImportMixin, admin.ModelAdmin):
     """Опции продукта"""
 
     # skip_admin_log = True
@@ -102,7 +102,7 @@ class ProductOptionsInline(admin.TabularInline):
 
 
 @admin.register(Product)
-class ProductAdmin(ImportExportModelAdmin):
+class ProductAdmin(admin.ModelAdmin):
     """Товары магазина"""
 
     formfield_overrides = {

@@ -1,73 +1,24 @@
-from django.db.models import QuerySet
-from import_export import fields, resources
-from import_export.fields import Field
+
+from import_export import fields, resources, widgets
+
 from import_export.instance_loaders import CachedInstanceLoader
-from import_export.widgets import (
-    BooleanWidget,
-    CharWidget,
-    DecimalWidget,
-    ForeignKeyWidget,
-    IntegerWidget,
-    ManyToManyWidget,
-)
-
 from .models import Animal, Brand, Category, Product, ProductOptions, SubCategory, Units
-
-
-# class ForeignKeyWidgetWithCreation(ForeignKeyWidget):
-#     def __init__(self, model, field="pk", create=False, **kwargs):
-#         self.model = model
-#         self.field = field
-#         self.create = create
-#         super(ForeignKeyWidgetWithCreation, self).__init__(model, field=field, **kwargs)
-#
-#     def clean(self, value, **kwargs):
-#         if not value:
-#             return None
-#         if self.create:
-#             self.model.objects.get_or_create(**{self.field: value})
-#         val = super(ForeignKeyWidgetWithCreation, self).clean(value, **kwargs)
-#         return self.model.objects.get(**{self.field: val}) if val else None
-#
-#
-# class ManyToManyWidgetWithCreation(ManyToManyWidget):
-#     def __init__(self, model, field="pk", create=False, **kwargs):
-#         self.model = model
-#         self.field = field
-#         self.create = create
-#         super(ManyToManyWidgetWithCreation, self).__init__(model, field=field, **kwargs)
-#
-#     def clean(self, value, **kwargs):
-#         if not value:
-#             return self.model.objects.none()
-#         cleaned_value: QuerySet = super(ManyToManyWidgetWithCreation, self).clean(
-#             value, **kwargs
-#         )
-#         object_list = value.split(self.separator)
-#         if len(cleaned_value.all()) == len(object_list):
-#             return cleaned_value
-#         if self.create:
-#             for object_value in object_list:
-#                 _instance, _new = self.model.objects.get_or_create(
-#                     **{self.field: object_value}
-#                 )
-#         model_objects = self.model.objects.filter(**{f"{self.field}__in": object_list})
-#         return model_objects
 
 
 class ProductOptionsResource(resources.ModelResource):
     article_number = fields.Field(column_name="Артикул", attribute="article_number")
     weight = fields.Field(
-        column_name="Вес",
+        column_name="Вес объем длина",
     )
-    volume = fields.Field(
-        column_name="Объем",
-    )
-    length = fields.Field(
-        column_name="Длина",
-    )
+    # volume = fields.Field(
+    #     column_name="Объем",
+    # )
+    # length = fields.Field(
+    #     column_name="Длина",
+    # )
     price = fields.Field(column_name="Цена", attribute="price")
     units = fields.Field(column_name="Ед.изм.", attribute="units1")
+    partial = fields.Field(column_name="Ед изм", attribute="is_partial")
     # widget=ForeignKeyWidgetWithCreation(Units, field='unit_name', create=True))
     product = fields.Field(column_name="Номенклатура", attribute="product1")
     stock_balance = fields.Field(column_name="Остаток", attribute="stock_balance")
@@ -84,8 +35,8 @@ class ProductOptionsResource(resources.ModelResource):
         fields = (
             "article_number",
             "weight",
-            "volume",
-            "length",
+            # "volume",
+            # "length",
             "price",
             "unit",
             "product",
@@ -113,23 +64,29 @@ class ProductOptionsResource(resources.ModelResource):
         self.sub_category = row["Подкатегория товаров"]
         self.product = row["Номенклатура"]
         # self.units = row.pop('Ед.изм.')
+        self.partial = row["Ед изм"]
         self.units = row["Ед.изм."]
         self.stock_balance = row["Остаток"]
         # weight = row.pop('Вес')
         # length = row.pop('Длина')
         # volume = row.pop('Объем')
-        weight = row["Вес"]
-        length = row["Длина"]
-        volume = row["Объем"]
-        if weight is not None:
+        weight = row["Вес объем длина"]
+        # length = row["Длина"]
+        # volume = row["Объем"]
+        if weight is not None and weight != '':
             self.size = weight
-        elif length is not None:
-            self.size = length
-        elif volume is not None:
-            self.size = volume
-        if row["Ед.изм."] == "кг":
-            row["Вес"] = 1000
-            row["Ед.изм."] = "грамм"
+        else:
+            self.size = 1
+            self.units = self.partial
+        if row['Артикул'] == '05800':
+            print(row['Артикул'], self.units, self.size, weight)
+        # elif length is not None:
+        #     self.size = length
+        # elif volume is not None:
+        #     self.size = volume
+        if row["Ед изм"] == "кг":
+            row["Вес объем длина"] = 1000
+            row["Ед.изм."] = "г"
             row["Остаток"] = row["Остаток"] * 1000
 
     def after_import_instance(self, instance, new, row_number=None, **kwargs):
@@ -191,7 +148,7 @@ class ProductOptionsResource(resources.ModelResource):
             instance.is_active = False
         if self.units == "кг":
             unit_for_partial, created_unit = Units.objects.get_or_create(
-                unit_name="грамм"
+                unit_name="г"
             )
             instance.partial = 1
             instance.units = unit_for_partial
@@ -205,15 +162,15 @@ class ProductOptionsResource(resources.ModelResource):
             instance.size = self.size
         instance.product = product
 
-    def bulk_create(self, using_transactions, dry_run, raise_errors, batch_size=None):
-        super().bulk_create(using_transactions, dry_run, raise_errors, batch_size=None)
+    # def bulk_create(self, using_transactions, dry_run, raise_errors, batch_size=None):
+    #     super().bulk_create(using_transactions, dry_run, raise_errors, batch_size=None)
 
     def get_bulk_update_fields(self):
         not_bulk_fields = (
             "article_number",
             "weight",
-            "length",
-            "volume",
+            # "length",
+            # "volume",
             "brand",
             "animal",
             "sub_category",
