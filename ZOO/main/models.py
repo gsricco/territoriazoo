@@ -864,7 +864,7 @@ class Banner(models.Model):
 
     def save(self, *args, **kwargs):
         if InfoShop.objects.all().exists():
-            self.info_shop = InfoShop.objects.all().first().id
+            self.info_shop = InfoShop.objects.all().first()
         super().save(*args,**kwargs)
 
     def __str__(self):
