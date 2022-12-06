@@ -859,8 +859,13 @@ class Banner(models.Model):
     )
     is_active = models.BooleanField(verbose_name="Активно", default=False)
     info_shop = models.ForeignKey(
-        "InfoShop", related_name="banners", on_delete=models.CASCADE, null=True,
-        default=InfoShop.objects.all().first().id)
+        "InfoShop", related_name="banners", on_delete=models.CASCADE, null=True,)
+        # default=InfoShop.objects.all().first().id)
+
+    def save(self, *args, **kwargs):
+        if shop_info := InfoShop.objects.all():
+            self.info_shop = shop_info.first().id
+        super().save(*args,**kwargs)
 
     def __str__(self):
         return self.title
