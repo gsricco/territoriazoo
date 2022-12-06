@@ -69,3 +69,4 @@ xlwt==1.3.0
 yarl==1.7.2
 python-dotenv==0.20.0
 django-smart-selects==1.6.0
+gevent==22.10.2
