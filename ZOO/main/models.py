@@ -9,6 +9,59 @@ from smart_selects.db_fields import ChainedManyToManyField
 
 from .validators import name_validator, phone_validator
 
+NUM_ORDERING = (
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5),
+    (6, 6),
+    (7, 7),
+    (8, 8),
+    (9, 9),
+    (10, 10),
+    (11, 11),
+    (12, 12),
+    (13, 13),
+    (14, 14),
+    (15, 15),
+    (16, 16),
+    (17, 17),
+    (18, 18),
+    (19, 19),
+    (20, 20),
+    (21, 21),
+    (22, 22),
+    (23, 23),
+    (24, 24),
+    (25, 25),
+    (26, 26),
+    (27, 27),
+    (28, 28),
+    (29, 29),
+    (30, 30),
+    (31, 31),
+    (32, 32),
+    (33, 33),
+    (34, 34),
+    (35, 35),
+    (36, 36),
+    (37, 37),
+    (38, 38),
+    (39, 39),
+    (40, 40),
+    (41, 41),
+    (42, 42),
+    (43, 43),
+    (44, 44),
+    (45, 45),
+    (46, 46),
+    (47, 47),
+    (48, 48),
+    (49, 49),
+    (50, 50),
+)
+
 
 class MyManager(models.Manager):
     def bulk_create(self, objs, batch_size=None, ignore_conflicts=False):
@@ -281,7 +334,14 @@ class ProductOptions(models.Model):
 
 class Animal(models.Model):
     """Доступные типы животных для поиска товаров"""
-
+    ORDER_CHOICES = (
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+        (6, 6),
+    )
     name = models.CharField(
         verbose_name="Название животного", max_length=150, unique=True
     )
@@ -292,10 +352,12 @@ class Animal(models.Model):
         blank=True,
         upload_to="photos_animal/",
     )
+    num_ordering = models.IntegerField(verbose_name="Очерёдность показа", choices=ORDER_CHOICES, default=1)
 
     class Meta:
         verbose_name = "ЖИВОТНОГО"
         verbose_name_plural = "ЖИВОТНЫЕ"
+        ordering = "num_ordering", "name"
 
     def __str__(self):
         return self.name
@@ -321,6 +383,7 @@ class Brand(models.Model):
     class Meta:
         verbose_name = "БРЕНД"
         verbose_name_plural = "БРЕНДЫ"
+        ordering = 'name',
 
     def __str__(self):
         return self.name
@@ -339,12 +402,15 @@ class Category(models.Model):
     )
     is_active = models.BooleanField(verbose_name="Активно", default=True)
     animal = models.ForeignKey(
-        "Animal", on_delete=models.PROTECT, null=True, related_name="categories"
+        "Animal", on_delete=models.PROTECT, null=True, related_name="categories",
+        verbose_name="Животное"
     )
+    num_ordering = models.IntegerField(verbose_name="Очерёдность показа", choices=NUM_ORDERING, default=1)
 
     class Meta:
         verbose_name = "КАТЕГОРИИ"
         verbose_name_plural = "КАТЕГОРИИ"
+        ordering = 'num_ordering',
 
     def __str__(self):
         return f"{self.name} <{self.animal.name.upper()}>"
@@ -366,6 +432,7 @@ class SubCategory(models.Model):
         related_name="subcategory",
     )
     is_active = models.BooleanField(verbose_name="Активно", default=True)
+    num_ordering = models.IntegerField(verbose_name="Очерёдность показа", choices=NUM_ORDERING, default=1)
 
     def __str__(self):
         return f"{self.name} <{self.category.animal.name.upper()}>"
@@ -373,6 +440,7 @@ class SubCategory(models.Model):
     class Meta:
         verbose_name = "ПОДКАТЕГОРИЯ"
         verbose_name_plural = "ПОДКАТЕГОРИИ"
+        ordering = 'num_ordering',
 
     def count_prod(self):
         return self.products.count()
@@ -865,7 +933,7 @@ class Banner(models.Model):
     def save(self, *args, **kwargs):
         if InfoShop.objects.all().exists():
             self.info_shop = InfoShop.objects.all().first()
-        super().save(*args,**kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

@@ -198,6 +198,7 @@ class AnimalAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "image_img",
+        "num_ordering",
     )
     search_fields = ("name",)
     readonly_fields = ("preview",)
@@ -263,6 +264,7 @@ class CategoryAdmin(admin.ModelAdmin):
         "animal",
         "is_active",
         "count_prod",
+        "num_ordering",
     )
     list_editable = ("is_active",)
     search_fields = ("name",)
@@ -281,6 +283,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
         "category",
         "animal",
         "count_prod",
+        "num_ordering",
     )
     list_editable = ("is_active",)
     search_fields = ("name", "category")
