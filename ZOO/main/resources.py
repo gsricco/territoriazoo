@@ -6,20 +6,14 @@ from .models import Animal, Brand, Category, Product, ProductOptions, SubCategor
 
 
 class ProductOptionsResource(resources.ModelResource):
-    article_number = fields.Field(column_name="Артикул", attribute="article_number")
+    article_number = fields.Field(column_name="Артикул", attribute="article_number",
+                                  widget=widgets.CharWidget())
     weight = fields.Field(
         column_name="Вес объем длина",
     )
-    # volume = fields.Field(
-    #     column_name="Объем",
-    # )
-    # length = fields.Field(
-    #     column_name="Длина",
-    # )
     price = fields.Field(column_name="Цена", attribute="price")
     units = fields.Field(column_name="Ед.изм.", attribute="units1")
     partial = fields.Field(column_name="Ед изм", attribute="is_partial")
-    # widget=ForeignKeyWidgetWithCreation(Units, field='unit_name', create=True))
     product = fields.Field(column_name="Номенклатура", attribute="product1")
     stock_balance = fields.Field(column_name="Остаток", attribute="stock_balance")
     brand = fields.Field(column_name="Бренд", attribute="brand")
@@ -28,15 +22,14 @@ class ProductOptionsResource(resources.ModelResource):
     sub_category = fields.Field(
         column_name="Подкатегория товаров", attribute="sub_category"
     )
+    size = fields.Field()
     is_active = fields.Field()
 
     class Meta:
         model = ProductOptions
         fields = (
             "article_number",
-            "weight",
-            # "volume",
-            # "length",
+            "size",
             "price",
             "unit",
             "product",
@@ -51,10 +44,8 @@ class ProductOptionsResource(resources.ModelResource):
         use_transactions = True
         import_id_fields = ("article_number",)
         exclude = ("id",)
-        # skip_admin_log = True
         batch_size = 100
         use_bulk = True
-        # skip_html_diff = True
         instance_loader_class = CachedInstanceLoader
 
     def before_import_row(self, row, row_number=None, **kwargs):
@@ -63,31 +54,19 @@ class ProductOptionsResource(resources.ModelResource):
         self.category = row["Категория товаров"]
         self.sub_category = row["Подкатегория товаров"]
         self.product = row["Номенклатура"]
-        # self.units = row.pop('Ед.изм.')
         self.partial = row["Ед изм"]
         self.units = row["Ед.изм."]
         self.stock_balance = row["Остаток"]
-        # weight = row.pop('Вес')
-        # length = row.pop('Длина')
-        # volume = row.pop('Объем')
         weight = row["Вес объем длина"]
-        # length = row["Длина"]
-        # volume = row["Объем"]
         if weight is not None and weight != '':
             self.size = weight
         else:
             self.size = 1
             self.units = self.partial
-        if row['Артикул'] == '05800':
-            print(row['Артикул'], self.units, self.size, weight)
-        # elif length is not None:
-        #     self.size = length
-        # elif volume is not None:
-        #     self.size = volume
-        if row["Ед изм"] == "кг":
-            row["Вес объем длина"] = 1000
-            row["Ед.изм."] = "г"
-            row["Остаток"] = row["Остаток"] * 1000
+        if self.partial == "кг":
+            self.size = 1000
+            self.units = "г"
+            self.stock_balance *= 1000
 
     def after_import_instance(self, instance, new, row_number=None, **kwargs):
 
@@ -146,7 +125,7 @@ class ProductOptionsResource(resources.ModelResource):
         )
         if self.stock_balance <= 0:
             instance.is_active = False
-        if self.units == "кг":
+        if self.partial == "кг":
             unit_for_partial, created_unit = Units.objects.get_or_create(
                 unit_name="г"
             )
@@ -155,22 +134,15 @@ class ProductOptionsResource(resources.ModelResource):
             instance.size = 1000
             instance.stock_balance = self.stock_balance * 1000
         else:
-            # unit_for_instance, created_unit = Units.objects.get_or_create(unit_name=self.units)
-            # print(unit_instance, 'in else statement')
-
             instance.units = unit_instance
             instance.size = self.size
         instance.product = product
-
-    # def bulk_create(self, using_transactions, dry_run, raise_errors, batch_size=None):
-    #     super().bulk_create(using_transactions, dry_run, raise_errors, batch_size=None)
 
     def get_bulk_update_fields(self):
         not_bulk_fields = (
             "article_number",
             "weight",
-            # "length",
-            # "volume",
+            "partial"
             "brand",
             "animal",
             "sub_category",
