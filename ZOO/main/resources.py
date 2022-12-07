@@ -142,7 +142,7 @@ class ProductOptionsResource(resources.ModelResource):
         not_bulk_fields = (
             "article_number",
             "weight",
-            "partial"
+            "partial",
             "brand",
             "animal",
             "sub_category",
