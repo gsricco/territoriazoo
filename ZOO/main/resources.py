@@ -44,7 +44,7 @@ class ProductOptionsResource(resources.ModelResource):
         use_transactions = True
         import_id_fields = ("article_number",)
         exclude = ("id",)
-        batch_size = 100
+        batch_size = 250
         use_bulk = True
         instance_loader_class = CachedInstanceLoader
 
