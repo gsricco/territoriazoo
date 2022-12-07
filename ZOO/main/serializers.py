@@ -70,10 +70,6 @@ class ProductOptionsSerializer(serializers.ModelSerializer):
         depth = 1
 
     def get_discount_by_option(self, obj):
-        # if hasattr(obj, 'discount_option'):
-        #     print(obj.discount_option)
-        # else:
-        #     print('no such attributes')
         try:
             ser = DiscountByProductOptionSerializer(obj.discount_by_product_option)
             return ser.data["discount_amount"]

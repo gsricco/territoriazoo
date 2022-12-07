@@ -450,8 +450,6 @@ class DiscountByDayViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = DiscountByDaySerializer
 
     def get_queryset(self):
-        print(datetime.datetime.now())
-        print(datetime.datetime.now().weekday())
         queryset = (
             DiscountByDay.objects.filter(is_active=True)
             .prefetch_related(
@@ -459,5 +457,4 @@ class DiscountByDayViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             )
             .filter(week_days__contains=[datetime.datetime.now().weekday()])
         )
-        print(queryset)
         return queryset
