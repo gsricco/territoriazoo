@@ -91,8 +91,8 @@ class ProductOptionsResource(resources.ModelResource):
                 brand, created = Brand.objects.get_or_create(name=self.brand)
                 product, created = Product.objects.get_or_create(
                     name=self.product,
-                    brand=brand,
                 )
+            product.brand = brand
             product.animal.set(animals_list)
             product.category.set(categories_list)
             product.subcategory.set(subcat_list)
@@ -111,8 +111,9 @@ class ProductOptionsResource(resources.ModelResource):
             )
             brand, created = Brand.objects.get_or_create(name=self.brand)
             product, created = Product.objects.get_or_create(
-                name=self.product, brand=brand
+                name=self.product
             )
+            product.brand = brand
             product.animal.set((animal,))
             product.category.set((category,))
             product.subcategory.set((sub_category,))

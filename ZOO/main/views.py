@@ -215,6 +215,16 @@ class BrandViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
 
+    def get_queryset(self):
+        qs = self.queryset
+        animal = self.request.query_params.get("animal")
+        category = self.request.query_params.get("category")
+        if animal:
+            qs = qs.filter(products__animal__id=animal).distinct()
+            if category:
+                qs = qs.filter(products__category_ids__overlap=[category]).distinct()
+        return qs
+
 
 class AnimalViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Animal.objects.all()
