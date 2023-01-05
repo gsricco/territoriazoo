@@ -49,12 +49,12 @@ class ProductOptionsResource(resources.ModelResource):
         instance_loader_class = CachedInstanceLoader
 
     def before_import_row(self, row, row_number=None, **kwargs):
-        self.brand = row["Бренд"]
-        self.animal = row["Животное"]
-        self.category = row["Категория товаров"]
-        self.sub_category = row["Подкатегория товаров"]
-        self.product = row["Номенклатура"]
-        self.partial = row["Ед изм"]
+        self.brand = row["Бренд"].strip()
+        self.animal = row["Животное"].strip()
+        self.category = row["Категория товаров"].strip()
+        self.sub_category = row["Подкатегория товаров"].strip()
+        self.product = row["Номенклатура"].strip()
+        self.partial = row["Ед изм"].strip()
         self.units = row["Ед.изм."]
         self.stock_balance = row["Остаток"]
         weight = row["Вес объем длина"]
