@@ -137,24 +137,18 @@ class Product(models.Model):
         "Category",
         chained_field="animal",
         chained_model_field="animal",
-        # show_all=False,
         auto_choose=True,
-        # sort=True,
         related_name="products",
         verbose_name="Категория",
     )
-    # on_delete=models.PROTECT)
     subcategory = ChainedManyToManyField(
         "SubCategory",
         chained_field="category",
         chained_model_field="category",
-        # show_all=False,
         auto_choose=True,
-        # sort=True,
         related_name="products",
         verbose_name="Подкатегория",
     )
-    # on_delete=models.PROTECT,)
     popular = models.IntegerField(
         verbose_name="Популярность", choices=POPULAR_CHOICES, default=0
     )
@@ -182,16 +176,6 @@ class Product(models.Model):
         return self.options.count()
 
     product_options.short_description = "Доступные фасовки"
-
-    # def save(self, *args, **kwargs):
-    # #     # if self.options.filter(is_active=True).count() == 0:
-    # #     #     self.is_active = False
-    # #     # else:
-    # #     #     self.is_active = True
-    #     self.animal_ids = self.animal.values_list('id', flat=True)
-    #     self.category_ids = self.category.values_list('id', flat=True)
-    #     self.subcategory_ids = self.subcategory.values_list('id', flat=True)
-    #     super().save(*args, **kwargs)
 
 
 class ProductImage(models.Model):
@@ -306,8 +290,6 @@ class ProductOptions(models.Model):
     def save(self, *args, **kwargs):
         if self.stock_balance <= 0:
             self.is_active = False
-        # if self.partial == False:
-        #     super(ProductOptions, self).save(*args, **kwargs)
         if self.partial is True:
             self.size = 1000
             self.units = Units.objects.get(unit_name="грамм")
@@ -931,8 +913,8 @@ class Banner(models.Model):
         # default=InfoShop.objects.all().first().id)
 
     def save(self, *args, **kwargs):
-        if InfoShop.objects.all().exists():
-            self.info_shop = InfoShop.objects.all().first()
+        if InfoShop.objects.exists():
+            self.info_shop = InfoShop.objects.first()
         super().save(*args, **kwargs)
 
     def __str__(self):

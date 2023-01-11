@@ -56,7 +56,6 @@ def basket_counter(items, discount_by_day):
     total_with_discount = Decimal('0')
     total_no_discount = Decimal('0')
     for item in items:
-        print('=============================================')
         discounts = [item['max_discount'], item['chosen_option']['discount_by_option']]
         discounts_list = [x for x in discounts if x is not None]
         if discounts_list:

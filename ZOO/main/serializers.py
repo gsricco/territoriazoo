@@ -1,6 +1,4 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
-from django.utils.html import strip_tags
 from rest_framework import serializers
 
 from .models import (
@@ -137,7 +135,6 @@ class ProductSerializer(serializers.ModelSerializer):
             "min_price",
             "discount_by_subcategory",
             "name",
-            # "chosen_option",
             "options",
             "images",
         )
@@ -159,7 +156,6 @@ class ProductDetailSerializer(ProductSerializer):
             "discount_by_subcategory",
             "name",
             "brand",
-            # "chosen_option",
             "options",
             "images",
             "description",

@@ -13,7 +13,7 @@ from .views import (
     ProductViewSet,
 )
 
-router = DefaultRouter()
+router = SimpleRouter()
 
 router.register(r"products", ProductViewSet, basename="products")
 router.register(r"brands", BrandViewSet, basename="brands")

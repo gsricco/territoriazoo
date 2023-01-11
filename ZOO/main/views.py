@@ -23,14 +23,11 @@ from .models import (
     Consultation,
     Customer,
     DiscountByDay,
-    DiscountByProductOption,
-    DiscountBySubCategory,
     InfoShop,
     Order,
     Product,
     ProductOptions,
     SubCategory,
-    Units,
 )
 from .recommendations import Recommend
 from .serializers import (
@@ -50,7 +47,7 @@ from .serializers import (
     ProductOptionsSerializer,
     ProductSerializer,
 )
-from .services import basket_counter, bot_comment, call_back_bot, send_order_bot
+from .services import bot_comment, call_back_bot, send_order_bot
 
 
 class Pagination(PageNumberPagination):
@@ -105,7 +102,6 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         .annotate(
             min_price_options=Min(
                 "options__price",
-                # filter=Q(options__partial=False) & Q(options__is_active=True),
             )
         )
         .annotate(min_price_options=Subquery(
@@ -118,7 +114,6 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
             first_option_discount=Subquery(
                 ProductOptions.objects.filter(
                     product=OuterRef("pk"),
-                    # partial=False,
                     is_active=True,
                     discount_by_product_option__is_active=True,
                 )[:1]
@@ -145,11 +140,6 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProductSerializer
     pagination_class = Pagination
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
-    filterset_fields = (
-        # "animal",
-        # "category",
-        # "subcategory",
-    )
     search_fields = ("name",)
     ordering_fields = ("name", "popular", "date_added", "min_price")
     ordering = ("name",)
@@ -158,19 +148,6 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         response = super().list(request, args, kwargs)
         if len(response.data["results"]) == 0:
             response.status_code = 400
-        # qs = response.data["results"]
-        # for product in qs:
-        #     product["min_price_options"] = Decimal(product["min_price_options"])
-        #     if product["greatest_discount"]:
-        #         t_price = product["min_price_options"]
-        #         discount = product["greatest_discount"]
-        #         product["min_price_options"] = t_price * Decimal((100 - discount) / 100)
-        # response.data["results"].sort(key=lambda x: x["min_price_options"])
-        # if request.query_params.get("ordering") == "min_price":
-        #     return response
-        # if request.query_params.get("ordering") == "-min_price":
-        #     response.data["results"].reverse()
-        #     return response
         return response
 
     def get_queryset(self):
@@ -212,15 +189,14 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class BrandViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Brand.objects.all()
     serializer_class = BrandSerializer
 
     def get_queryset(self):
-        qs = self.queryset
+        qs = Brand.objects.all()
         animal = self.request.query_params.get("animal")
         category = self.request.query_params.get("category")
         if animal:
-            qs = qs.filter(products__animal__id=animal).distinct()
+            qs = qs.filter(products__animal_ids__overlap=[animal]).distinct()
             if category:
                 qs = qs.filter(products__category_ids__overlap=[category]).distinct()
         return qs
@@ -229,15 +205,6 @@ class BrandViewSet(viewsets.ReadOnlyModelViewSet):
 class AnimalViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Animal.objects.all()
     serializer_class = AnimalSerializer
-
-    # @action(detail=True, methods=['GET'], url_path='popular', name='popular_product_by_pet')
-    # def popular_by_pet(self, request, pk=None):
-    #     instance_set = Product.objects.filter(animal=pk).order_by('-popular')
-    #     if len(instance_set) < 16:
-    #         serializer = ProductSerializer(instance_set, many=True)
-    #     else:
-    #         serializer = ProductSerializer(instance_set[:16], many=True)
-    #     return Response(serializer.data)
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -324,7 +291,7 @@ class InfoShopView(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 
 class OrderViewSet(
-    mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
+    mixins.CreateModelMixin, viewsets.GenericViewSet
 ):
     queryset = (
         Order.objects.all()
@@ -450,13 +417,6 @@ class OrderViewSet(
 
 
 class DiscountByDayViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    # queryset = (
-    #     DiscountByDay.objects.filter(is_active=True)
-    #     .prefetch_related(
-    #         "options",
-    #     )
-    #     .filter(week_days__contains=[datetime.datetime.now().weekday()])
-    # )
     serializer_class = DiscountByDaySerializer
 
     def get_queryset(self):
