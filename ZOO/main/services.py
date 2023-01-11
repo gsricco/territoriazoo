@@ -1,10 +1,7 @@
-import datetime
 import os
 from dotenv import load_dotenv
 from decimal import *
 import requests
-from ZOO.celery import app
-from main.models import DiscountByDay
 load_dotenv()
 
 my_chat_id = os.getenv('CHAT_ID')
