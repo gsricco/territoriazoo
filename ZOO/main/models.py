@@ -380,7 +380,7 @@ class Category(models.Model):
     """Категории товаров"""
 
     name = models.CharField(
-        verbose_name="Название категории", max_length=255, blank=False, null=False
+        verbose_name="Название категории", max_length=255, blank=False, null=False, db_index=True
     )
     is_active = models.BooleanField(verbose_name="Активно", default=True)
     animal = models.ForeignKey(
@@ -406,7 +406,7 @@ class Category(models.Model):
 class SubCategory(models.Model):
     """Подкатегории товаров"""
 
-    name = models.CharField(verbose_name="Название подкатегории", max_length=255)
+    name = models.CharField(verbose_name="Название подкатегории", max_length=255, db_index=True)
     category = models.ForeignKey(
         "Category",
         on_delete=models.CASCADE,
@@ -913,8 +913,8 @@ class Banner(models.Model):
         # default=InfoShop.objects.all().first().id)
 
     def save(self, *args, **kwargs):
-        if InfoShop.objects.exists():
-            self.info_shop = InfoShop.objects.first()
+        if InfoShop.objects.all().exists():
+            self.info_shop = InfoShop.objects.all().first()
         super().save(*args, **kwargs)
 
     def __str__(self):
