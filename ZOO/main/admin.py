@@ -285,9 +285,11 @@ class SubCategoryAdmin(admin.ModelAdmin):
         "count_prod",
         "num_ordering",
     )
+    ordering = ("name",)
     list_editable = ("is_active",)
-    search_fields = ("name", "category")
+    search_fields = ("name",)
     list_select_related = ("category__animal",)
+    autocomplete_fields = ("category",)
 
 
 @admin.register(Article)
@@ -526,6 +528,7 @@ class DiscountBySubCategoryAdmin(admin.ModelAdmin):
         "is_active",
         "discount_amount",
     )
+    autocomplete_fields = ("subcategory",)
 
 
 class ProductOptionsInlineForDiscount(admin.TabularInline):
