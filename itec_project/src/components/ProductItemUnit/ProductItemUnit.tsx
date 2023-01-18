@@ -1,18 +1,17 @@
-import React, { ReactElement } from 'react';
+import React, {ReactElement} from 'react';
 import style from './ProductItemUnit.module.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { setChosenOptionToProduct } from '../../redux/reducers/products';
-import { location } from '../../enums';
-import { setChosenOptionToPopularProduct } from '../../redux/reducers/popularProducts';
-import { setChosenOptionToLatestProduct } from '../../redux/reducers/latestProducts';
-import { useNavigate } from 'react-router-dom';
-import { routesPathsEnum } from '../../routes/enums';
-import { changeChosenOption } from '../../redux/reducers/basket';
-import { setChosenOptionToOneOrderProduct } from '../../redux/reducers/onClickOrder';
-import { setWeightSetIsShowed } from '../../redux/reducers/app';
-import { ProductItemUnitPropsType } from './types';
-import { setChosenOptionToPreviouslyProduct } from '../../redux/reducers/previouslyProducts';
-import { getDiscountsForBasket } from '../../redux/selectors/discountForBasket';
+import {useDispatch, useSelector} from 'react-redux';
+import {setChosenOptionToProduct} from '../../redux/reducers/products';
+import {location} from '../../enums';
+import {setChosenOptionToPopularProduct} from '../../redux/reducers/popularProducts';
+import {setChosenOptionToLatestProduct} from '../../redux/reducers/latestProducts';
+import {useNavigate} from 'react-router-dom';
+import {routesPathsEnum} from '../../routes/enums';
+import {setChosenOptionToOneOrderProduct} from '../../redux/reducers/onClickOrder';
+import {setWeightSetIsShowed} from '../../redux/reducers/app';
+import {ProductItemUnitPropsType} from './types';
+import {setChosenOptionToPreviouslyProduct} from '../../redux/reducers/previouslyProducts';
+import {getDiscountsForBasket} from '../../redux/selectors/discountForBasket';
 import Discount from '../../Images/svg/Discount';
 
 const ProductItemUnit = ( { option, productId, active, from }: ProductItemUnitPropsType ): ReactElement => {
@@ -25,8 +24,9 @@ const ProductItemUnit = ( { option, productId, active, from }: ProductItemUnitPr
     if ( from === location.CATALOG ) dispatch( setChosenOptionToProduct( { productId, option } ) );
     if ( from === location.POPULAR_PRODUCTS ) dispatch( setChosenOptionToPopularProduct( { productId, option } ) );
     if ( from === location.LATEST_PRODUCTS ) dispatch( setChosenOptionToLatestProduct( { productId, option } ) );
-    if ( from === location.BASKET ) dispatch(
-      changeChosenOption( { productId, option, basketDiscount } ) );
+    if ( from === location.BASKET ) {
+      onSetWeightClick()
+    }
     if ( from === location.ONE_CLICK_ORDER ) dispatch( setChosenOptionToOneOrderProduct( { option, basketDiscount } ) );
     if ( from === location.PREVIOUSLY_PRODUCTS ) dispatch( setChosenOptionToPreviouslyProduct( {
       productId,

@@ -148,10 +148,10 @@ const CheckoutPage = React.memo( () => {
             </div>
             <div className={ style.list }>
               <div className={ style.address }>Самовывоз по адресу: Минск, ул. Чюрлёниса, 6.
-                <span/>
+                {/*<span/>*/}
               </div>
               <div>Оплата любым способом при получении
-                <span/>
+                {/*<span/>*/}
               </div>
             </div>
             <div className={ style.basketInfo }>

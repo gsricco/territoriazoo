@@ -42,11 +42,20 @@
         border-radius: 8px;
         cursor: default;
 
+                .basketProducts {
+                  @include SFTextMedium();
+                  font-size: 14px;
+                  line-height: 20px;
+                  color: #FFFFFF;
+                  text-align: center;
+                  margin-bottom: 5px;
+                }
+
         .basketInfo {
           display: flex;
           flex-direction: row;
           align-items: center;
-          justify-content: space-between;
+          justify-content: center;
           gap: 8px;
           margin-bottom: 24px;
 
@@ -69,15 +78,8 @@
               color: rgba(255, 255, 255, 0.8);
               text-decoration: line-through;
               text-decoration-color: #D72C0D;
-              margin-right: 8px;
+              margin-right: 10px;
             }
-          }
-
-          & .basketProducts {
-            @include SFTextMedium();
-            font-size: 14px;
-            line-height: 20px;
-            color: #FFFFFF;
           }
         }
 

@@ -17,7 +17,7 @@ import { getPrice } from '../../../helpers/getPrice';
 import { setWeightSetIsShowed } from '../../../redux/reducers/app';
 import { ProductForBasketPropsType } from '../types';
 import { PRODUCT_IMAGE } from '../../../constants';
-import { getPriceWithDiscount } from '../../../redux/reducers/helpers';
+import {getPriceWithDiscount, getPriceWithDiscountForProductPage} from '../../../redux/reducers/helpers';
 import { getDiscountsForBasket } from '../../../redux/selectors/discountForBasket';
 
 const Product = ( {
@@ -25,6 +25,7 @@ const Product = ( {
                     isForModal,
                     closeOneClickModal,
                     from,
+                    isFullBasket,
                   }: ProductForBasketPropsType ): ReactElement => {
 
   const dispatch = useDispatch<AppDispatch>();
@@ -32,6 +33,7 @@ const Product = ( {
 
   const { id, name, chosen_option, greatest_discount, images, options } = product;
   const basketDiscount = useSelector( getDiscountsForBasket )[ 0 ];
+  const priceWithDiscountCropped = getPrice( getPriceWithDiscountForProductPage( product ) );
   const priceWithDiscount = ( !!greatest_discount || !!chosen_option.discount_by_option ) ? getPriceWithDiscount( product ) : null;
   const productName = stringCutter( name, 70 );
   const countOfProduct = chosen_option.quantity;
@@ -47,7 +49,7 @@ const Product = ( {
     dispatch( incrementProductQuantity( { optionId: chosen_option.id, quantity: 1, basketDiscount } ) );
   };
   const deleteProductFromBasket = () => {
-    dispatch( removeByChosenOptionArticle( { article_number: chosen_option.article_number, basketDiscount } ) );
+    dispatch( removeByChosenOptionArticle( { prId:Number(chosen_option.id), basketDiscount } ) );
   };
   const onNameClick = () => {
     navigate( `${ routesPathsEnum.CATALOG }/${ id }` );
@@ -67,7 +69,7 @@ const Product = ( {
         <div
           className={ isForModal ? `${ style.productMainInfo } ${ style.widthForModalMainProductInfo }` : `${ style.productMainInfo } ${ style.widthForBasketMainProductInfo }` }>
           <h3 className={ style.basketTitle } onClick={ onNameClick }>
-            { productName }
+            { productName }---111
           </h3>
           <div className={ style.heftWrapper }>
             {
@@ -114,7 +116,16 @@ const Product = ( {
               draggable="false"
             /> }
           </div>
-          { showDiscount && <div className={ style.discount }>Акция</div> }
+          <div className={style.priceProductBasket}>
+            <span className={ showDiscount ? style.priceWithDiscount : style.firstPrice }>
+              { price } BYN
+            </span>
+            { showDiscount &&
+                <span className={ style.discountPrice }>
+                  { priceWithDiscountCropped } BYN
+                </span>}
+            {showDiscount && <div className={style.discount}>Акция</div>}
+          </div>
         </div>
         { isForModal &&
           <div className={ style.priceBlock }>

@@ -12,6 +12,7 @@ import Brand from '../../components/PopularBrandsBlock/Brand/Brand';
 import { setActualPage } from '../../redux/reducers/products';
 
 const BrandsPage = () => {
+
   const brands = useSelector( getBrands );
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -23,7 +24,7 @@ const BrandsPage = () => {
     navigate( routesPathsEnum.CATALOG );
   }, [ dispatch, navigate ] );
   useEffect( () => {
-    dispatch( fetchBrandsTC() );
+    dispatch( fetchBrandsTC({}) );
   }, [ dispatch ] );
   return (
     <div className={ style.brandsPage }>

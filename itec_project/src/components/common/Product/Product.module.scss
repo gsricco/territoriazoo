@@ -65,6 +65,8 @@
         flex-direction: row;
         align-items: center;
         margin-bottom: 16px;
+        justify-content: flex-end;
+        width: 100%;
 
 
         .quantityManagementBlock {
@@ -132,13 +134,50 @@
         }
       }
 
-      .discount {
-        padding: 0 6px;
-        background: $discountColor;
-        border-radius: 2px;
-        font-size: 15px;
-        line-height: 20px;
-        color: #FFFFFF;
+
+      .priceProductBasket {
+        display: flex;
+        justify-content: space-between;
+        max-width: 260px;
+
+        .priceWithDiscount{
+          @include SFDisplayBold();
+          font-size: 28px;
+          line-height: 32px;
+          color: #8C9196;
+          text-decoration: line-through;
+          text-decoration-color: #D72C0D;
+          cursor: default;
+          width: 160px;
+        }
+
+        .firstPrice {
+          @include SFDisplayBold();
+          font-size: 16px;
+          line-height: 130%;
+          color: $textColor;
+          cursor: default;
+          width: 177px;
+        }
+
+        .discountPrice{
+          @include SFDisplayBold();
+          font-size: 16px;
+          line-height: 130%;
+          color: $textColor;
+          cursor: default;
+          margin-left: 12px;
+          width: 177px;
+        }
+
+        .discount {
+          padding: 0 6px;
+          background: $discountColor;
+          border-radius: 2px;
+          font-size: 15px;
+          line-height: 20px;
+          color: #FFFFFF;
+        }
       }
     }
 
@@ -178,7 +217,8 @@
         flex-direction: row;
         align-items: center;
         margin-bottom: 16px;
-
+        justify-content: flex-end;
+        width: 100%;
 
         .quantityManagementBlock {
           display: flex;
@@ -245,13 +285,50 @@
         }
       }
 
-      .discount {
-        padding: 0 6px;
-        background: $discountColor;
-        border-radius: 2px;
-        font-size: 15px;
-        line-height: 20px;
-        color: #FFFFFF;
+      .priceProductBasket {
+        display: flex;
+        justify-content: space-between;
+        max-width: 260px;
+
+        .priceWithDiscount{
+          @include SFDisplayBold();
+          color: #8C9196;
+          text-decoration: line-through;
+          text-decoration-color: #D72C0D;
+          cursor: default;
+          font-size: 16px;
+          line-height: 130%;
+          margin-right: 6px;
+          width: 160px;
+        }
+
+        .firstPrice {
+          @include SFDisplayBold();
+          font-size: 16px;
+          line-height: 130%;
+          color: $textColor;
+          cursor: default;
+          width: 177px;
+        }
+
+        .discountPrice{
+          @include SFDisplayBold();
+          font-size: 16px;
+          line-height: 130%;
+          color: $textColor;
+          cursor: default;
+          margin-left: 12px;
+          width: 177px;
+        }
+
+        .discount {
+          padding: 0 6px;
+          background: $discountColor;
+          border-radius: 2px;
+          font-size: 15px;
+          line-height: 20px;
+          color: #FFFFFF;
+        }
       }
     }
 

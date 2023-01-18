@@ -24,7 +24,7 @@ const PopularBrandsBlock = React.memo( (): ReactElement => {
     navigate( routesPathsEnum.CATALOG );
   }, [ dispatch, navigate ] );
   useEffect( () => {
-    dispatch( fetchBrandsTC() );
+    dispatch( fetchBrandsTC({}) );
   }, [ dispatch ] );
 
   return (

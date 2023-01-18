@@ -5,7 +5,6 @@ import { BrandFormInputPropsType } from '../types';
 
 const BrandFormInput = React.memo( ( { id, name, chosen }: BrandFormInputPropsType ): ReactElement => {
   const dispatch = useDispatch();
-
   const addBrandStatusChosen = () => {
     dispatch( setChosenBrandId( { id } ) );
   };

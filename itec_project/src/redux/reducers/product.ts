@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { productAPI } from '../../Api/productApi';
-import { getProductInitState } from '../../mocks';
-import { OptionType } from '../../types';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {productAPI} from '../../Api/productApi';
+import {getProductInitState} from '../../mocks';
+import {OptionType} from '../../types';
 
 export const fetchProductTC = createAsyncThunk(
   'product/fetchProduct', async ( param: { productId: number }, {

@@ -3,8 +3,8 @@ import { brandsAPI } from '../../Api/brandsApi';
 import { BrandType } from '../../types';
 
 export const fetchBrandsTC = createAsyncThunk(
-  'brands/fetchBrands', async ( param, { dispatch, rejectWithValue } ) => {
-    const res = await brandsAPI.setBrands();
+  'brands/fetchBrands', async ( param:{animalId?:number, categoryId?:number}, { dispatch, rejectWithValue } ) => {
+    const res = await brandsAPI.setBrands({animalId:param.animalId, categoryId:param.categoryId});
     try {
       return { brands: res.data };
     } catch ( err ) {
@@ -43,6 +43,8 @@ export const slice = createSlice( {
     } );
   } ),
 } );
+
+
 
 export const brands = slice.reducer;
 export const {

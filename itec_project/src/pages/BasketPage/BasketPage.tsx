@@ -72,24 +72,25 @@ const BasketPage = React.memo( () => {
               <div className={ style.basketInfoBlockContainer }>
                 <div className={ style.productsItemsBlockContainer }>
                   {
-                    productsInBasket.map( item =>
+                    productsInBasket.map( (item,index) =>
                       <Product
-                        key={ item.id }
+                        key={ index }
                         product={ item }
                         isForModal={ false }
                         from={ location.BASKET }
+                        isFullBasket = {isFullBasket}
                       />,
                     )
                   }
                 </div>
                 <div className={ style.basketInfoContainer }>
+                  <p className={ style.basketProducts }>{ productsCount } { goodsName }</p>
                   <div className={ style.basketInfo }>
                     <div className={ style.priceBlock }>
                       <p
                         className={ !showDiscount ? style.basketBUN : style.basketBUNWIthDiscount }>{ price } BYN</p>
                       { showDiscount && <p className={ style.basketBUN }>{ priceWithDiscount } BYN</p> }
                     </div>
-                    <p className={ style.basketProducts }>{ productsCount } { goodsName }</p>
                   </div>
                   <div className={ style.pickUpBlock }>
                     <img className={ style.basketBoxImage } src={ boxIcon } loading={ 'lazy' } alt="boxIcon"/>
@@ -116,7 +117,6 @@ const BasketPage = React.memo( () => {
             </div>
           )
       }
-
       <PopularProductsBlock fromCatalog={ false }/>
       { !!previouslyProducts.length && <PreviouslyProductsBlock products={ previouslyProducts }/> }
       { !!articlesFromStore.length && <UsefulArticlesBlock/> }

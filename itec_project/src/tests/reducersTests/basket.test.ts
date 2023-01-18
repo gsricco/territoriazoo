@@ -194,7 +194,7 @@ describe( 'operation with basket', () => {
     expect( endState.totalProductsCount ).toBe( 0 );
   } );
   test( 'correct product should be deleted from basket with correct total sum and quantity', () => {
-    const endState = basket( startState, removeByChosenOptionArticle( { article_number: '405', basketDiscount } ) );
+    const endState = basket( startState, removeByChosenOptionArticle( { prId: 156, basketDiscount } ) );
     expect( endState.productsInBasket.length ).toEqual( 0 );
     expect( endState.totalSum ).toBe( '0.00' );
     expect( endState.totalProductsCount ).toBe( 0 );

@@ -69,8 +69,8 @@ export const slice = createSlice( {
       setTotalSumWithDiscount( state, action.payload.basketDiscount );
       setTotalSum( state );
     },
-    removeByChosenOptionArticle( state, action: PayloadAction<{ article_number: string, basketDiscount: DiscountType }> ) {
-      state.productsInBasket = state.productsInBasket.filter( product => product.chosen_option.article_number !== action.payload.article_number );
+    removeByChosenOptionArticle( state, action: PayloadAction<{ prId: number, basketDiscount: DiscountType }> ) {
+      state.productsInBasket = state.productsInBasket.filter( product => product.chosen_option.id !== action.payload.prId );
       setTotalCount( state );
       setTotalSumWithDiscount( state, action.payload.basketDiscount );
       setTotalSum( state );

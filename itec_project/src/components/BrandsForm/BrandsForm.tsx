@@ -1,32 +1,36 @@
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import React, {ReactElement, useCallback, useEffect, useState} from 'react';
 import BrandFormInput from './BrandFormInput/BrandFormInput';
 import style from './BrandsForm.module.scss';
 import RejectSearchResult from '../common/modals/RejectSearchResult/RejectSearchResult';
-import { useDispatch, useSelector } from 'react-redux';
-import { getBrands } from '../../redux/selectors/brands';
+import {useDispatch, useSelector} from 'react-redux';
+import {getBrands} from '../../redux/selectors/brands';
 import Button from '../common/Button/Button';
-import { fetchBrandsTC, setChosenBrandsId } from '../../redux/reducers/brands';
-import { setActualPage } from '../../redux/reducers/products';
-import { AppDispatch } from '../../redux/store';
-import { BrandsFormPropsType } from './types';
+import {fetchBrandsTC, setChosenBrandsId} from '../../redux/reducers/brands';
+import {setActualPage} from '../../redux/reducers/products';
+import {AppDispatch} from '../../redux/store';
+import {BrandsFormPropsType} from './types';
+import {getChosenAnimalTypeId} from "../../redux/selectors/animalTypes";
+import {getChosenProductTypeId} from "../../redux/selectors/productTypes";
 
 const BrandsForm = React.memo( ( { closeEditMode, forBurger }: BrandsFormPropsType ): ReactElement => {
 
   const [ value, setValue ] = useState( '' );
-
   const brands = useSelector( getBrands );
+  const animals = useSelector(getChosenAnimalTypeId);
+  const categories = useSelector(getChosenProductTypeId);
   const filteredBrands = brands.filter( brand => brand.name.toLowerCase().includes( value.toLowerCase() ) );
   const dispatch = useDispatch<AppDispatch>();
+
   const setFilters = useCallback( () => {
     const pageNumber = 1;
     closeEditMode();
-    dispatch( setChosenBrandsId( {} ) );
+    dispatch( setChosenBrandsId( {animals} ) );
     dispatch( setActualPage( { pageNumber } ) );
   }, [ dispatch, closeEditMode ] );
   const clearBrandsForm = useCallback( () => setValue( '' ), [] );
   useEffect( () => {
     if ( !brands[ 0 ] ) {
-      dispatch( fetchBrandsTC() );
+      dispatch( fetchBrandsTC({animalId:Number(animals),categoryId:Number(categories)}) );
     }
   }, [ dispatch, brands ] );
 

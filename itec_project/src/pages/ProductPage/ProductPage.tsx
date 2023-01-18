@@ -1,51 +1,47 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import PopularProductsBlock from '../../components/PopularProductsBlock/PopularProductsBlock';
 import UsefulArticlesBlock from '../../components/UsefulArticlesBlock/UsefulArticlesBlock';
 import style from './ProductPage.module.scss';
 import navigationStyle from '../../styles/common/NavigationBlock.module.scss';
 import nextIcon from '../../Images/nextIcon.svg';
-import { useNavigate, useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import UnitsForBasket from '../../components/common/UnitsForBasket/UnitsForBasket';
 import boxIcon from '../../Images/boxIcon.svg';
 import Address from '../../components/common/Address/Address';
 import Button from '../../components/common/Button/Button';
 import Modal from '../../components/common/modals/Modal';
 import OneClickOrder from '../../components/common/modals/OneClickOrder/OneClickOrder';
-import { useDispatch, useSelector } from 'react-redux';
-import { routesPathsEnum } from '../../routes/enums';
+import {useDispatch, useSelector} from 'react-redux';
+import {routesPathsEnum} from '../../routes/enums';
 import BasketModal from '../../components/common/modals/BasketModal/BasketModal';
-import { removeChosenBrandsId, setChosenBrandId, setChosenBrandsId } from '../../redux/reducers/brands';
-import {
-  changePartialProductQuantity,
-  incrementProductQuantity,
-  setProductToBasket,
-} from '../../redux/reducers/basket';
-import { setActualPage } from '../../redux/reducers/products';
-import { stringCutter } from '../../helpers/stringCutter';
-import { getProductsInBasket } from '../../redux/selectors/basket';
-import { AppDispatch } from '../../redux/store';
-import { fetchProductTC, setChosenOptionToProduct } from '../../redux/reducers/product';
-import { getProduct } from '../../redux/selectors/product';
-import { setProductToState } from '../../redux/reducers/onClickOrder';
-import { setProductToBlock } from '../../redux/reducers/previouslyProducts';
-import { getPreviouslyProduct } from '../../redux/selectors/previouslyProducts';
-import { getInfo } from '../../redux/selectors/descriptionShop';
-import { PRODUCT_IMAGE } from '../../constants';
-import { getOneClickOrderRequestStatus, getWeightSetValue } from '../../redux/selectors/app';
-import { setOneClickOrderRequestStatus, setWeightSetIsShowed } from '../../redux/reducers/app';
-import { getPrice } from '../../helpers/getPrice';
+import {removeChosenBrandsId, setChosenBrandId, setChosenBrandsId} from '../../redux/reducers/brands';
+import {changePartialProductQuantity, incrementProductQuantity, setProductToBasket,} from '../../redux/reducers/basket';
+import {setActualPage} from '../../redux/reducers/products';
+import {stringCutter} from '../../helpers/stringCutter';
+import {getProductsInBasket} from '../../redux/selectors/basket';
+import {AppDispatch} from '../../redux/store';
+import {fetchProductTC, setChosenOptionToProduct} from '../../redux/reducers/product';
+import {getProduct} from '../../redux/selectors/product';
+import {setProductToState} from '../../redux/reducers/onClickOrder';
+import {setProductToBlock} from '../../redux/reducers/previouslyProducts';
+import {getPreviouslyProduct} from '../../redux/selectors/previouslyProducts';
+import {getInfo} from '../../redux/selectors/descriptionShop';
+import {PRODUCT_IMAGE} from '../../constants';
+import {getOneClickOrderRequestStatus, getWeightSetValue} from '../../redux/selectors/app';
+import {setOneClickOrderRequestStatus, setWeightSetIsShowed} from '../../redux/reducers/app';
+import {getPrice} from '../../helpers/getPrice';
 import SuccessOrderModal from '../../components/common/modals/SuccessOrderModal/SuccessOrderModal';
-import { location } from '../../enums';
-import { RequestStatus } from '../../redux/reducers/enums';
-import { OptionType, ProductItemType } from '../../types';
-import { getDiscountsForBasket } from '../../redux/selectors/discountForBasket';
-import { WithThisProductBuyBlock } from '../../components/WithThisProductBuy/WithThisProductBuyBlock';
-import { getAccompanyingProducts } from '../../redux/selectors/accompanyingProducts';
-import { fetchAccompanyingProductsTC } from '../../redux/reducers/accompanyingProducts';
-import { getPriceWithDiscountForProductPage } from '../../redux/reducers/helpers';
-import { fetchArticlesTC } from '../../redux/reducers/articles';
-import { getChosenAnimalTypeId } from '../../redux/selectors/animalTypes';
-import { getArticles } from '../../redux/selectors/articles';
+import {location} from '../../enums';
+import {RequestStatus} from '../../redux/reducers/enums';
+import {OptionType, ProductItemType} from '../../types';
+import {getDiscountsForBasket} from '../../redux/selectors/discountForBasket';
+import {WithThisProductBuyBlock} from '../../components/WithThisProductBuy/WithThisProductBuyBlock';
+import {getAccompanyingProducts} from '../../redux/selectors/accompanyingProducts';
+import {fetchAccompanyingProductsTC} from '../../redux/reducers/accompanyingProducts';
+import {getPriceWithDiscountForProductPage} from '../../redux/reducers/helpers';
+import {fetchArticlesTC} from '../../redux/reducers/articles';
+import {getChosenAnimalTypeId} from '../../redux/selectors/animalTypes';
+import {getArticles} from '../../redux/selectors/articles';
 import RejectOrderModal from '../../components/common/modals/RejectOrderModal/RejectOrderModal';
 
 const ProductPage = React.memo( () => {
@@ -271,7 +267,7 @@ const ProductPage = React.memo( () => {
           </div>
           <div className={ style.orderBlock }>
             <h3>
-              Варианты фасовки. Выберите удобный вес
+              Варианты фасовки. Сделайте Ваш выбор.
             </h3>
             <div>
               <div className={ style.unitsGroup }>
@@ -333,8 +329,8 @@ const ProductPage = React.memo( () => {
               </div>
               {
                 chosen_option.partial
-                  ? <p>Общий вес: { chosen_option.quantity / 1000 } кг.</p>
-                  : <p>Общий вес: { chosen_option.size * countOfProduct } { chosen_option.units.unit_name }</p>
+                  ? <p>ИТОГО: { chosen_option.quantity / 1000 } кг.</p>
+                  : <p>ИТОГО: { chosen_option.size * countOfProduct } { chosen_option.units.unit_name }</p>
               }
             </div>
             <div className={ style.basketInterface }>
