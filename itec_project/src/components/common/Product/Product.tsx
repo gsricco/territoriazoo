@@ -69,7 +69,7 @@ const Product = ( {
         <div
           className={ isForModal ? `${ style.productMainInfo } ${ style.widthForModalMainProductInfo }` : `${ style.productMainInfo } ${ style.widthForBasketMainProductInfo }` }>
           <h3 className={ style.basketTitle } onClick={ onNameClick }>
-            { productName }---111
+            { productName }
           </h3>
           <div className={ style.heftWrapper }>
             {
