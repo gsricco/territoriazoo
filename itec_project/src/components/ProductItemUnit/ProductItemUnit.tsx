@@ -24,9 +24,7 @@ const ProductItemUnit = ( { option, productId, active, from }: ProductItemUnitPr
     if ( from === location.CATALOG ) dispatch( setChosenOptionToProduct( { productId, option } ) );
     if ( from === location.POPULAR_PRODUCTS ) dispatch( setChosenOptionToPopularProduct( { productId, option } ) );
     if ( from === location.LATEST_PRODUCTS ) dispatch( setChosenOptionToLatestProduct( { productId, option } ) );
-    if ( from === location.BASKET ) {
-      onSetWeightClick()
-    }
+    if ( from === location.BASKET ) navigate(`${routesPathsEnum.CATALOG}/${productId}`);
     if ( from === location.ONE_CLICK_ORDER ) dispatch( setChosenOptionToOneOrderProduct( { option, basketDiscount } ) );
     if ( from === location.PREVIOUSLY_PRODUCTS ) dispatch( setChosenOptionToPreviouslyProduct( {
       productId,
