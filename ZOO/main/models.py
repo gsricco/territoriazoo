@@ -292,7 +292,7 @@ class ProductOptions(models.Model):
             self.is_active = False
         if self.partial is True:
             self.size = 1000
-            self.units = Units.objects.get(unit_name="грамм")
+            self.units = Units.objects.get(unit_name="г")
         super(ProductOptions, self).save(*args, **kwargs)
 
         if (
