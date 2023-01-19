@@ -18,13 +18,13 @@ def send_order_bot(data):
         if Decimal(item['quantity']) >= Decimal(item['stock_balance']):
             warning = '⚠️'
         text_items += f"🐤Товар:\n" \
-                      f"Артикул:{item.get('article_number')}, " \
-                      f"Кол-во: {item['quantity']}, " \
-                      f"Остаток на складе: {item['stock_balance']}{warning}, " \
-                      f"Цена: **{item['price']}**\n"
+                      f"\t📌Артикул:{item.get('article_number')},\n " \
+                      f"\t📌Кол-во: {item['quantity']},\n " \
+                      f"\t📌Остаток на складе: {item['stock_balance']}{warning},\n " \
+                      f"\t📌Цена: **{item['price']}**\n"
     text = f"📍Новый Заказ\n" \
            f"{data['customer'].get('customer_name')} {data['customer'].get('phone_number')}\n" \
-           f"💴На сумму со скидкой: {data.get('total_with_discount')}, без скидки{data.get('total_no_discount')}\n"
+           f"💴На сумму со скидкой: {data.get('total_with_discount')}, без скидки: {data.get('total_no_discount')}\n"
     requests.post(url=URL + TOKEN + URLMETHOD,
                   data={'chat_id': my_chat_id,
                         'text': f'{text + text_items}',
