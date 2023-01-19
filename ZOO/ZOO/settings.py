@@ -165,7 +165,7 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
-        "KEY_PREFIX": "PRODUCT_LIST",
+        "KEY_PREFIX": "CACHED",
     }
 }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
