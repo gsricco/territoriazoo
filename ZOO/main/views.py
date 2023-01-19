@@ -189,6 +189,10 @@ class BrandViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BrandSerializer
 
     @method_decorator(cache_page(60, key_prefix="BRANDS_LIST"))
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        return response
+
     def get_queryset(self):
         qs = Brand.objects.all()
         animal = self.request.query_params.get("animal")
