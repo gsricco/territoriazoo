@@ -18,9 +18,9 @@ def send_order_bot(data):
         if Decimal(item['quantity']) >= Decimal(item['stock_balance']):
             warning = '⚠️'
         text_items += f"🐤 Товар:\n" \
-                      f"— Артикул:{item.get('article_number')},\n " \
-                      f"— Кол-во: {item['quantity']},\n " \
-                      f"— Остаток на складе: {item['stock_balance']}{warning},\n " \
+                      f"— Артикул:{item.get('article_number')},\n" \
+                      f"— Кол-во: {item['quantity']},\n" \
+                      f"— Остаток на складе: {item['stock_balance']}{warning},\n" \
                       f"— Цена: **{item['price']}**\n"
     text = f"📍Новый Заказ\n" \
            f"{data['customer'].get('customer_name')} {data['customer'].get('phone_number')}\n" \
