@@ -321,8 +321,6 @@ class OrderViewSet(
             "phone_number": request.data["phone_number"],
             "customer_name": request.data["customer_name"],
         }
-        # sum_check = basket_counter(items_basket, request.data['discountForBasket'])
-        # if sum_check == Decimal(request.data["orderInfo"]["basketCountWithDiscount"]):
         order_items_list = []
         articles_numbers = []
         not_sellable = []
@@ -336,11 +334,6 @@ class OrderViewSet(
                     "price": item["chosen_option"]["price"],
                 }
             )
-            # if Decimal(item["chosen_option"]["stock_balance"]) < Decimal(item["chosen_option"]["quantity"]):
-            #     not_sellable.append(item)
-            print('START',
-                  ProductOptions.objects.get(article_number=item["chosen_option"]["article_number"]).stock_balance)
-            print(Decimal(item["chosen_option"]["quantity"]), 'END')
             if (ProductOptions.objects.get(article_number=item["chosen_option"]["article_number"]).stock_balance
                     < Decimal(item["chosen_option"]["quantity"])):
                 not_sellable.append(item)
