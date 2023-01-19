@@ -24,7 +24,7 @@ def send_order_bot(data):
                       f"— Цена: **{item['price']}**\n"
     text = f"📍Новый Заказ\n" \
            f"{data['customer'].get('customer_name')} {data['customer'].get('phone_number')}\n" \
-           f"💴На сумму: {data.get('total_with_discount')},\n❗️скидка: {data.get('total_no_discount') - data.get('total_with_discount')}\n"
+           f"💴На сумму: {data.get('total_with_discount')},\n❗️скидка: {Decimal(data.get('total_no_discount')) - Decimal(data.get('total_with_discount'))}\n"
     requests.post(url=URL + TOKEN + URLMETHOD,
                   data={'chat_id': my_chat_id,
                         'text': f'{text + text_items}',
