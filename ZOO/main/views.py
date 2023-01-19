@@ -144,6 +144,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ("name", "popular", "date_added", "min_price")
     ordering = ("name",)
 
+    @method_decorator(cache_page(60))
     def list(self, request, *args, **kwargs):
         response = super().list(request, args, kwargs)
         if len(response.data["results"]) == 0:

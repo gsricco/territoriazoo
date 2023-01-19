@@ -161,11 +161,11 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis:6379/2",
+        "LOCATION": "redis://redis:6379",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
-        "KEY_PREFIX": "example",
+        "KEY_PREFIX": "PRODUCT_LIST",
     }
 }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
