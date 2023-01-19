@@ -14,24 +14,15 @@ from dotenv import load_dotenv
 from datetime import timedelta
 from pathlib import Path
 load_dotenv()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get('SECRET_KEY')
 SECRET_KEY = os.getenv("SECRET_KEY")
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get("DEBUG")
+
 DEBUG = False
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split()
 
-# if not DEBUG:
-#     ALLOWED_HOSTS += os.getenv('ALLOWED_HOSTS')
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,6 +55,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
 }
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
@@ -107,13 +101,6 @@ TEMPLATES = [
 ]
 
 ADMIN_REORDER = (
-    # {
-    #     'app': 'main',
-    #     'label': 'Администрация сайта',  # название поля
-    #     'models': [
-    #         {'model': 'auth.User', 'label': 'Пользователи'},
-    #     ]
-    # },
     {
         'app': 'main',
         'label': 'База товаров интернет магазина',
@@ -200,8 +187,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = 'ru'
 
@@ -211,18 +196,13 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/django_static/'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static')
-# ]
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 3000
+
 MEDIA_URL = '/django_media/'
+
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
 # Default primary key field type
@@ -278,6 +258,3 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'YourCustomToolbarConfig',
     }
 }
-# INTERNAL_IPS = [
-#     '127.0.0.1',
-# ]
