@@ -79,7 +79,7 @@
   },
   {
     "model": "main.animal",
-    "pk": 6,
+    "pk": 1,
     "fields": {
       "name": "Собаки",
       "image": "photos_animal/image_10_4.png",
@@ -88,7 +88,7 @@
   },
   {
     "model": "main.animal",
-    "pk": 7,
+    "pk": 2,
     "fields": {
       "name": "Коты",
       "image": "photos_animal/image_10_3.png",
@@ -97,7 +97,7 @@
   },
   {
     "model": "main.animal",
-    "pk": 8,
+    "pk": 3,
     "fields": {
       "name": "Грызуны",
       "image": "photos_animal/image_10_2.png",
@@ -106,7 +106,7 @@
   },
   {
     "model": "main.animal",
-    "pk": 9,
+    "pk": 4,
     "fields": {
       "name": "Рыбы",
       "image": "photos_animal/image_10_1.png",
@@ -115,7 +115,7 @@
   },
   {
     "model": "main.animal",
-    "pk": 10,
+    "pk": 5,
     "fields": {
       "name": "Птицы",
       "image": "photos_animal/image_10.png",
