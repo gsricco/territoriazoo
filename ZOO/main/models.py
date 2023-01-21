@@ -80,7 +80,7 @@ class Product(models.Model):
 
     POPULAR_CHOICES = (
         (
-            2,
+            0,
             "Стандартный",
         ),
         (
@@ -88,7 +88,7 @@ class Product(models.Model):
             "Популярный",
         ),
         (
-            0,
+            2,
             "Очень популярный",
         ),
     )
