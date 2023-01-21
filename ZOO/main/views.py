@@ -144,7 +144,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ("name", "popular", "date_added", "min_price")
     ordering = ("name",)
 
-    @method_decorator(cache_page(60, key_prefix="PRODUCTS_LIST"))
+    # @method_decorator(cache_page(60, key_prefix="PRODUCTS_LIST"))
     def list(self, request, *args, **kwargs):
         response = super().list(request, args, kwargs)
         if len(response.data["results"]) == 0:
@@ -188,7 +188,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 class BrandViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BrandSerializer
 
-    @method_decorator(cache_page(60, key_prefix="BRANDS_LIST"))
+    # @method_decorator(cache_page(60, key_prefix="BRANDS_LIST"))
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         return response
@@ -226,7 +226,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ("animal",)
 
-    @method_decorator(cache_page(60, key_prefix="CATEGORY_LIST"))
+    # @method_decorator(cache_page(60, key_prefix="CATEGORY_LIST"))
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         return response
@@ -243,7 +243,7 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ("animals",)
 
-    @method_decorator(cache_page(60, key_prefix="ARTICLE_LIST"))
+    # @method_decorator(cache_page(60, key_prefix="ARTICLE_LIST"))
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         return response
@@ -266,7 +266,7 @@ class CommentsView(
     permission_classes = (MyPerms,)
     serializer_class = CommentsListSerializer
 
-    @method_decorator(cache_page(60*2, key_prefix="COMMENTS_LIST"))
+    # @method_decorator(cache_page(60*2, key_prefix="COMMENTS_LIST"))
     def list(self, request, *args, **kwargs):
         comments = Comments.objects.filter(published=True)
         serializer = CommentsListSerializer(comments, many=True)
@@ -297,7 +297,7 @@ class InfoShopView(mixins.ListModelMixin, viewsets.GenericViewSet):
     )
     serializer_class = InfoShopSerializer
 
-    @method_decorator(cache_page(60*2, key_prefix="SHOP_INFO"))
+    # @method_decorator(cache_page(60*2, key_prefix="SHOP_INFO"))
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset.first())
