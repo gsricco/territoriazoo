@@ -10,15 +10,15 @@ services:
       - ZOO/.db_env
     volumes:
       - pgdata:/var/lib/postgresql/data
-  zoo_pgadmin4:
-    container_name: zoo_pgadmin4
-    image: dpage/pgadmin4:latest
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: superadminkorney@admin.com
-      PGADMIN_DEFAULT_PASSWORD: yoyoyoqweasdzxc
-    ports:
-      - "5555:80"
+#  zoo_pgadmin4:
+#    container_name: zoo_pgadmin4
+#    image: dpage/pgadmin4:latest
+#    restart: unless-stopped
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: superadminkorney@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: yoyoyoqweasdzxc
+#    ports:
+#      - "5555:80"
   backend:
     container_name: backend
     restart: unless-stopped
