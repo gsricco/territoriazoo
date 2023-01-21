@@ -148,7 +148,7 @@ class ProductAdmin(admin.ModelAdmin):
         "product_options",
     )
     readonly_fields = ("is_active",)
-    list_editable = ("popular",)
+    # list_editable = ("popular",)
     list_filter = (
         "date_added",
         "animal",
