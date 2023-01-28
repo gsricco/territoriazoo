@@ -77,65 +77,65 @@ class Pagination(PageNumberPagination):
 
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = (
-        Product.objects.filter(is_active=True)
-        .prefetch_related(
-            Prefetch(
-                "options",
-                queryset=ProductOptions.objects.filter(is_active=True)
-                .select_related("units", "discount_by_product_option")
-                .defer("date_created", "date_updated"),
-            )
-        )
-        .prefetch_related(
-            Prefetch(
-                "subcategory",
-                queryset=SubCategory.objects.select_related("discount_subcategory"),
-            ),
-            "images",
-        )
-        .annotate(
-            discount_by_subcategory=F(
-                "subcategory__discount_subcategory__discount_amount"
-            )
-        )
-        .annotate(
-            min_price_options=Min(
-                "options__price",
-            )
-        )
-        .annotate(min_price_options=Subquery(
-            ProductOptions.objects.filter(
-                product=OuterRef("pk"))[:1]
-            .values("price")
-        )
-        )
-        .annotate(
-            first_option_discount=Subquery(
-                ProductOptions.objects.filter(
-                    product=OuterRef("pk"),
-                    is_active=True,
-                    discount_by_product_option__is_active=True,
-                )[:1]
-                .annotate(min_discount=F("discount_by_product_option__discount_amount"))
-                .values("min_discount")
-            )
-        )
-        .annotate(
-            greatest_discount=Greatest(
-                "discount_by_subcategory", "first_option_discount"
-            )
-        )
-        .annotate(
-            min_price=Case(
-                When(greatest_discount=None, then=F("min_price_options")),
-                When(
-                    greatest_discount__gte=0,
-                    then=F("min_price_options") * (100 - F("greatest_discount")) / 100,
-                ),
-            )
-        )
-    )
+    # queryset = (
+    #     Product.objects.filter(is_active=True)
+    #     .prefetch_related(
+    #         Prefetch(
+    #             "options",
+    #             queryset=ProductOptions.objects.filter(is_active=True)
+    #             .select_related("units", "discount_by_product_option")
+    #             .defer("date_created", "date_updated"),
+    #         )
+    #     )
+    #     .prefetch_related(
+    #         Prefetch(
+    #             "subcategory",
+    #             queryset=SubCategory.objects.select_related("discount_subcategory"),
+    #         ),
+    #         "images",
+    #     )
+    #     .annotate(
+    #         discount_by_subcategory=F(
+    #             "subcategory__discount_subcategory__discount_amount"
+    #         )
+    #     )
+    #     .annotate(
+    #         min_price_options=Min(
+    #             "options__price",
+    #         )
+    #     )
+    #     .annotate(min_price_options=Subquery(
+    #         ProductOptions.objects.filter(
+    #             product=OuterRef("pk"))[:1]
+    #         .values("price")
+    #     )
+    #     )
+    #     .annotate(
+    #         first_option_discount=Subquery(
+    #             ProductOptions.objects.filter(
+    #                 product=OuterRef("pk"),
+    #                 is_active=True,
+    #                 discount_by_product_option__is_active=True,
+    #             )[:1]
+    #             .annotate(min_discount=F("discount_by_product_option__discount_amount"))
+    #             .values("min_discount")
+    #         )
+    #     )
+    #     .annotate(
+    #         greatest_discount=Greatest(
+    #             "discount_by_subcategory", "first_option_discount"
+    #         )
+    #     )
+    #     .annotate(
+    #         min_price=Case(
+    #             When(greatest_discount=None, then=F("min_price_options")),
+    #             When(
+    #                 greatest_discount__gte=0,
+    #                 then=F("min_price_options") * (100 - F("greatest_discount")) / 100,
+    #             ),
+    #         )
+    #     )
+    # )
 
     serializer_class = ProductSerializer
     pagination_class = Pagination
@@ -152,7 +152,65 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         return response
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = (
+            Product.objects.filter(is_active=True)
+            .prefetch_related(
+                Prefetch(
+                    "options",
+                    queryset=ProductOptions.objects.filter(is_active=True)
+                    .select_related("units", "discount_by_product_option")
+                    .defer("date_created", "date_updated"),
+                )
+            )
+            .prefetch_related(
+                Prefetch(
+                    "subcategory",
+                    queryset=SubCategory.objects.select_related("discount_subcategory"),
+                ),
+                "images",
+            )
+            .annotate(
+                discount_by_subcategory=F(
+                    "subcategory__discount_subcategory__discount_amount"
+                )
+            )
+            .annotate(
+                min_price_options=Min(
+                    "options__price",
+                )
+            )
+            .annotate(min_price_options=Subquery(
+                ProductOptions.objects.filter(
+                    product=OuterRef("pk"))[:1]
+                .values("price")
+            )
+            )
+            .annotate(
+                first_option_discount=Subquery(
+                    ProductOptions.objects.filter(
+                        product=OuterRef("pk"),
+                        is_active=True,
+                        discount_by_product_option__is_active=True,
+                    )[:1]
+                    .annotate(min_discount=F("discount_by_product_option__discount_amount"))
+                    .values("min_discount")
+                )
+            )
+            .annotate(
+                greatest_discount=Greatest(
+                    "discount_by_subcategory", "first_option_discount"
+                )
+            )
+            .annotate(
+                min_price=Case(
+                    When(greatest_discount=None, then=F("min_price_options")),
+                    When(
+                        greatest_discount__gte=0,
+                        then=F("min_price_options") * (100 - F("greatest_discount")) / 100,
+                        ),
+                    )
+                )
+            )
         animal = self.request.query_params.get("animal")
         if animal:
             queryset = queryset.filter(animal_ids__overlap=[animal])
