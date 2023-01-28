@@ -59,6 +59,7 @@ class Pagination(PageNumberPagination):
         return super(Pagination, self).paginate_queryset(queryset, request, view=view)
 
     def get_paginated_response(self, data):
+        print(data)
         return Response(
             OrderedDict(
                 [
