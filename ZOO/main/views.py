@@ -60,7 +60,8 @@ class Pagination(PageNumberPagination):
 
     def get_paginated_response(self, data):
         for i in data:
-            print(i)
+            if i is None:
+                print('ETO BLAD NONE')
         return Response(
             OrderedDict(
                 [
@@ -163,7 +164,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
                     .select_related("units", "discount_by_product_option")
                     .defer("date_created", "date_updated"),
                 )
-            )
+            ).filter(options__is_active=True)
             .prefetch_related(
                 Prefetch(
                     "subcategory",
